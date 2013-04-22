@@ -1,0 +1,39 @@
+\begin{thebibliography}{10}
+
+\bibitem{GTX280}
+Geforce gtx 280, 2008.
+\newblock http://www.nvidia.com/object/geforce\_gtx\_280.html.
+
+\bibitem{R3}
+S.J. Doran, L.~Charles-Edwards, S.A. Reinsberg, and M.O.~Leach MO,
+\newblock ``{A complete distortion correction for MR images: I. Gradient warp
+  correction},''
+\newblock {\em Phys. Med. Biol.}, vol. 50, pp. 1343--1361, 2005.
+
+\bibitem{R4}
+D.~Wang, W.~Strugnell, G.~Cowin, D.M. Doddrell, and R.~Slaughter,
+\newblock ``{Geometric distortion in clinical MRI systems Part I: evaluation
+  using a 3D phantom},''
+\newblock {\em J. Magn. Reson. Imaging}, vol. 22, pp. 1211--1221, 2004.
+
+\bibitem{R5}
+D.~Wang, W.~Strugnell, G.~Cowin, D.M. Doddrell, and R.~Slaughter,
+\newblock ``{Geometric distortion in clinical MRI systems Part II: correction
+  using a 3D phantom},''
+\newblock {\em J. Magn. Reson. Imaging}, vol. 22, pp. 1223--1232, 2004.
+
+\bibitem{R6}
+S.~Langlois, M.~Desvignes, J.M. Constans, and M.~Revenu,
+\newblock ``{MRI geometric distortion: a simple approach to correcting the
+  effects of non-linear gradient fields},''
+\newblock {\em J. Magn. Reson. Imaging}, vol. 9, pp. 821--831, 1999.
+
+\bibitem{Wil46}
+Robert Wilson.
+\newblock {Radiological Use of Fast Protons}.
+\newblock {\em Radiology}, (47):487--91, 1946.
+
+\bibitem{tom} Lee, T.S.  {\it Software-Based Gradient Nonlinearity Distortion Correction.} MSc Thesis, California State University San Bernardino, December 2006.
+
+
+\end{thebibliography}
