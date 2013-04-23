@@ -18,7 +18,7 @@ function [S1 S2 S3 S4] = get_ct_tank_surfaces(data_set_dir, image_file)
         S4 = [];
     else 
         % mid_image = dicomread(sprintf('%s/%s', '../data/ct_5345_sagittal', '20121017_250.dcm'));
-        mid_image = dicomread(sprintf('%s/%s', '../data/ct_5346_coronal', '20121017_250.dcm'));
+        mid_image = dicomread(sprintf('%s/%s', '../../data/ct_5346_coronal', '20121017_250.dcm'));
         surfaces_locations = locate_surfaces(mid_image);
 
         image_filename = sprintf('%s/%s', data_set_dir, image_file);
