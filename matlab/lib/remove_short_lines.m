@@ -40,7 +40,6 @@ function result = remove_short_lines(data, min_length)
             return
         else 
             % restore original values
-            length(edge_pixels)
             for i=1:length(edge_pixels)
                 pixel = edge_pixels{i};
                 result(pixel(1), pixel(2)) = pixel(3);

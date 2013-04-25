@@ -2,23 +2,19 @@ function [values, count] = myhist(vector, plot_data)
     if nargin == 1
         plot_data = 0;
     end
-    [row col] = size(vector);
-    if row > 1
+    if min(size(vector)) > 1
         vector = vector(:)';
     end
-    max_value = max(vector);
-    min_value = min(vector);
+    max_value = max(vector)
+    min_value = min(vector)
     
-    values = (int32(min_value)+1:1:int32(max_value));
+    values = (int32(min_value):1:int32(max_value));
     count  = zeros(size(values));
-    [row col] = size(values);
     
-    for c=1:col
+    for c=1:length(vector)
         diff = int32(vector(c) - min_value);
-        if diff >= 1
-            i = diff + 1;
-            count(i) = count(i) + 1;
-        end
+        i = diff + 1;
+        count(i) = count(i) + 1;
     end
     if plot_data ~= 0
         newfigure('Histogram');
