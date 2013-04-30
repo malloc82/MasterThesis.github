@@ -5,8 +5,8 @@ function [values, count] = myhist(vector, plot_data)
     if min(size(vector)) > 1
         vector = vector(:)';
     end
-    max_value = max(vector)
-    min_value = min(vector)
+    max_value = max(vector);
+    min_value = min(vector);
     
     values = (int32(min_value):1:int32(max_value));
     count  = zeros(size(values));
