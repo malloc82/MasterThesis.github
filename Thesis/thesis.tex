@@ -1,14 +1,38 @@
 \documentclass{sbthesis}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color} % color
+\definecolor{listinggray}{gray}{0.9}
 
 % \IncludeFig{caption}{label}{file}{scale}
 \newcommand{\IncludeFig}[4]{
-\begin{figure}[h]
-\centering
-\includegraphics[scale=#4]{#3}
-\caption{#1}
-\label{#2}
-\end{figure}
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=#4]{#3}
+    \caption{#1}
+    \label{#2}
+  \end{figure}
+}
+
+% \Ccode{title}{label}{file}
+\newcommand{\Ccode}[3]{
+  \lstset{language=c}
+  \lstset{basicstyle=\footnotesize}
+  \lstset{backgroundcolor=\color{listinggray},rulecolor=\color{blue}}
+  \lstset{linewidth=\textwidth, xleftmargin=0pt, xrightmargin=0pt}
+  \lstset{commentstyle=\textit, stringstyle=\upshape,showspaces=false}
+  \lstset{frame=tb}
+  \lstinputlisting[caption={#1},label={#2}]{#3}
+}
+
+\newcommand{\Matlab}[3]{
+  \lstset{language=matlab}
+  \lstset{basicstyle=\footnotesize}
+  \lstset{backgroundcolor=\color{listinggray},rulecolor=\color{blue}}
+  \lstset{linewidth=\textwidth, xleftmargin=0pt, xrightmargin=0pt}
+  \lstset{commentstyle=\textit, stringstyle=\upshape,showspaces=false}
+  \lstset{frame=tb}
+  \lstinputlisting[caption={#1},label={#2}]{#3}
 }
 
 \title{MRI Distortion Correction ... }
@@ -20,7 +44,7 @@
 \CSUSBDate{Janurary 2010}
 \Copyright
 
-\AbstractText{ abstract contents}
+\AbstractText{abstract contents}
 \AcknowledgementText{}
 \DedicationText{To Zel and Septimus.}
 
@@ -29,13 +53,18 @@
 
 \begin{document}
 \Thesis
-% \Chapter{Introduction}
-\label{Introduction}
+
+\Chapter{Introduction}
+\label{introduction}
+
 \Chapter{Background}
+\label{background}
 
 \Chapter{Overview}
+\label{overview}
 
 \Chapter{Phantom Design}
+\label{phantom_design}
 
 \Chapter{Data Extraction}
 \label{data_extraction}
