@@ -1,0 +1,13 @@
+* functions:
+*** tank_threshold:
+    - find the a threshold for phantom material's signal, this signal can be used to filter out water
+      and background noises
+*** tank_threshold_test:
+    - find a phantom material's threshold for all images in a directory and ploty them out in a graph
+    - e.g.: thresholds = tank_threshold_test('../../../data/ct_5346_coronal', 1, 'peak_delta = 120');
+*** filter_tank:
+    - filter out water and other noises, leaves only phantom's signal in the images
+    - also compare the results of canny on original image and filtered images by displaying them together
+*** filter_tank_test:
+    - run filter_tank on all images inside a directory and dump the result images in a specified directory.
+    - e.g. filter_tank_test('../../../data/ct_5346_coronal', 'filter_tank_test_dump')

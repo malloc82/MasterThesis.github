@@ -1,4 +1,4 @@
-function thresholds = tank_threshold_test(dirname, plot_opt)
+function thresholds = tank_threshold_test(dirname, plot_opt, msg)
     if nargin == 1
         plot_opt = 0;
     end
@@ -11,7 +11,8 @@ function thresholds = tank_threshold_test(dirname, plot_opt)
         threshold_val = tank_threshold(filename);
         thresholds = [thresholds; threshold_val];
     end
-    if plot_optx == 1
+    if plot_opt == 1
+        newfigure(msg);
         plot((1:length(thresholds)), thresholds);
     end
 end
