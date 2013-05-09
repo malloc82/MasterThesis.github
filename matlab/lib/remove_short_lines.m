@@ -56,5 +56,5 @@ function result = remove_short_lines(data, min_length)
             end
         end
     end
-    imshow(result, []);
+    % imshow(result, []);
 end

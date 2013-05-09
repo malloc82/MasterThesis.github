@@ -7,7 +7,7 @@ function [left, right] = find_surface_boundary(surface_region, plot_data, msg)
     gradient_data = smooth_gradient(column_sums);
     if nargin >= 2 && plot_data == 1
         if nargin == 3
-            newfigure(sprintf('surface data: %s', msg));
+            newfigure(sprintf('surface data2: %s', msg));
         else 
             newfigure('surface data')
         end
@@ -19,11 +19,11 @@ function [left, right] = find_surface_boundary(surface_region, plot_data, msg)
     % maxpeaks(maxpeaks(:, 2) < 1000 & maxpeaks(:, 2) > 250, :);
 
     % boundary threshold
-    right = maxpeaks(maxpeaks(:, 2) <  1000 & maxpeaks(:, 2) >  250, 1);
+    right = maxpeaks(maxpeaks(:, 2) <  1000 & maxpeaks(:, 2) >  200, 1);
     [c i] = max(column_sums(right));
     right = right(i);
-
-    left  = minpeaks(minpeaks(:, 2) > -1000 & minpeaks(:, 2) < -250, 1);
+    
+    left  = minpeaks(minpeaks(:, 2) > -1000 & minpeaks(:, 2) < -200, 1);
     [c i] = max(column_sums(left));
     left = left(i);
 end

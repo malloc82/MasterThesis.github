@@ -7,26 +7,51 @@ function [S1 S2 S3 S4] = get_ct_tank_surfaces(data_set_dir, image_file)
         
         surfaces_locations = locate_surfaces(mid_image_sample);
         fprintf('mid sample : %s/%s\n', data_set_dir, image_set{mid_sample_index});
-        image_filename = fprintf('%s/%s', data_set_dir, image_set{200});
-        % for i=1:length(image_set)
-        %     fprintf('%s\n', image_set{i});
-        % end
-        
+
+        im_info1 = dicominfo(image_set{1});
+        im_info2 = dicominfo(image_set{2});
+        mask = [im_info2.ImagePositionPatient - im_info1.ImagePositionPatient == 0];
+ 
         S1 = [];
         S2 = [];
         S3 = [];
         S4 = [];
-    else 
-        % mid_image = dicomread(sprintf('%s/%s', '../data/ct_5345_sagittal', '20121017_250.dcm'));
-        mid_image = dicomread(sprintf('%s/%s', '../../data/ct_5346_coronal', '20121017_250.dcm'));
         
+        for i=1:length(image_set)
+            im_info = dicomread(image_set{i});
+            spacing = im_info.PixelSpacing';
+            corner  = im_info.ImagePositionPatient;
+            [s1 s2 s3 s4] = get_surface_data(image_set{i}, surface_locations);
+
+            s1 = transform_2d_to_3d(s1.*spacing(ones(length(s1), 1), :), mask') + ...
+                 repmat(corner', [length(s1) 1]);
+            s2 = transform_2d_to_3d(s2.*spacing(ones(length(s2), 1), :), mask') + ...
+                 repmat(corner', [length(s2) 1]);
+            s3 = transform_2d_to_3d(s3.*spacing(ones(length(s3), 1), :), mask') + ...
+                 repmat(corner', [length(s3) 1]);
+            s4 = transform_2d_to_3d(s4.*spacing(ones(length(s4), 1), :), mask') + ...
+                 repmat(corner', [length(s4) 1]);
+
+            S1 = [S1; s1];
+            S2 = [S2; s2];
+            S3 = [S3; s3];
+            S4 = [S4; s4];
+        end
+    else 
+        image_filename = sprintf('%s/%s', data_set_dir, image_file);
+        % mid_image = dicomread(image_filename);
+        mid_image = dicomread(sprintf('%s/%s', '../../data/ct_5346_coronal', '20121017_250.dcm'));
         newfigure('original mid slice');
         imshow(mid_image, []);
+
+        im_info1 = dicominfo(sprintf('%s/%s', '../../data/ct_5346_coronal', '20121017_250.dcm'));
+        im_info2 = dicominfo(sprintf('%s/%s', '../../data/ct_5346_coronal', '20121017_251.dcm'));
+        mask = [im_info2.ImagePositionPatient - im_info1.ImagePositionPatient == 0];
         
         surfaces_locations = locate_surfaces(mid_image);
 
-        image_filename = sprintf('%s/%s', data_set_dir, image_file);
         image_data = dicomread(image_filename);
+        image_info = dicominfo(image_filename);
 
         newfigure('original image');
         imshow(image_data, []);
@@ -41,16 +66,11 @@ function [S1 S2 S3 S4] = get_ct_tank_surfaces(data_set_dir, image_file)
         end
         [S1 S2 S3 S4] = get_surface_data(image_filename, surfaces_locations);
         mark_image(image_data, {S1 S2 S3 S4}, sprintf('marked : %s', image_filename));
-    end
-end
-
-function spacing_mask = pixelspacing_mask(pixelspacing, mask)
-% mask is [3, 1] vector
-    spacing_mask = zeros(3, 1);
-    if mask(1) == 1
-        spacing_mask(1)   = pixelspacing(1);
-        spacing_mask(2:3) = pixelspacing(2)*mask(2:3);
-    else
-        spacing_mask(2:3) = pixelspacing;
+        
+        spacing = (image_info.PixelSpacing)';
+        corner  = image_info.ImagePositionPatient;
+        S1 = transform_2d_to_3d(S1.*spacing(ones(length(S1), 1), :), mask') + repmat(corner', [length(S1) 1]);
+        spacing
+        corner
     end
 end

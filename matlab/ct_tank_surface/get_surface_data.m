@@ -10,49 +10,60 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
             imshow(region, []);
         end
         
-        if nargin < 3, msg = ''; end
+        if nargin <= 3, msg = ''; end
         [left_bound, right_bound] = find_surface_boundary(region, plot_data, msg);
         if isempty(left_bound) || isempty(right_bound)
             fprintf('empty : %s\n', msg);
             return;
         end
-
         
         %% test 
-        [tank_edge threshold] = edge(region, 'canny', [0.001 0.002]);
+        % [tank_edge threshold] = edge(region, 'canny', [0.001 0.002]);
+        [tank_edge threshold] = edge(region, 'canny');
         if nargin >= 3 && plot_data == 1
-            newfigure(sprintf('edge: %s', msg));
+            newfigure(sprintf('raw edge: %s', msg));
             imshow(tank_edge, []);
         end
-        threshold;
+        threshold;        
         tank_edge = remove_short_lines(tank_edge);
 
+        if nargin >= 3 && plot_data == 1
+            newfigure(sprintf('without short edges: %s', msg));
+            imshow(tank_edge, []);
+        end        
+        
+        
         % tank_edge = remove_short_lines(edge(region, 'canny', [0.005 0.01]));
 
         % tank_edge = edge(region, 'canny', [0.01 0.02]);
 
         %% end         
+
         
         [row, col] = size(region);
-        h_edges = zeros(row, col);
         for r=1:row
             for c=1:col
-                if tank_edge(r, c) > 0 && (c > left_bound+2 && c < right_bound-2)
-                    h_edges(r, c) = tank_edge(r, c);
+                if ~(tank_edge(r, c) > 0 && (c > left_bound+2 && c < right_bound-2))
+                    tank_edge(r, c) = 0;
                 end
             end
         end
+        if nargin >= 3 && plot_data == 1
+            newfigure(sprintf('filtered edge: %s', msg));
+            imshow(tank_edge, []);
+        end        
         
-        % h_edges = remove_vertical_edges(h_edges);
+        h_edges = cell(1, col);
         for r=1:row
             for c=1:col
-                if h_edges(r, c) > 0
+                if tank_edge(r, c) > 0 && (c > left_bound+2 && c < right_bound-2)
                     edge_pixels = [edge_pixels; [r c]];
                 end
             end
         end
+                
         if ~isempty(edge_pixels)
-            edge_pixels = filter_flat_surface(edge_pixels);
+            edge_pixels = filter_flat_surface(edge_pixels, col);
             edge_pixels(:, 1) = edge_pixels(:, 1) + (upper_layer - 1);
         end
     end
@@ -99,7 +110,7 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
     display('Surface 3');
     S3 = edge_pixels_canny(S3_up, S3_down, 0, 'Inferior outside surface');
     display('Surface 4');
-    S4 = edge_pixels_canny(S4_up, S4_down, 0, 'Inferior inside surface');
+    S4 = edge_pixels_canny(S4_up, S4_down, 1, 'Inferior inside surface');
     
     % S2 = image_data(S2_up:S2_down, :);
     % S3 = image_data(S3_up:S3_down, :);
