@@ -21,9 +21,21 @@ function [left, right] = find_surface_boundary(surface_region, plot_data, msg)
     % boundary threshold
     right = maxpeaks(maxpeaks(:, 2) <  1000 & maxpeaks(:, 2) >  200, 1);
     [c i] = max(column_sums(right));
-    right = right(i);
+    if column_sums(right(i)) < 0
+        right = [];
+        left  = [];
+    else 
+        right = right(i);
+    end 
+    % right = right(i);
     
     left  = minpeaks(minpeaks(:, 2) > -1000 & minpeaks(:, 2) < -200, 1);
     [c i] = max(column_sums(left));
-    left = left(i);
+    if column_sums(left(i)) < 0
+        right = [];
+        left  = [];
+    else 
+        left = left(i);
+    end 
+    % left = left(i);
 end

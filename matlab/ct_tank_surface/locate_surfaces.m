@@ -1,5 +1,5 @@
 function  tank_surfaces = locate_surfaces(image_data)
-    plot_data = 1;
+    plot_data = 0;
     [row, col] = size(image_data);
 
     sample_point = idivide(int32(col), 2);
@@ -29,15 +29,15 @@ function  tank_surfaces = locate_surfaces(image_data)
         plot((1:row), sample_gradient_smooth, 'r');
     end
 
-    [maxpeaks, minpeaks] = peakdet(sample_gradient_smooth, 40);
+    [maxpeaks, minpeaks] = peakdet(sample_gradient_smooth, 40)
 
     if length(maxpeaks) == 0 || length(minpeaks) == 0
         tank_surfaces = [];
         return;
     end
     
-    filtered_maxpeaks = maxpeaks(maxpeaks(:, 2) <  100, :);
-    filtered_minpeaks = minpeaks(minpeaks(:, 2) > -100, :);
+    filtered_maxpeaks = maxpeaks(maxpeaks(:, 2) <  210, :)
+    filtered_minpeaks = minpeaks(minpeaks(:, 2) > -210, :)
 
     tank_surfaces = struct('exterior_outside_upper', filtered_minpeaks(1,1)-5, ...
                            'exterior_outside_lower', filtered_minpeaks(1,1)+5, ...

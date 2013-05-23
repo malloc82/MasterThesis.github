@@ -1,5 +1,11 @@
 
 \subsection{CT Scan overview, target surfaces}
+Due to the limitation of manufacture equipments, water tank at each end can only be guaranteed that their
+surfaces are parallel \footnote{what's the error?} to each other, their accurate distances betweeen each other
+are unknown. We decided to perform a CT scan\footnote{what's the CT's error} on the phantom, then collect each
+surfaces' data points through coronal view CT images. With enough data points on each surface, we should be
+able to have a good estimation of the distances with between each pair of surfaces. \footnote{brief outline of full algorithm}
+
 \begin{figure}[htb]
   \begin{minipage}[t]{2.75in}
     \centering
@@ -13,36 +19,304 @@
   \end{minipage}
 \end{figure}
 
+Above images indicates the target feature we are looking for inside a typical coronal view of CT image.
+
 \subsection{Canny Edges}
+
+The obvious method is to extract the data points is to apply an edge detection algorithm on the image, then
+iterate through the resulting edge image to collection the desired lines. However, the resulting edge image from
+this approach often contain fair amount of noise edges some of which overlap with the desired edges we are looking
+for. This problem is illustrated in figure \ref{fig:canny_ct_141}, \ref{fig:canny_ct_270} and \ref{fig:canny_ct_276}.
+ 
 \begin{figure}[htb]
   \begin{minipage}[t]{2.75in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/cases/Canny_issue_artifacts.eps}}}
-    \centerline{\emph{(a) Artifacts in canny edges}}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/default/20121017_141.eps}}}
+    \centerline{\emph{(a) Default parameters}}
   \end{minipage}\medskip
   \begin{minipage}[t]{2.75in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/cases/Canny_issue_relatively_better.eps}}}
-    \centerline{\emph{(b) Relatively better result}}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.01_0.02/20121017_141.eps}}}
+    \centerline{\emph{(b) Low threshold 0.01, high threshold  0.02}}
   \end{minipage}
   \begin{minipage}[t]{2.75in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/cases/Canny_issue_high_threshold.eps}}}
-    \centerline{\emph{(c) High threshold result}}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_141.eps}}}
+    \centerline{\emph{(c) Low threshold 0.02, high threshold  0.04}}
   \end{minipage}\medskip
   \begin{minipage}[t]{2.75in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/cases/Canny_issue_missing_edges.eps}}}
-    \centerline{\emph{(d) Incomplete edges}}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_141.eps}}}
+    \centerline{\emph{(d) Low threshold 0.05, high threshold  0.1}}
   \end{minipage}
+  \caption{\emph{Canny algorithm applied to coronal sequence 141 with different parameters}} \label{fig:canny_ct_141}
 \end{figure}
+
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/default/20121017_270.eps}}}
+    \centerline{\emph{(a) Default parameter}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.01_0.02/20121017_270.eps}}}
+    \centerline{\emph{(b) Low threshold 0.01, high threshold  0.02}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_270.eps}}}
+    \centerline{\emph{(c) Low threshold 0.02, high threshold  0.04}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_270.eps}}}
+    \centerline{\emph{(d) Low threshold 0.05, high threshold  0.1}}
+  \end{minipage}
+  \caption{\emph{Canny algorithm applied to coronal sequence 270 with different parameters}} \label{fig:canny_ct_270}
+\end{figure}
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_276.eps}}}
+    \centerline{\emph{(f) Low threshold 0.02, high threshold  0.04}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_276.eps}}}
+    \centerline{\emph{(h) Low threshold 0.05, high threshold  0.1}}
+  \end{minipage}
+  \caption{\emph{Canny algorithm applied to coronal sequence 276 with different parameters}} \label{fig:canny_ct_276}
+\end{figure}
+
+In figure \ref{fig:canny_ct_141}(a), we can see that Matlab's canny algorithm with default parameter gives 
+descent edges when applied to image \#141. However, the same parameters will create many noisy edges in some other
+images, e.g. \#270 in the same series in figure \ref{fig:canny_ct_270}(c). Setting higher threshold is able to
+reduce those noisy edges as we can see in figure \ref{fig:canny_ct_270}(c), but that threshold will eliminate
+some edges we are looking for as shown in \ref{fig:canny_ct_141}(c). 
+
+To get rid of this noisy edges, different types algorithms might be involved, probably including validating
+all the edges in an image,
+which might involve multiple pass to the whole image, and in which case the process
+could be slowed down by factor of several times. So if there is a simpler and faster way, it would be preferred
+choice.
 
 \subsection{Surface Location}
 
-\subsection{Canny On Local Region}
+Since all objects we are looking for has a very uniform and distinct shape, we could start with finding a small 
+regions each contains one object. In our case, the choice is very obvious. The objects we are looking for are
+four straight lines at fixed location and parallel to each other. For images that contain those objects, they
+should have them at almost exactly the same location with possibility of a few pixels offset due to potential
+tiltness of the phantom during scan. If we choose a slice in the middle of the series, that should give us a
+relatively smaller overall error margin both above and below the surface location on that particular slice
+comparing to picking a slice at the beginning or at the end of the series which would give a relatively larger 
+error on either above or below the surface location. Also the slice in the middle of series tends to have better 
+quality. We would call this middle slice as surface location sample.
 
-\subsection{Removing Extra Edges}
+In the surface location sample, we would plot a histogram of gradient of the sum of middle 7 columns as shown
+in figure \ref{fig:histograms_mid_coronal}(a) and a histogram of intensity distribution as shown in
+figure \ref{fig:histograms_mid_coronal}(b). From figure \ref{fig:histograms_mid_coronal}(b), we can see that there
+are three very obvious normal distribution in the graph. 
+From left to right, they represent background noise signal, water signal and phantom tank signals respectively.
+In figure \ref{fig:histograms_mid_coronal}(c), a zoomed in picture of the region between water signal distribution
+and phantom tank distribution, we can see that two distributions' tails overlaps with each other. From the fact 
+that the number of pixels in this overlap region is quite small and that this region is between two 
+distributions, we can determine that most of them should be the pixels on the boundary between water and tank.
+So, according to ranges of two distributinos as we can observer from the diagram, the range of difference
+between tank signal and water signal should be somewhere between 40 to 300. However, since the difference we are
+looking for is on the boundary of water and phantom tank, signals in those regions should tend to be close 
+to each other. Therefore we should expect the to see spikes in gradient to be around $\pm40$. In figure
+\ref{fig:histograms_mid_coronal}(a), we can clearly see six spikes that can be uniquely identified.
+Their values are -41.8404, 44.2372, -36.2271, 50.4055, -40.9654 and 29.8124, and they are right around the 
+predicted range. Thus, we can identify them with high confidence that they are on each of the boundary between
+water and phantom tank.
+
+With one pixel on each locations of the water and phantom tank boundaries are identified, 
+we can also narrow down the 
+location of each surface by specifying the surfaces are within the $\pm5$ rows of the row coordinate of each
+identified pixels. The $\pm5$ rows should give enough room for any horizontal or vertical tiltness.
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_histogram.eps}}}
+    \centerline{\emph{(a) mid slice intensity histogram}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_tank_and_water_overlap_marked.eps}}}
+    \centerline{\emph{(b) Mared overlap region}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_gradient_marked.eps}}}
+    \centerline{\emph{(c) mid slice surface locations}}
+  \end{minipage}
+
+  \caption{\emph{Histograms of middle column of middle slice of a coronal series}} 
+  \label{fig:histograms_mid_coronal}
+\end{figure}
+
+\subsection{Edge Detection On Local Surface Region}
+
+After the regions of boundaries of water and phantom tank are extract we can proceed to extract the surface
+edge from these regions. The following issues are need to be resolved:
+\begin{enumerate}
+  \item Identify the left and right boundaries of the edges.
+  \item Remove the noisy edges, and there are two types noisy edges:
+    \begin{enumerate}
+      \item Noisy edges that are not in contact with the target edge.
+      \item Noisy edges that are in contact with the target edge.
+    \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Boundary Finding}
+
+To detect the left and right boundary we plot the histogram of sum of intensities of each column across the
+region as well as the gradient for the intensity graph as shown in figure 
+\ref{fig:coronal_270_boundary_histogram}. 
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{5in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/histogram_marked.eps}}}
+    \centerline{\emph{(a) Histogram for inferior tank inside edge}}
+  \end{minipage}
+  \caption{\emph{Histogram for boundary detection on image sequence \#270}}
+  \label{fig:coronal_270_boundary_histogram}
+\end{figure}
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{5in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/exterior_outside/exterior_outside_histogram_marked.eps}}}
+    \centerline{\emph{(a) Histogram for exterior tank outside edge}}
+  \end{minipage}
+  \caption{\emph{Histogram for boundary detection on image sequence \#100}}
+  \label{fig:coronal_270_boundary_histogram}
+\end{figure}
+
+Upper pair of arrows in figure \ref{fig:coronal_270_boundary_histogram} indicates where the inside edges of
+the phantom tanks are, and the lower pair of arrows indicates how do those edges shows up in its gradient graph.
+The two small edges are identifiable with properties of value bewteen 200 and 1000. We can identify them with
+this property for most of the sliceds. The transition from phantom tank to water become smoother on the slices
+more toward anterior or posterior in coronal view. However, with the slices that able to identify the edges,
+we can reconstruct majority of each water tank surface and they are more than enough for us to estimate the
+distances between each surfaces, especially with the assumption that they are all flat and parallel to each
+other.
+
+\subsubsection{Removing Noise}
+
+We are going to remove the noise of the each edge in two steps. 
+\begin{enumerate}
+  \item Remove noisy edges that are unattached to target edges.
+  \item Filter out small edges sticking out of target edges. 
+\end{enumerate}
+
+Noisy edges unattached to target edges has one characteristic which is short. Since these edges are generated
+by noises, all observations has shown that they all tend to be very short in length due to lack of consistent
+pattern. To remove the noisy edges that are unattached to the target edges, we do the following steps:
+\begin{enumerate}
+  \item Create an empty image that has the same size of the input image.
+  \item Iterate every pixel of input image
+    \begin{enumerate}
+      \item if current pixel in input image is not zero:
+        \begin{enumerate}
+          \item We recursively collect all the nonzero pixels from the input image and set those pixel values on
+            the input image to 0.
+        \end{enumerate}
+      \item If there has been an edge collected, we check the length of this group of pixels
+        \begin{enumerate}
+          \item If the length is less than a threshold, say, 15, we assume they are a noisy edge and 
+            complete ignore this group of pixels
+          \item Otherwise, we will write these pixels' values to the image we initially created.
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+After follwing above steps, the resulting image will look like something like figure 
+\ref{fig:coronal_270_intermediate_results} (c).
+
+At this stage, we will apply the boundary limit to this newly filtered edge, removing all the pixels beyond
+either left or right boundary. And this will left us with target edges with some small noisy edges sticking
+out as shown in figure \ref{fig:coronal_270_intermediate_results} (d).
+
+To filter these sticking edges out, we do the following steps:
+
+\begin{enumerate}
+  \item Extract 2d coordinate informate of every edge pixels, and fit them to a straight line, since we know
+    our target edge is a straight line. We can setup the equation as:
+    \begin{eqnarray}
+      \begin{bmatrix}
+        columns \quad 1
+      \end{bmatrix}
+      \begin{bmatrix}
+        m\\
+        k\\
+      \end{bmatrix}
+      & = & 
+      \begin{bmatrix}
+        rows
+      \end{bmatrix}
+    \end{eqnarray}
+    where \emph{columns} is column values of all edge pixels and \emph{rows} is row values of all edge pixels.
+    $m$ and $k$ will the line parameter of the straight line we are trying to fit into.
+  \item Group all edge pixels by their column value.
+  \item Iterate all column groups. We pick a pixel from each group having the minimum value of
+    $|Pixel_{row} - (m*Pixel_{column} + k)|$ and ignore the rest.
+  \item At the end we should have one pixel per column group left, they will be our final edge.
+\end{enumerate}
+
+For testing we write out these filtered edges to original input image. We can see the result in figure 
+\ref{fig:coronal_edge_final_result} (a). For some edges, in some image we are unable to determine the left
+and right boundary. We will skip them as we have more than enough data with images that can gives us good 
+edges. Figure Figure \ref{fig:coronal_edge_final_result} (b) is an example where some edges are identifiable
+while others not.
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/1_region.eps}}}
+    \centerline{\emph{(a) Extracted region}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/2_raw_edges.eps}}}
+    \centerline{\emph{(b) Raw edges}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/3_removed_noise.eps}}}
+    \centerline{\emph{(c) Removed noisy edges}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/4_within_boundary.eps}}}
+    \centerline{\emph{(d) Edges within the boundary}}
+  \end{minipage}
+  \caption{\emph{Edge extraction intermediate results on image sequence \#270's inferior tank inside edge}}
+  \label{fig:coronal_270_intermediate_results}
+\end{figure}
+
+\subsubsection{Result}
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/result.eps}}}
+    \centerline{\emph{(a) Edge result on image sequence \#270}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_100/Coronal/result_canny_[0.001,0.002].eps}}}
+    \centerline{\emph{(b) Edge result on image sequence \#100}}
+  \end{minipage}
+  \caption{\emph{Final edge results}}
+  \label{fig:coronal_edge_final_result}
+\end{figure}
+
 
 \subsection{Creating Surfaces}
+
+
 
 \subsection{Estimating Surfaces Distances}

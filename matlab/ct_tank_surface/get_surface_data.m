@@ -18,7 +18,7 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
         end
         
         %% test 
-        % [tank_edge threshold] = edge(region, 'canny', [0.001 0.002]);
+        % [tank_edge threshold] = edge(regionx, 'canny', [0.001 0.002]);
         [tank_edge threshold] = edge(region, 'canny');
         if nargin >= 3 && plot_data == 1
             newfigure(sprintf('raw edge: %s', msg));
@@ -30,15 +30,13 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
         if nargin >= 3 && plot_data == 1
             newfigure(sprintf('without short edges: %s', msg));
             imshow(tank_edge, []);
-        end        
-        
+        end                
         
         % tank_edge = remove_short_lines(edge(region, 'canny', [0.005 0.01]));
 
         % tank_edge = edge(region, 'canny', [0.01 0.02]);
 
         %% end         
-
         
         [row, col] = size(region);
         for r=1:row
@@ -110,7 +108,7 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
     display('Surface 3');
     S3 = edge_pixels_canny(S3_up, S3_down, 0, 'Inferior outside surface');
     display('Surface 4');
-    S4 = edge_pixels_canny(S4_up, S4_down, 1, 'Inferior inside surface');
+    S4 = edge_pixels_canny(S4_up, S4_down, 0, 'Inferior inside surface');
     
     % S2 = image_data(S2_up:S2_down, :);
     % S3 = image_data(S3_up:S3_down, :);
