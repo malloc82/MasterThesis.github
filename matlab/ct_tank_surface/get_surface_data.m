@@ -1,8 +1,17 @@
-function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
+function [S1 S2 S3 S4 boundaries_info] = get_surface_data(image_filename, surface_locations, surface_boundaries)
+% surface_boundaries format: 
+%    {[left1  right1  pixel_range1]
+%     [left2  right2  pixel_range2]
+%     [left3  right3  pixel_range3]
+%     [left4  right4  pixel_range4]}
+    
     image_data = dicomread(image_filename);
     image_info = dicominfo(image_filename);
+    if nargin < 3
+        surface_boundaries = {[], [], [], []};
+    end
     
-    function edge_pixels = edge_pixels_canny(upper_layer, lower_layer, plot_data, msg)
+    function [edge_pixels boundary_info] = edge_pixels_canny(upper_layer, lower_layer, prev_boundaries, canny_threshold, plot_data, msg)
         edge_pixels = [];
         region = image_data(upper_layer:lower_layer, :);
         if nargin >= 3 && plot_data == 1
@@ -11,20 +20,24 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
         end
         
         if nargin <= 3, msg = ''; end
-        [left_bound, right_bound] = find_surface_boundary(region, plot_data, msg);
-        if isempty(left_bound) || isempty(right_bound)
-            fprintf('empty : %s\n', msg);
+        [left_bound, right_bound, boundary_info] = find_surface_boundary(region, prev_boundaries, plot_data, msg);
+        if isempty(left_bound) || isempty(right_bound)            
+            % fprintf(': %s\n', msg);
             return;
         end
         
-        %% test 
-        % [tank_edge threshold] = edge(regionx, 'canny', [0.001 0.002]);
-        [tank_edge threshold] = edge(region, 'canny');
+        %% edges 
+        if isempty(canny_threshold)
+            [tank_edge canny_threshold] = edge(region, 'canny');
+        else 
+            tank_edge = edge(region, 'canny', canny_threshold);
+        end 
+            
         if nargin >= 3 && plot_data == 1
             newfigure(sprintf('raw edge: %s', msg));
             imshow(tank_edge, []);
         end
-        threshold;        
+        % fprintf('Canny threshold = [%f, %f]\n', canny_threshold(1) canny_threshold(2));  
         tank_edge = remove_short_lines(tank_edge);
 
         if nargin >= 3 && plot_data == 1
@@ -72,7 +85,7 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
         
         [left_bound, right_bound] = find_surface_boundary(region, plot_data, msg)
         if isempty(left_bound) || isempty(right_bound)
-            fprintf('empty : %s\n', msg);
+            % fprintf('empty : %s', msg);
             return;
         end
         edge_length = right_bound - left_bound;
@@ -101,18 +114,30 @@ function [S1 S2 S3 S4] = get_surface_data(image_filename, surface_locations)
     S4_up   = surface_locations.inferior_inside_upper;
     S4_down = surface_locations.inferior_inside_lower;
     
-    display('Surface 1');
-    S1 = edge_pixels_canny(S1_up, S1_down, 0, 'Exterior outside surface');
-    display('Surface 2');
-    S2 = edge_pixels_canny(S2_up, S2_down, 0, 'Exterior inside surface');
-    display('Surface 3');
-    S3 = edge_pixels_canny(S3_up, S3_down, 0, 'Inferior outside surface');
-    display('Surface 4');
-    S4 = edge_pixels_canny(S4_up, S4_down, 0, 'Inferior inside surface');
+    fprintf('Surface 1: ');
+    [S1 boundary1] = edge_pixels_canny(S1_up, S1_down, surface_boundaries{1}, [0.001, 0.002], ...
+                                       0, 'Exterior outside surface');
+    fprintf('\n');
+    
+    fprintf('Surface 2: ');
+    [S2 boundary2] = edge_pixels_canny(S2_up, S2_down, surface_boundaries{2}, [0.001, 0.002], ...
+                                       0, 'Exterior inside surface');
+    fprintf('\n');;
+    
+    fprintf('Surface 3: ');
+    [S3 boundary3] = edge_pixels_canny(S3_up, S3_down, surface_boundaries{3}, [0.001, 0.002], ...
+                                       0, 'Inferior outside surface');
+    fprintf('\n');;
+    
+    fprintf('Surface 4: ');
+    [S4 boundary4] = edge_pixels_canny(S4_up, S4_down, surface_boundaries{4}, [], ...
+                                       0, 'Inferior inside surface');
+    fprintf('\n');;
+
+    boundaries_info = {boundary1 boundary2 boundary3 boundary4};
     
     % S2 = image_data(S2_up:S2_down, :);
     % S3 = image_data(S3_up:S3_down, :);
-
 end
 
 

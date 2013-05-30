@@ -317,6 +317,64 @@ while others not.
 
 \subsection{Creating Surfaces}
 
+Surface in 3D space can be represented by equation:
+\begin{eqnarray}
+ax + by + cz + d & = & 0 \label{eq:plane}
+\end{eqnarray}
 
+With somewhere between 50,000~70,000 date points for each surfaces, it's the best to use least square ($Ax=b$) to 
+esitmate each surfaces' equation paramters. Considering the following fact:
+\begin{enumerate}
+  \item Least square assumes that there is error in measurement but not observation, so it will only try to
+    minimize error in A not b.
+  \item For every data point we only have measurement error in two axis, the third one is taking for granted 
+    from DICOM info. Though there should be some very small error during CT image reconstruction as well, but
+    that's not necessary to be consider here.
+\end{enumerate}
+Since the image set we are dealing with is coronal view, which means it's the y-axis we are taking for granted,
+we are setting up our least square as follows:
 
+\begin{eqnarray}
+\frac{a}{b}x + \frac{c}{b}z + \frac{d}{b} & = & -y \label{eq:x_orient}\\
+\begin{bmatrix}
+  x_0  & z_0 & 1 \\
+  \vdots & \vdots & \vdots \\
+  x_n & z_n & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+a/b\\
+c/b\\
+d/b
+\end{bmatrix}
+& = &
+\begin{bmatrix}
+-y_0 \\
+\vdots\\
+-y_n
+\end{bmatrix}
+\end{eqnarray}
+
+With this setup, our estimated paramters for each planes are:
+
+\begin{tabular}{| l || r | r | r | r |}
+            \hline
+            &               $a$ & $b$ &               $c$ & $d$ \\
+            \hline
+  surface 1 & $-1.0617\times10^{-06}$ & $1$ & $-6.9880\times10^{-10}$ & $-2.0644$ \\ 
+            \hline
+  surface 2 & $-3.8209\times10^{-06}$ & $1$ & $-2.3851\times10^{-9}$  & $-6.7681$ \\ 
+            \hline
+  surface 3 & $3.2496\times10^{-06}$  & $1$ & $4.3242\times10^{-10}$  & $-4.8297$ \\ 
+            \hline
+  surface 4 & $3.3399\times10^{-06}$  & $1$ & $1.2575\times10^{-10}$  & $-2.0644$ \\ 
+            \hline
+\end{tabular}
+
+algorithm limited by two factors:
+\begin{enumerate}
+  \item left and right boundary finding
+  \item canny parameters
+\end{enumerate}
+
+continue here $\dots$
 \subsection{Estimating Surfaces Distances}

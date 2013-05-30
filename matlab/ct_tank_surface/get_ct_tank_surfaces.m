@@ -4,7 +4,7 @@ function [S1 S2 S3 S4] = get_ct_tank_surfaces(data_set_dir, image_file)
 %         Second argument: for testing purpose, could be omitted
 
     addpath(sprintf('%s/%s', pwd, '../lib'));
-    function [S1_3d S2_3d S3_3d S4_3d] = convert(S1_2d, S2_2d, S3_2d, S4_2d, mask, corner)
+    function [S1_3d S2_3d S3_3d S4_3d] = convert(S1_2d, S2_2d, S3_2d, S4_2d, mask, corner, spacing)
         if ~isempty(S1_2d)
             S1_3d = transform_2d_to_3d(S1_2d.*spacing(ones(length(S1_2d), 1), :), mask') ...
                     + repmat(corner', [length(S1_2d) 1]);
@@ -39,38 +39,51 @@ function [S1 S2 S3 S4] = get_ct_tank_surfaces(data_set_dir, image_file)
         fprintf('mid sample : %s/%s\n', data_set_dir, image_set{mid_sample_index});
 
         im_info1 = dicominfo(image_set{1});
-        im_info2 = dicominfo(image_set{2});
+        im_info2 = dicominfo(image_set{10});
         mask = [im_info2.ImagePositionPatient - im_info1.ImagePositionPatient == 0];
  
-        S1 = [];
-        S2 = [];
-        S3 = [];
-        S4 = [];
+        % S1 = [];
+        % S2 = [];
+        % S3 = [];
+        % S4 = [];
+
+        [S1 S2 S3 S4 boundary_info] = get_surface_data(image_set{mid_sample_index}, surfaces_locations)
+        im_info = dicominfo(image_set{mid_sample_index});
+        spacing = im_info.PixelSpacing';
+        corner  = im_info.ImagePositionPatient;
+        [S1 S2 S3 S4] = convert(S1, S2, S3, S4, mask, corner, spacing);
         
-        for i=1:length(image_set)
-            i
+        b_info = boundary_info;
+        for i=mid_sample_index-1:-1:1
+            fprintf('\n==> i    =    %d\n', i);
             im_info = dicominfo(image_set{i});
             spacing = im_info.PixelSpacing';
             corner  = im_info.ImagePositionPatient;
-            [s1 s2 s3 s4] = get_surface_data(image_set{i}, surfaces_locations);
-            [s1 s2 s3 s4] = convert(s1, s2, s3, s4, mask, corner);
-            % s1 = transform_2d_to_3d(s1.*spacing(ones(length(s1), 1), :), mask') + ...
-            %      repmat(corner', [length(s1) 1]);
-            % s2 = transform_2d_to_3d(s2.*spacing(ones(length(s2), 1), :), mask') + ...
-            %      repmat(corner', [length(s2) 1]);
-            % s3 = transform_2d_to_3d(s3.*spacing(ones(length(s3), 1), :), mask') + ...
-            %      repmat(corner', [length(s3) 1]);
-            % s4 = transform_2d_to_3d(s4.*spacing(ones(length(s4), 1), :), mask') + ...
-            %      repmat(corner', [length(s4) 1]);
+            [s1 s2 s3 s4 b_info] = get_surface_data(image_set{i}, surfaces_locations, b_info);
+            [s1 s2 s3 s4] = convert(s1, s2, s3, s4, mask, corner, spacing);
             S1 = [S1; s1];
             S2 = [S2; s2];
             S3 = [S3; s3];
             S4 = [S4; s4];
-        end
+        end 
+
+        b_info = boundary_info;
+        for i=mid_sample_index+1:length(image_set)
+            fprintf('\n==> i    =    %d\n', i);
+            im_info = dicominfo(image_set{i});
+            spacing = im_info.PixelSpacing';
+            corner  = im_info.ImagePositionPatient;
+            [s1 s2 s3 s4 b_info] = get_surface_data(image_set{i}, surfaces_locations, b_info);
+            [s1 s2 s3 s4] = convert(s1, s2, s3, s4, mask, corner, spacing);
+            S1 = [S1; s1];
+            S2 = [S2; s2];
+            S3 = [S3; s3];
+            S4 = [S4; s4];            
+        end 
     else 
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % This part is for testing
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % This part is for testing %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         image_filename = sprintf('%s/%s', data_set_dir, image_file);
         % mid_image = dicomread(image_filename);
@@ -103,12 +116,7 @@ function [S1 S2 S3 S4] = get_ct_tank_surfaces(data_set_dir, image_file)
         
         spacing = (image_info.PixelSpacing)';
         corner  = image_info.ImagePositionPatient
-        % S1 = transform_2d_to_3d(S1.*spacing(ones(length(S1), 1), :), mask') + repmat(corner', [length(S1) 1]);
-        % S2 = transform_2d_to_3d(S2.*spacing(ones(length(S2), 1), :), mask') + repmat(corner', [length(S2) 1]);
-        % S3 = transform_2d_to_3d(S3.*spacing(ones(length(S3), 1), :), mask') + repmat(corner', [length(S3) 1]);
-        % S4 = transform_2d_to_3d(S4.*spacing(ones(length(S4), 1),
-        % :), mask') + repmat(corner', [length(S4) 1]);
-        [S1 S2 S3 S4] = convert(S1, S2, S3, S4, mask, corner);
+        [S1 S2 S3 S4] = convert(S1, S2, S3, S4, mask, corner, spacing);
         spacing
         corner
     end
