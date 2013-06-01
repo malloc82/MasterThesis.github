@@ -4,7 +4,7 @@ function [ax by cz d] = plane_estimation(S_in)
 % (-ax/by) X + (-cz/by) Z + (-d/by) = Y
     
     b = -S_in(:, 2);
-    A = [ S_in(:, 1)./S_in(:, 2) S_in(:, 3)./S_in(:, 2) ones(length(S_in), 1)];
+    A = [ S_in(:, 1) S_in(:, 3) ones(length(S_in), 1)];
     x = A\b;
     
     ax = x(1);
