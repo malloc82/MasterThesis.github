@@ -191,8 +191,8 @@ region as well as the gradient for the intensity graph as shown in figure
 \begin{figure}[htb]
   \begin{minipage}[t]{5in}
     \centering
-    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/exterior_outside/exterior_outside_histogram_marked.eps}}}
-    \centerline{\emph{(a) Histogram for exterior tank outside edge}}
+    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
+    \centerline{\emph{(a) Histogram for superior tank outside edge}}
   \end{minipage}
   \caption{\emph{Histogram for boundary detection on image sequence \#100}}
   \label{fig:coronal_270_boundary_histogram}
@@ -204,7 +204,35 @@ The two small edges are identifiable with properties of value bewteen 200 and 10
 this property for most of the sliceds. The transition from phantom tank to water become smoother on the slices
 more toward anterior or posterior in coronal view. 
 
-==> modify here
+There are couple of issues with this approach.
+\begin{itemize}
+  \item For images close to either edges of the two tanks, contrast ratio between water and tank material 
+    become very weak. As shown in figure \ref{fig:coronal_edge_final_result}, the transition from tank to
+    water become very smooth, and their gradient, therefore, become very small, and fallen out the filter
+    range we specified. If we lower the range of the filter, it will pick up too many noise.
+  \item For superior tank's outside surface, its regions also include the end part of tubes. Structure
+    on those regions of tubes are fairly complex, which will result in frequent change of each column's 
+    total intensities in regions that have tubes.
+% so there are lots of change of peaks in the intensity 
+%     graph as we can see in figure \ref{fig:superior_outside_artifacts}, and it's easy for some of these peaks to fall into the range of our
+%     boundary filter. 
+\end{itemize}
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge.eps}}}
+    \centerline{\emph{(a) Extra edge caused by tube section}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge_histogram.eps}}}
+    \centerline{\emph{(b) Histgram of the superior outside surface in (a) }}
+  \end{minipage}
+  \caption{\emph{Superior outside surface artifacts}}
+  \label{fig:superior_outside_artifacts}
+\end{figure}
+
 However, with the slices that able to identify the edges,
 we can reconstruct majority of each water tank surface and they are more than enough for us to estimate the
 distances between each surfaces, especially with the assumption that they are all flat and parallel to each
