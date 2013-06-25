@@ -1,39 +1,23 @@
 \begin{thebibliography}{10}
 
-\bibitem{GTX280}
-Geforce gtx 280, 2008.
-\newblock http://www.nvidia.com/object/geforce\_gtx\_280.html.
+\bibitem{simpleapproach}
+S. Langlois, M. Desvignes, J.M. Constans, and M. Revenu, 
+\newblock ``{MRI Geometric Distortion: A Simple Approach to Correcting the Effects of Non-linear Gradient Fields},'' 
+\newblock {\em J. Magn. Reson. Imaging}, vol. 9, pp. 821-831, 1999.
 
-\bibitem{R3}
-S.J. Doran, L.~Charles-Edwards, S.A. Reinsberg, and M.O.~Leach MO,
-\newblock ``{A complete distortion correction for MR images: I. Gradient warp
-  correction},''
-\newblock {\em Phys. Med. Biol.}, vol. 50, pp. 1343--1361, 2005.
+\bibitem{tleeiaeng}
+T. Lee, K. Schubert, R. Schulte, 
+\newblock ``{Software-Based Algorithm for Modeling and Correction of Gradient Nonlinearity Distortions in Magnetic Resonance Imaging},''
+\newblock {\em IAENG Transactions on Electrical and Electronics Engineering}, vol. I, 2008
 
-\bibitem{R4}
-D.~Wang, W.~Strugnell, G.~Cowin, D.M. Doddrell, and R.~Slaughter,
-\newblock ``{Geometric distortion in clinical MRI systems Part I: evaluation
-  using a 3D phantom},''
-\newblock {\em J. Magn. Reson. Imaging}, vol. 22, pp. 1211--1221, 2004.
+\bibitem{magsusceptibility}
+J. F. Schenck, 
+\newblock ``{The Role of Magnetic Susceptibility In Magnetic Resonance Imaging: MRI Magnetic Compatibility of the First And Second Kind},'' 
+\newblock {\em Medical Physics}, vol. 23, iss 6, 1996, pp. 815–850.
 
-\bibitem{R5}
-D.~Wang, W.~Strugnell, G.~Cowin, D.M. Doddrell, and R.~Slaughter,
-\newblock ``{Geometric distortion in clinical MRI systems Part II: correction
-  using a 3D phantom},''
-\newblock {\em J. Magn. Reson. Imaging}, vol. 22, pp. 1223--1232, 2004.
-
-\bibitem{R6}
-S.~Langlois, M.~Desvignes, J.M. Constans, and M.~Revenu,
-\newblock ``{MRI geometric distortion: a simple approach to correcting the
-  effects of non-linear gradient fields},''
-\newblock {\em J. Magn. Reson. Imaging}, vol. 9, pp. 821--831, 1999.
-
-\bibitem{Wil46}
-Robert Wilson.
-\newblock {Radiological Use of Fast Protons}.
-\newblock {\em Radiology}, (47):487--91, 1946.
-
-\bibitem{tom} Lee, T.S.  {\it Software-Based Gradient Nonlinearity Distortion Correction.} MSc Thesis, California State University San Bernardino, December 2006.
-
+\bibitem{isocentericsc}
+R. Cai, K. Schubert, R. Schulte, 
+\newblock ``{Computational Algorithm for Estimating the Gradient Isocenter of an MRI Scanner},'' 
+\newblock {\em Proceedings of the International Conference on Scientific Computing}, 2012, accepted for publication
 
 \end{thebibliography}
