@@ -9,3 +9,10 @@
 # ignore data directory where all input images are stored
 data
 data/
+
+# ignore temperary latex file
+*.aux
+*.log
+*.dvi
+*.toc
+*.blg
