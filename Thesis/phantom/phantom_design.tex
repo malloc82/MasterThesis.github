@@ -14,7 +14,30 @@ related to weight and cost of manufacturing. We are introducing a new phantom de
 approach, which can be built to a larger size, improves accuracy of distortion characterization and reduces 
 cost.
 
-\section{Design}
+\section{Initial Design}
+
+The original phantom design, a 16-cm oil-filled cube, could not be scaled up due to weight and manufacturing 
+constraints. Our first modification was to look at changing the material to FR-4 since it is rigid, very flat,
+and could be submerged for short periods of time to permit scanning the solid liquid interface in an MRI 
+machine.  Since most of the distortion is visible only in the corners, this was rapidly replaced by 8 corners 
+of a virtual cube, which could be connected by a rigid frame.  The weight of a tank to submerge either of 
+these designs to allow scanning was prohibitive, requiring a complete redesign.
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{phantom/images/brain_storm/model1.eps}}}
+    \centerline{\emph{(a) First model}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{phantom/images/brain_storm/model2.eps}}}
+    \centerline{\emph{(b) Second model}}
+  \end{minipage}
+\end{figure}
+
+
+\section{New Design}
 
 The phantom is shaped to be as large as possible, while still fitting in the head coil of the scanner, so as 
 to achieve the maximum quality of signal and largest distortion. The phantom is an octagonal prism with 205mm 
@@ -30,6 +53,92 @@ long-term accuracy of the two surfaces, making sure they won’t deform, and are
 minimize their effect on the field.  The data generated from 64 tubes mounted on the sides are designed to 
 give us x and y axis distortion information, and the end tank is designed to provide z-axis distortion data, 
 allowing a complete 3-D distortion correction with a relatively small amount of data. 
+
+\section{Sealing NMR Tubes}
+
+Our original idea for sealing the NMR tubes was to use paraffin wax, either with or without a silicon seal.  
+Paraffin was heated and a liquid drop was then added to the tube as a seal , but had an uneven bottom caused 
+by the rapid solidifying of the wax, when it came in contact with the copper sulfate.  Additionally, 
+it tended to trap air bubbles, which made the end very hard to work with in the images.  Worst yet, after a 
+few weeks the liquid level in the tubes started to drop.  We decided to compare three potential alternatives: 
+machinable wax, water weld, and silicon sealer.  As the images on the right show, the silicon was far and 
+away the best.  There was no leakage lost, and since the setup time was slower on the liquid side it ended 
+up being almost completely flat.  Every feature was met, and it was also the most cost effective solution.
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{1in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/paraffin_and_floable_silicon.eps}}}
+    \centerline{\emph{(a) Paraffin wax at top with floatable silicon at bottom}}
+  \end{minipage}
+  \begin{minipage}[t]{1in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/paraffin.eps}}}
+    \centerline{\emph{(b) Paraffin wax only}}
+  \end{minipage}
+
+  \begin{minipage}[t]{1in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/machinable_wax.eps}}}
+    \centerline{\emph{(c) Machinable wax}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{1in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/water_weld.eps}}}
+    \centerline{\emph{(d) Water weld}}
+  \end{minipage}
+
+  \begin{minipage}[t]{1in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/silicon.eps}}}
+    \centerline{\emph{(e) Silicon}}
+  \end{minipage}
+
+\end{figure}
+
+\section{Updated Desgin}
+
+% \begin{figure}[htb]
+%   \begin{minipage}[t]{1in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/paraffin_and_floable_silicon.eps}}}
+%     \centerline{\emph{(a) Paraffin wax at top with floatable silicon at bottom}}
+%   \end{minipage}
+%   \begin{minipage}[t]{1in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/paraffin.eps}}}
+%     \centerline{\emph{(b) Paraffin wax only}}
+%   \end{minipage}
+
+%   \begin{minipage}[t]{1in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/machinable_wax.eps}}}
+%     \centerline{\emph{(c) Machinable wax}}
+%   \end{minipage}\medskip
+%   \begin{minipage}[t]{1in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/water_weld.eps}}}
+%     \centerline{\emph{(d) Water weld}}
+%   \end{minipage}
+
+%   \begin{minipage}[t]{1in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=1in]{phantom/images/tube_sealings/silicon.eps}}}
+%     \centerline{\emph{(e) Silicon}}
+%   \end{minipage}
+
+% \end{figure}
+
+
+\section{Installation and Use}
+
+The new phantom is designed to rest in the head coil of a 3T MRI scanner.  It has a back plate with several 
+leveling screws to align the phantom in the head coil using the laser alignment system.  This alignment is 
+aided by alignment marks on the outside of the phantom. The phantom is then moved into the MRI scanner, 
+and its center is placed as close to the isocenter as possible.  While it is not required to be centered, 
+centering does improve the performance.  A quick alignment scan is used to ensure the phantom is in the best 
+location possible.  When this is done the scan is taken and processed using distortion detection and 
+correction software, which is not subject of the present presentation.
 
 \section{Initial Experience}
 
