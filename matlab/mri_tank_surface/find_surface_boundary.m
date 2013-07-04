@@ -10,6 +10,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
     
     min_delta = 5; 
     
+    % named index
     L       = 1;
     L_diff  = 2;
     L_range = 3;
@@ -30,30 +31,32 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
         return
     else 
         if ~isempty(prev_boundaries)
-        fprintf(' prev_boundaries = [%d, %d, %d, %d, %d, %d], ', ...
-                prev_boundaries(L), prev_boundaries(L_diff), prev_boundaries(L_range), ...
-                prev_boundaries(R), prev_boundaries(R_diff), prev_boundaries(R_range));
+            fprintf(' prev_boundaries = [%d, %d, %d, %d, %d, %d], ', ...
+                    prev_boundaries(L), prev_boundaries(L_diff), prev_boundaries(L_range), ...
+                    prev_boundaries(R), prev_boundaries(R_diff), prev_boundaries(R_range));
         else 
-            fprintf(' prev_boundaries is empty, ')
+            fprintf(' prev_boundaries is empty, ');
         end 
     end 
     
-    cutoff = 5;  % ?
-    column_sums = zeros(1, length(surface_region));
-    for i=1:length(column_sums)
-        column_sums(i) = sum(surface_region(:, i));
+    column_averages = zeros(1, length(surface_region));
+    for i=1:length(column_averages)
+        column_averages(i) = mean(surface_region(:, i));
     end
-    gradient_data = smooth_gradient(column_sums);
-    if nargin >= 2 && plot_data == 1
+    gradient_data = smooth_gradient(column_averages);
+    
+    % Test plot
+    if nargin > 2 && plot_data == 1
         if nargin == 3
             newfigure(sprintf('surface data2: %s', msg));
         else 
             newfigure('surface data')
         end
-        plot((1:length(gradient_data)), column_sums, 'b', ...
+        plot((1:length(gradient_data)), column_averages, 'b', ...
              (1:length(gradient_data)), gradient_data, 'r');
     end
-    [maxpeaks, minpeaks] = peakdet(gradient_data, 250);
+    
+    [maxpeaks, minpeaks] = peakdet(gradient_data, 15);
     
     % maxpeaks(maxpeaks(:, 2) < 1000 & maxpeaks(:, 2) > 250, :);
 
@@ -64,7 +67,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
     end 
     
     % boundary threshold
-    right_candidates = maxpeaks(maxpeaks(:, 2) <  1000 & maxpeaks(:, 2) >  200, 1);
+    right_candidates = minpeaks(minpeaks(:, 2) < -15, 1);
     if ~isempty(prev_boundaries)
         diffs = right_candidates - prev_boundaries(R);
         if prev_boundaries(R_range) > min_delta
@@ -97,9 +100,9 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
             boundary_info(R_range) = min_delta;
         end
     else 
-        [c i] = max(column_sums(right_candidates));
+        [c i] = max(column_averages(right_candidates));
         right = right_candidates(i);
-        if isempty(right) || column_sums(right) < 0
+        if isempty(right) || column_averages(right) < 0
             right = [];
             left  = [];
             boundary_info = [];
@@ -111,7 +114,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
         boundary_info(R_range) = min_delta;
     end 
 
-    left_candidates = minpeaks(minpeaks(:, 2) > -1000 & minpeaks(:, 2) < -200, 1);
+    left_candidates = maxpeaks(maxpeaks(:, 2) > 15, 1);
     if ~isempty(prev_boundaries)
         diffs = left_candidates - prev_boundaries(L);
         if prev_boundaries(L_range) > min_delta
@@ -144,9 +147,9 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
             boundary_info(L_range) = min_delta;
         end 
     else 
-        [c i] = max(column_sums(left_candidates));
+        [c i] = max(column_averages(left_candidates));
         left = left_candidates(i);
-        if isempty(left) || column_sums(left) < 0
+        if isempty(left) || column_averages(left) < 0
             right = [];
             left  = [];
             boundary_info = [];
