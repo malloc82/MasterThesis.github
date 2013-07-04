@@ -403,11 +403,70 @@ With this setup, our estimated paramters for each planes are:
             \hline
 \end{tabular}
 
-algorithm limited by two factors:
-\begin{enumerate}
-  \item left and right boundary finding
-  \item canny parameters
-\end{enumerate}
+% algorithm limited by two factors:
+% \begin{enumerate}
+%   \item left and right boundary finding
+%   \item canny parameters
+% \end{enumerate}
 
-continue here $\dots$
+% continue here $\dots$
+
+Reconstructed surfaces can be see below:
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/superior_comparison/Surface1_2.eps}}}
+    \centerline{\emph{(a)}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_comparison/Surface3_4.eps}}}
+    \centerline{\emph{(b)}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/Surface1_2_3_4.eps}}}
+    \centerline{\emph{(c)}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/saggital_ct_tilt.eps}}}
+    \centerline{\emph{(d)}}
+  \end{minipage}
+  
+  \caption{\emph{Water tank surfaces reconstruction from CT scan, YZ view}}
+  \label{fig:ct_tank_surface_reconstruction_yz}
+
+\end{figure}
+
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/superior_inside/xy.eps}}}
+    \centerline{\emph{(a)}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/superior_outside/xy.eps}}}
+    \centerline{\emph{(b)}}
+  \end{minipage}
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_inside/xy.eps}}}
+    \centerline{\emph{(c)}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_outside/xy.eps}}}
+    \centerline{\emph{(d)}}
+  \end{minipage}
+  \caption{\emph{Water tank surfaces reconstruction from CT scan, XY view}}
+  \label{fig:ct_tank_surface_reconstruction_xy}
+\end{figure}
+
+Notice that in the YZ view in figure \ref{fig:ct_tank_surface_reconstruction_yz}(a) (b) (c), 
+all four surfaces are tilted. This is consistant with what we observed on saggital reconstruction 
+of this image set. 
+
 \subsection{Estimating Surfaces Distances}
