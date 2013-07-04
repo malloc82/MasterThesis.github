@@ -13,6 +13,34 @@ we can easily identify it with our eyes, after slightly tweeking canny's algorit
 edge result. However, the bottom tank region is very noise. Although we can identify them our eye, canny
 algorithm has a very hard time produce good edge result for that section. 
 
+\begin{figure}[htb]
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/MRI/mid_slice/112.eps}}}
+    \centerline{\emph{(a) MR images}}
+  \end{minipage}\medskip
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/MRI/mid_slice/112_canny_default.eps}}}
+    \centerline{\emph{(b) Canny algorithm on (a) using default parameters}}
+  \end{minipage}
+
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/MRI/mid_slice/112_canny_[0.1,0.2].eps}}}
+    \centerline{\emph{(b) Canny algorithm on (a) using parameter [0.1, 0.2]}}
+  \end{minipage}\medskip
+
+  \begin{minipage}[t]{2.75in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/MRI/mid_slice/112_canny_[0.09,0.18].eps}}}
+    \centerline{\emph{(b) Canny algorithm on (a) using parameter [0.09, 0.18]}}
+  \end{minipage}
+
+
+\end{figure}
+
+
 Since the overall layouts of tanks in MR images and CT images are quite similar -- they both have water tanks
 at top and bottom of images and we are looking for top and bottom edges of those water tanks in both imagse.
 So we decided that the best approach is to start with the algorithm we used in CT images even though there
@@ -86,7 +114,19 @@ than enough data for our estimation. This algorithm goes as follows:
   \item Run the algorithm two more passes, each run will take each half of the image set and iterate from
     the slice closest to mid slice to slice furthest to the mid slice. At the beginning of each run, we will
     pass the parameters we obtained from previous step.
+  \item We just run this algorithm to the inside surface of exterior tank due to the fact that we had make
+    sure there was no rotation and tiltness in each different axis. This means other three surfaces will
+    share the left and right boundaries with exterior outside surface.
 \end{enumerate}
 
 \subsection{Noisy Edge reduction}
 
+For noisy edge reduction, we are going to follow these steps:
+\begin{enumerate}
+  \item We are going to apply the short edges removal as we did in CT images. 
+  \item After removing short edges, what's left are very hard to distinguish. In CT images, we knew the edges
+    are supposed to be a straight line, so we filtered the noises based on a straight line model. In MR images,
+    edges are distorted and are supposed to be curved. Since exterior tank gets very good signal and very good
+    edge results, we can use the edge result from exterior tank's opposite surfaces' edge result as a model
+    for filtering inferior tank's surface edge.
+\end{enumerate}
