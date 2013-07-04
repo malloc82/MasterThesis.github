@@ -117,13 +117,13 @@ function boundary_visual_test(data_set_dir)
     % S1_down = tank_surfaces.exterior_outside_lower;
     % [S1_left, S1_right] = surface_edge(S1_up, S1_down, 0, 'exterior outside');
     
-    S2_up   = tank_surfaces.exterior_inside_upper;
-    S2_down = tank_surfaces.exterior_inside_lower;
-    [S2_left, S2_right] = surface_edge(S2_up, S2_down, 0, 'exterior inside');
+    % S2_up   = tank_surfaces.exterior_inside_upper;
+    % S2_down = tank_surfaces.exterior_inside_lower;
+    % [S2_left, S2_right] = surface_edge(S2_up, S2_down, 0, 'exterior inside');
     
-    % S3_up   = tank_surfaces.inferior_outside_upper;
-    % S3_down = tank_surfaces.inferior_outside_lower;
-    % [S3_left, S3_right] = surface_edge(S3_up, S3_down, 0, 'inferior outside');
+    S3_up   = tank_surfaces.inferior_outside_upper;
+    S3_down = tank_surfaces.inferior_outside_lower;
+    [S3_left, S3_right] = surface_edge(S3_up, S3_down, 0, 'inferior outside');
     
     % S4_up   = tank_surfaces.inferior_inside_upper;
     % S4_down = tank_surfaces.inferior_inside_lower;
@@ -135,11 +135,11 @@ function boundary_visual_test(data_set_dir)
     % if ~isempty(S1_left),  scatter3(S1_left(:, 1),  S1_left(:, 2),  S1_left(:, 3),  'b'); end
     % if ~isempty(S1_right), scatter3(S1_right(:, 1), S1_right(:, 2), S1_right(:, 3), 'b'); end
     
-    if ~isempty(S2_left),  scatter3(S2_left(:, 1),  S2_left(:, 2),  S2_left(:, 3),  'b'); end
-    if ~isempty(S2_right), scatter3(S2_right(:, 1), S2_right(:, 2), S2_right(:, 3), 'b'); end
+    % if ~isempty(S2_left),  scatter3(S2_left(:, 1),  S2_left(:, 2),  S2_left(:, 3),  'b'); end
+    % if ~isempty(S2_right), scatter3(S2_right(:, 1), S2_right(:, 2), S2_right(:, 3), 'b'); end
 
-    % if ~isempty(S3_left),  scatter3(S3_left(:, 1),  S3_left(:, 2),  S3_left(:, 3),  'b'); end
-    % if ~isempty(S3_right), scatter3(S3_right(:, 1), S3_right(:, 2), S3_right(:, 3), 'b'); end
+    if ~isempty(S3_left),  scatter3(S3_left(:, 1),  S3_left(:, 2),  S3_left(:, 3),  'b'); end
+    if ~isempty(S3_right), scatter3(S3_right(:, 1), S3_right(:, 2), S3_right(:, 3), 'b'); end
     
     
     xlabel('X');

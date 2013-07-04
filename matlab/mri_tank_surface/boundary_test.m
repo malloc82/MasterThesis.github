@@ -3,9 +3,9 @@ function boundary_test(tank_surfaces, index)
     region = get_surface_regions(im_data, tank_surfaces);
     
     newfigure(sprintf('region : %0.3d', index));
-    imshow(region.S2, []);
+    imshow(region.S3, []);
     
-    [column_averages, maxpeak, minpeak] = boundary_histogram_test(region.S2, 1, int2str(index));
+    [column_averages, maxpeak, minpeak] = boundary_histogram_test(region.S3, 1, int2str(index));
     maxpeak
     minpeak
 end

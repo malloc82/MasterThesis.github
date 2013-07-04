@@ -8,7 +8,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
 % already intercepted each other, and current region has nothing to
 % look for.
     
-    min_delta = 5; 
+    min_delta = 10; 
     
     % named index
     L       = 1;
@@ -67,100 +67,132 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
     end 
     
     % boundary threshold
-    right_candidates = minpeaks(minpeaks(:, 2) < -15, 1);
-    if ~isempty(prev_boundaries)
-        diffs = right_candidates - prev_boundaries(R);
-        if prev_boundaries(R_range) > min_delta
-            diff_index = abs(diffs) <= prev_boundaries(R_range) & sign(diffs) == sign(prev_boundaries(R_diff));
+    if isempty(minpeaks)
+        right = [];
+        left  = [];
+        if isempty(prev_boundaries)
+            boundary_info = [];
         else 
-            diff_index = abs(diffs) <= prev_boundaries(R_range);
-        end        
-        if isempty(diffs(diff_index))
-            if prev_boundaries(R_range) <= min_delta
-                right = prev_boundaries(R) + prev_boundaries(R_diff);
-                boundary_info(R)       = right;
-                boundary_info(R_diff)  = prev_boundaries(R_diff);
-                boundary_info(R_range) = prev_boundaries(R_range) + min_delta;
+            boundary_info(R_range) = prev_boundaries(R_range) + min_delta;
+        end 
+    else 
+        right_candidates = minpeaks(minpeaks(:, 2) < -15, 1);
+        if ~isempty(prev_boundaries)
+            diffs = right_candidates - prev_boundaries(R);
+            if prev_boundaries(R_range) > min_delta
+                diff_index = abs(diffs) <= prev_boundaries(R_range) & sign(diffs) == sign(prev_boundaries(R_diff));
             else 
+                diff_index = abs(diffs) <= prev_boundaries(R_range);
+            end        
+            if isempty(diffs(diff_index))
+                if prev_boundaries(R_range) <= min_delta
+                    right = prev_boundaries(R) + prev_boundaries(R_diff);
+                    boundary_info(R)       = right;
+                    boundary_info(R_diff)  = prev_boundaries(R_diff);
+                    boundary_info(R_range) = prev_boundaries(R_range) + min_delta;
+                else 
+                    right = [];
+                    left  = [];
+                    boundary_info(R_range) = prev_boundaries(R_range) + min_delta;
+                    fprintf('Cannot determine right boundary1, ');
+                    return
+                end 
+            else
+                right = right_candidates(diff_index);
+                if length(right) == 1
+                    boundary_info(R) = right;
+                else 
+                    [v i] = min(abs(right - prev_boundaries(R)));
+                    boundary_info(R) = right(i);
+                    right            = right(i);
+                end
+                diff = right - prev_boundaries(R);
+                if diff == 0
+                    boundary_info(R_diff) = sign(prev_boundaries(R_diff));
+                else 
+                    boundary_info(R_diff) = diff;
+                end 
+                boundary_info(R_range) = min_delta;
+            end
+        else 
+            [c i] = min(gradient_data(right_candidates));
+            right = right_candidates(i);
+            if isempty(right) || column_averages(right) < 0
                 right = [];
                 left  = [];
-                boundary_info(R_range) = prev_boundaries(R_range) + min_delta;
-                fprintf('Cannot determine right boundary1, ');
+                boundary_info = [];
+                fprintf('Cannot determine right boundary2, ');
                 return
             end 
-        else
-            right = right_candidates(diff_index);
             boundary_info(R)       = right;
-            diff = right - prev_boundaries(R);
-            if diff == 0
-                boundary_info(R_diff) = sign(prev_boundaries(R_diff));
-            else 
-                boundary_info(R_diff) = diff;
-            end 
+            boundary_info(R_diff)  = 0;
             boundary_info(R_range) = min_delta;
-        end
-    else 
-        [c i] = max(column_averages(right_candidates));
-        right = right_candidates(i);
-        if isempty(right) || column_averages(right) < 0
-            right = [];
-            left  = [];
-            boundary_info = [];
-            fprintf('Cannot determine right boundary2, ');
-            return
         end 
-        boundary_info(R)       = right;
-        boundary_info(R_diff)  = 0;
-        boundary_info(R_range) = min_delta;
     end 
 
-    left_candidates = maxpeaks(maxpeaks(:, 2) > 15, 1);
-    if ~isempty(prev_boundaries)
-        diffs = left_candidates - prev_boundaries(L);
-        if prev_boundaries(L_range) > min_delta
-            diff_index = abs(diffs) <= prev_boundaries(L_range) & sign(diffs) == sign(prev_boundaries(L_diff));
+    if isempty(maxpeaks)
+        right = [];
+        left  = [];
+        if isempty(prev_boundaries)
+            boundary_info = [];
         else 
-            diff_index = abs(diffs) <= prev_boundaries(L_range);
-        end
-        if isempty(diffs(diff_index))
-            if prev_boundaries(L_range) <= min_delta
-                left = prev_boundaries(L) + prev_boundaries(L_diff);
-                boundary_info(L)       = left;
-                boundary_info(L_diff)  = prev_boundaries(L_diff);
-                boundary_info(L_range) = prev_boundaries(L_range) + min_delta;
+            boundary_info(L_range) = prev_boundaries(L_range) + min_delta;
+        end 
+    else     
+        left_candidates = maxpeaks(maxpeaks(:, 2) > 15, 1);
+        if ~isempty(prev_boundaries)
+            diffs = left_candidates - prev_boundaries(L);
+            if prev_boundaries(L_range) > min_delta
+                diff_index = abs(diffs) <= prev_boundaries(L_range) & sign(diffs) == sign(prev_boundaries(L_diff));
             else 
+                diff_index = abs(diffs) <= prev_boundaries(L_range);
+            end
+            if isempty(diffs(diff_index))
+                if prev_boundaries(L_range) <= min_delta
+                    left = prev_boundaries(L) + prev_boundaries(L_diff);
+                    boundary_info(L)       = left;
+                    boundary_info(L_diff)  = prev_boundaries(L_diff);
+                    boundary_info(L_range) = prev_boundaries(L_range) + min_delta;
+                else 
+                    right = [];
+                    left  = [];
+                    boundary_info(L_range) = prev_boundaries(L_range) + min_delta;
+                    fprintf('Cannot determine left boundary1, ');
+                    return
+                end 
+            else 
+                left = left_candidates(diff_index);
+                if length(left) == 1
+                    boundary_info(L) = left;
+                else 
+                    [v i] = min(abs(left - prev_boundaries(L)));
+                    boundary_info(L) = left(i);
+                    left             = left(i);
+                end
+                % boundary_info(L)       = left_candidates(diff_index);
+                diff = left - prev_boundaries(L);
+                if diff == 0
+                    boundary_info(L_diff) = sign(prev_boundaries(L_diff));
+                else 
+                    boundary_info(L_diff) = diff;
+                end 
+                boundary_info(L_range) = min_delta;
+            end 
+        else 
+            [c i] = max(gradient_data(left_candidates));
+            left = left_candidates(i);
+            if isempty(left) || column_averages(left) < 0
                 right = [];
                 left  = [];
-                boundary_info(L_range) = prev_boundaries(L_range) + min_delta;
-                fprintf('Cannot determine left boundary1, ');
+                boundary_info = [];
+                fprintf('Cannot determine left boundary2, ');
                 return
             end 
-        else 
-            left = left_candidates(diff_index);
-            boundary_info(L)       = left_candidates(diff_index);
-            diff = left - prev_boundaries(L);
-            if diff == 0
-                boundary_info(L_diff) = sign(prev_boundaries(L_diff));
-            else 
-                boundary_info(L_diff) = diff;
-            end 
+            boundary_info(L)       = left;
+            boundary_info(L_diff)  = 0;
             boundary_info(L_range) = min_delta;
-        end 
-    else 
-        [c i] = max(column_averages(left_candidates));
-        left = left_candidates(i);
-        if isempty(left) || column_averages(left) < 0
-            right = [];
-            left  = [];
-            boundary_info = [];
-            fprintf('Cannot determine left boundary2, ');
-            return
-        end 
-        boundary_info(L)       = left;
-        boundary_info(L_diff)  = 0;
-        boundary_info(L_range) = min_delta;
+        end     
     end     
-    
     if nargin > 1 && plot_data == 1
         left_return  = left
         right_return = right
