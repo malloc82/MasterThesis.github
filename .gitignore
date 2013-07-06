@@ -16,3 +16,7 @@ data/
 *.dvi
 *.toc
 *.blg
+
+# ignore dropbox files
+.dropbox
+Icon?
