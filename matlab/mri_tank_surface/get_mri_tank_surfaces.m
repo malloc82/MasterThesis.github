@@ -13,10 +13,10 @@ function [S1 S2 S3 S4] = get_mri_tank_surfaces(data_set_dir, image_file)
     if nargin == 1
         image_set = getAllFiles(data_set_dir);
         mid_sample_index = int32(length(image_set) / 2);
-        mid_image_sample = dicomread(sprintf('%s/%s', data_set_dir, image_set{mid_sample_index}));
+        mid_image_sample = dicomread(image_set{mid_sample_index});
         
         surfaces_locations = locate_surfaces(mid_image_sample);
-        fprintf('mid sample : %s/%s\n', data_set_dir, image_set{mid_sample_index});
+        fprintf('mid sample : %s\n', image_set{mid_sample_index});
 
         im_info1 = dicominfo(image_set{1});
         im_info2 = dicominfo(image_set{10});

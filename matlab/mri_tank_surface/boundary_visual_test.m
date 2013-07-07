@@ -1,16 +1,17 @@
-function boundary_visual_test(data_set_dir)
+function boundary_visual_test(image_set)
     addpath(sprintf('%s/%s', pwd, '../lib'));
-    image_set = getAllFiles(data_set_dir);
+    % image_set = getAllFiles(data_set_dir);
     
     % mid_sample_index = 110;
     mid_sample_index = int32(length(image_set) / 2);
-    mid_prev_sample  = dicomread(sprintf('%s/%s', data_set_dir, image_set{mid_sample_index-1}));
-    mid_sample       = dicomread(sprintf('%s/%s', data_set_dir, image_set{mid_sample_index}));
-    mid_next_sample  = dicomread(sprintf('%s/%s', data_set_dir, image_set{mid_sample_index+1}));
+    mid_prev_sample  = dicomread(image_set{mid_sample_index-1});
+    mid_sample       = dicomread(image_set{mid_sample_index});
+    mid_next_sample  = dicomread(image_set{mid_sample_index+1});
+    
     mid_image_sample = mid_prev_sample + mid_sample + mid_next_sample;
         
     tank_surfaces = locate_surfaces(mid_image_sample);
-    fprintf('mid sample : %s/%s\n', data_set_dir, image_set{mid_sample_index});
+    fprintf('mid sample : %s\n', image_set{mid_sample_index});
     
     mid_info         = dicominfo(image_set{mid_sample_index});
     mid_spacing      = mid_info.PixelSpacing;
@@ -44,7 +45,7 @@ function boundary_visual_test(data_set_dir)
         fprintf('\n');
         
         for i=mid_sample_index+1:length(image_set)-1
-            next_sample = dicomread(sprintf('%s/%s', data_set_dir, image_set{i+1}));
+            next_sample = dicomread(image_set{i+1});
 
             region = prev_sample(upper_layer:lower_layer, :) + ...
                      curr_sample(upper_layer:lower_layer, :) + ...
@@ -80,13 +81,13 @@ function boundary_visual_test(data_set_dir)
         fprintf('\n');
 
         for i=mid_sample_index-1:-1:2
-            next_sample = dicomread(sprintf('%s/%s', data_set_dir, image_set{i-1}));
+            next_sample = dicomread(image_set{i-1});
             
             region = prev_sample(upper_layer:lower_layer, :) + ...
                      curr_sample(upper_layer:lower_layer, :) + ...
                      next_sample(upper_layer:lower_layer, :);
 
-            % sample = dicomread(sprintf('%s/%s', data_set_dir, image_set{i}));
+            % sample = dicomread(image_set{i});
             % region = sample(upper_layer:lower_layer, :);
             
             im_info     = dicominfo(image_set{i});
