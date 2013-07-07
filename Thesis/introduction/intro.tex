@@ -175,52 +175,55 @@ In addition, with the introduction of the new 3T MR scanner with a larger bore, 
 
 \section{Significance}
 
-% Which equation are you referring to here?  It would be better to reference the equation, instead of saying "the equation above"
+% Medical Significance 
+Geometric distortions are critical for the use of MRI in accurate medical targeting. Procedures such as functional proton radiosurgery that deliver very high doses to small targets very accurate targeting is an absolute requirement. The built-in distortion correction of modern MRI scanners is probably not accurate enough for such procedures, and distortion correction methods that are based on measurements of the nonlinearity in the actual scanner are needed. With the work accomplished in this thesis, we have come a step closer to using MRI for such procedures. The phantom and algorithms developed will also be useful for other neurosurgical procedures that use MRI as the basis for accuate targeting.
 
-Consider the minimization of the original expression for the sum of spherical harmonics:
+% % Which equation are you referring to here?  It would be better to reference the equation, instead of saying "the equation above"
 
-\begin{equation} \label{eq:spherical_harmonics_2}
-0 = \alpha(1 + K_{\alpha_0}(x^2_i + y^2_i) + K_{\alpha_1}z^2_i +
-K_{\alpha_2}z^2_i(x^2_i + y^2_i) + K_{\alpha_3}(x^2_i + y^2_i)^2 +
-K_{\alpha_4}z^4_i)
-\end{equation}
+% Consider the minimization of the original expression for the sum of spherical harmonics:
 
-The correction method this work proposes is on a pixel-to-pixel basis instead of a plane to plane basis.
-Consider a point $P$ = $[X,Y,Z]$, where $X$, $Y$, and $Z$ are represented in equation \ref{eq:spherical_harmonics_2}. Each $X$, $Y$, and $Z$ describes the distance of $P$ from the DICOM origin (gradient isocenter), previously assumed to be at [0,0,0].  Past MRI studies have confirmed that the gradient isocenter is not at [0,0,0], therefore it is necessary to shift the DICOM origin appropriately by some offset $[\delta,\beta,\gamma]$.  Shifting the DICOM origin by this amount yields the new expression for $P$:
+% \begin{equation} \label{eq:spherical_harmonics_2}
+% 0 = \alpha(1 + K_{\alpha_0}(x^2_i + y^2_i) + K_{\alpha_1}z^2_i +
+% K_{\alpha_2}z^2_i(x^2_i + y^2_i) + K_{\alpha_3}(x^2_i + y^2_i)^2 +
+% K_{\alpha_4}z^4_i)
+% \end{equation}
 
-\begin{eqnarray}
-P = [X - \delta, Y - \beta, Z - \gamma]
-\end{eqnarray}
+% The correction method this work proposes is on a pixel-to-pixel basis instead of a plane to plane basis.
+% Consider a point $P$ = $[X,Y,Z]$, where $X$, $Y$, and $Z$ are represented in equation \ref{eq:spherical_harmonics_2}. Each $X$, $Y$, and $Z$ describes the distance of $P$ from the DICOM origin (gradient isocenter), previously assumed to be at [0,0,0].  Past MRI studies have confirmed that the gradient isocenter is not at [0,0,0], therefore it is necessary to shift the DICOM origin appropriately by some offset $[\delta,\beta,\gamma]$.  Shifting the DICOM origin by this amount yields the new expression for $P$:
 
-Substitute the new expression for $P$ into the sum of spherical harmonics expression:
+% \begin{eqnarray}
+% P = [X - \delta, Y - \beta, Z - \gamma]
+% \end{eqnarray}
 
-$$0 = \alpha(1 + K_{\alpha_0}((x_i - \delta)^2 + (y_i - \beta)^2)$$
-$$+ K_{\alpha_1}(z_i - \gamma)^2 + K_{\alpha_2}(z_i - \gamma)^2((x_i - \delta)^2 + (y_i - \beta)^2)$$
-$$+ K_{\alpha_3}((x_i - \delta)^2 + (y_i - \beta)^2)^2 + K_{\alpha_4}(z_i - \gamma)^4)$$
+% Substitute the new expression for $P$ into the sum of spherical harmonics expression:
 
-Therefore, by expressing $P$ in this manner, the position of the true gradient isocenter becomes
-$[\delta, \beta, \gamma]$. To solve for $\delta$, $\beta$, $\gamma$ and $K_{\alpha}$, we do not need
-to have a full plane, as long as enough data points exist, and each data point exhibits a significant amount of distortion. The system can be solved using a linear least squares technique.
+% $$0 = \alpha(1 + K_{\alpha_0}((x_i - \delta)^2 + (y_i - \beta)^2)$$
+% $$+ K_{\alpha_1}(z_i - \gamma)^2 + K_{\alpha_2}(z_i - \gamma)^2((x_i - \delta)^2 + (y_i - \beta)^2)$$
+% $$+ K_{\alpha_3}((x_i - \delta)^2 + (y_i - \beta)^2)^2 + K_{\alpha_4}(z_i - \gamma)^4)$$
 
-% To collect the data sets, a new phantom (Fig \ref{fig:2}), is proposed to capture data points on only the corner sections
-% of the original phantom cube.  Since these sections are located far away from the gradient isocenter, they will exhibit the largest amount
-% of distortion when compared to other sections closer to the gradient isocenter. The image slices that
-% would be used are those close to each surface of the phantom. For each of these images a 
-% filtering process will be applied to obtain only data points on the edge of phantom cube. 
+% Therefore, by expressing $P$ in this manner, the position of the true gradient isocenter becomes
+% $[\delta, \beta, \gamma]$. To solve for $\delta$, $\beta$, $\gamma$ and $K_{\alpha}$, we do not need
+% to have a full plane, as long as enough data points exist, and each data point exhibits a significant amount of distortion. The system can be solved using a linear least squares technique.
 
-% \begin{figure}[htb]
-%   \begin{minipage}{0.80\linewidth}
-%     \centering
-%     \centerline{\mbox{\includegraphics[width=4in]{images/model2.eps}}}
-% %    \centerline{New device}\medskip
-%     \centerline{}\medskip
-%   \end{minipage}
-%   \caption{The new phantom, designed to collect data at the corners of the MRI scan.}  \label{fig:2}
-% \end{figure}
+% % To collect the data sets, a new phantom (Fig \ref{fig:2}), is proposed to capture data points on only the corner sections
+% % of the original phantom cube.  Since these sections are located far away from the gradient isocenter, they will exhibit the largest amount
+% % of distortion when compared to other sections closer to the gradient isocenter. The image slices that
+% % would be used are those close to each surface of the phantom. For each of these images a 
+% % filtering process will be applied to obtain only data points on the edge of phantom cube. 
 
-% The reason for constructing a new phantom is that a phantom cube larger than original size (159.50 mm x 159.70 mm x 158.11 mm) is needed to 
-% capture the distortion of larger MRI scanner while the manufacturer who produced the original
-% phantom cube was having difficulty produce an accurate cubic phantom larger than the
-% one shown in \ref{fig:1}. The eight parts, shown in fig \ref{fig:2}, will be interconnected and placed inside a water tank for scanning.
-% For each image, eight curves representing the intersection between the surface of the material
-% and water will be obtained, and will be used for calculating the gradient nonlinearity distortion correction.
+% % \begin{figure}[htb]
+% %   \begin{minipage}{0.80\linewidth}
+% %     \centering
+% %     \centerline{\mbox{\includegraphics[width=4in]{images/model2.eps}}}
+% % %    \centerline{New device}\medskip
+% %     \centerline{}\medskip
+% %   \end{minipage}
+% %   \caption{The new phantom, designed to collect data at the corners of the MRI scan.}  \label{fig:2}
+% % \end{figure}
+
+% % The reason for constructing a new phantom is that a phantom cube larger than original size (159.50 mm x 159.70 mm x 158.11 mm) is needed to 
+% % capture the distortion of larger MRI scanner while the manufacturer who produced the original
+% % phantom cube was having difficulty produce an accurate cubic phantom larger than the
+% % one shown in \ref{fig:1}. The eight parts, shown in fig \ref{fig:2}, will be interconnected and placed inside a water tank for scanning.
+% % For each image, eight curves representing the intersection between the surface of the material
+% % and water will be obtained, and will be used for calculating the gradient nonlinearity distortion correction.
