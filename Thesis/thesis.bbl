@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{Wil46}
+Robert Wilson.
+\newblock {Radiological Use of Fast Protons}.
+\newblock {\em Radiology}, (47):487--91, 1946.
+
 % @INPROCEEDINGS{LSS06a,
 %   AUTHOR =       {T.S. Lee and K.E. Schubert and R.W. Schulte},
 %   TITLE =        {{Gradient Non-Linearity Correction of MR Images for Functional Radiosurgery}},
@@ -12,6 +17,8 @@
 %   doi =          {http://dx.doi.org/10.1109/ICIS-COMSAR.2006.43},
 %   publisher =    {IEEE Computer Society},
 % }
+
+\bibitem{tom} Lee, T.S.  {\it Software-Based Gradient Nonlinearity Distortion Correction.} MSc Thesis, California State University San Bernardino, December 2006.
 
 \bibitem{LSS06a}
 T.S. Lee and K.E. Schubert and R.W. Schulte

@@ -46,7 +46,7 @@ image~\cite{LSS08b,Lang99}.
 % \end{figure} 
 
 The primary purpose of this thesis was to improve the distortion correction method developed in a previous 
-thesis.  To do this, the following issues were addressed in this work:
+thesis \cite{tom}.  To do this, the following issues were addressed in this work:
 \begin{itemize}
 \item A new phantom was designed that can capture the distortion in modern 3-Tesla(T) MRI scanner. 
 \item Algorithms were developed that can extract relevant data points from the MR images of the new phantom.
@@ -80,19 +80,31 @@ MR images. The final chapter summarizes the main results and suggests future wor
 
 \section{Background}
 
+The research project associated with this thesis relates to the correction of MRI images that will be used 
+for functional proton radiosurgery at Loma Linda University Medical Center (LLUMC).
 The clinical application of protons was first suggested over 60 years ago \cite{Wil46}.
 The ability to penetrate human tissue, delivering high dosage of proton beams at a target
-region and being able to concentrate on a very small target area make protons ideal for use in noninvasive surgery \cite{Wil46}. Currently, Loma Linda University
+region and being able to concentrate on a very small target area make protons ideal for use in noninvasive 
+surgery \cite{Wil46}. Currently, Loma Linda University
 Medical Center (LLUMC) is using proton beams to treat patients with tumors or
 vascular malformations in the brain.
-Due to the effectiveness of proton radiosurgery, a new system is proposed to treat
-even smaller targets, more specifically, cranial targets.  However, this requires higher
-accuracy of the treatment system. The current system can treat targets as small as 1 to 3 cm.  Target localization is accomplished using CT and projection angiography.
-In order to achieve higher accuracy, MRI is to be used for target localization in the new
-system. The major obstacle of using MRI is the gradient nonlinear
-distortion on MRI images caused by the magnetic field of the scanner.
-Two of the most important requirements for a successful distortion correction are:
 
+Due to the effectiveness of proton radiosurgery, a new system is proposed thatl targets functional 
+disorders in the brain, such as trigeminal neuralgia and Parkiinson's disease by creating small lesions in 
+the brain regions affected by the disease.
+% Due to the effectiveness of proton radiosurgery, a new system is proposed to treat
+% even smaller targets, more specifically, cranial targets.  However, this requires higher
+% accuracy of the treatment system. 
+The current system can treat targets as small as 1 to 3 cm.  
+Target localization is accomplished using CT and projection angiography.
+% In order to achieve higher accuracy, MRI is to be used for target localization in the new system. 
+MRI will to be used for target localization in the new system.
+The major obstacle of using MRI is the geometric distortion on MRI images caused by the nonlinearity of the magnetic gradient fields of the scanner.
+% The major obstacle of using MRI is the gradient nonlinear distortion on MRI images caused by the magnetic 
+% field of the scanner.
+
+For the proposed application, two of the most important requirements for a successful distortion 
+correction are:
 \begin{enumerate}
 \item The distortion correction must have submillimeter accuracy.
 \item The correction process must be finished within 15 minutes.
@@ -101,7 +113,10 @@ Two of the most important requirements for a successful distortion correction ar
 % I added some more detail in this paragraph
 
 %The iteracy that this work is based on presented gradient nonlinearity correction method based on a cubic phantom MRI data set\cite{tom}.
-This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set \cite{tom}. The published method utilizes the sum of spherical
+
+This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set [French article], which was also subject of a previous thesis \cite{tom}.
+% This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set \cite{tom}. 
+The published method utilizes the sum of spherical
 harmonics to model the geometrically warped planes of the cube, and applies the model
 to correct arbitrary image sets acquired with the same scanner. The cube is
 placed in the MRI scanner such that the cube's center is exactly in the center of the MRI scanner.  This work assumes the center of the MRI scanner corresponds to the isocenter of the
@@ -126,24 +141,37 @@ Several assumptions are made for this model:
 \begin{itemize}
   \item The phantom is (reasonably) centered with respect to the gradient isocenter of the scanner.
   \item The distortion is (reasonably) symmetric for each pair of faces.
-  \item The origin of the DICOM patient coordinate system represents the position of the gradient isocenter.
+  \item The origin of the DICOM patient coordinate system conincides with the position of the gradient 
+    isocenter.
 \end{itemize}
 
-However, positioning the phantom with respect to gradient isocenter is very difficult,
-making it nearly impossible to perfectly center the phantom. After performing numerous
-scans by Permedics Inc and LLUMC over the past several years, the issue of phantom centering has been identified
-as a crucial factor in the quality of image data.  Improper centering of the phantom
-in the scanner produces strong asymmetry in the phantom surfaces, thereby affecting the
-accuracy of the distortion correction.  Therefore, the assumption that the distortion
-is symmetric for each pair of phantom faces is invalid.
 
-The assumption that the origin of the DICOM patient coordinate system corresponds to the isocenter of the magnetic field in the MRI scanner is also invalid. Siemens
-engineers have confirmed that the true location of the gradient isocenter is unknown.
-Investigating this further appeared to confirm this claim:  every scan performed thus far features a -10mm offset in Y in order to center the field of view on the phantom.  Therefore, the DICOM origin is shifted -10mm in $Y$ for each image.  But, the distortion inherent to each pair of phantom surfaces appears to be quite symmetric.  If the gradient isocenter was truly located at the DICOM origin, then the images would be expected to contain significant asymmetry in the distortion.  This is not the case in recent phantom studies.
+% However, positioning the phantom with respect to gradient isocenter is very difficult,
+% making it nearly impossible to perfectly center the phantom. After performing numerous
+% scans by Permedics Inc and LLUMC over the past several years, the issue of phantom centering has been 
+% identified
+% as a crucial factor in the quality of image data.  Improper centering of the phantom
+% in the scanner produces strong asymmetry in the phantom surfaces, thereby affecting the
+% accuracy of the distortion correction.  Therefore, the assumption that the distortion
+% is symmetric for each pair of phantom faces is invalid.
 
-In addition, the computation, including image filtering, distortion parameters
-computation and final correction, average takes about 20-30 minutes.  In some cases, the calculation
-could require as much as 40 minutes. This is far from the ideal 15 minutes requirement for clinical use.
+In reality, however, these assumptions are not valid. Due to the geometry of the MR scanner, 
+the phantom cannot be centered, and the phantom center will always we located in the upper half of the 
+circular scanning plane. The issue of phantom centering has been identified as a crucial factor in the 
+quality of distortion correction. Improper centering of the phantom in the scanner produces strong asymmetry 
+in the phantom surfaces, thereby violating the asumption of symmetry of the distortion.
+
+% The assumption that the origin of the DICOM patient coordinate system corresponds to the isocenter of the magnetic field in the MRI scanner is also invalid. Siemens
+% engineers have confirmed that the true location of the gradient isocenter is unknown.
+% Investigating this further appeared to confirm this claim:  every scan performed thus far features a -10mm offset in Y in order to center the field of view on the phantom.  Therefore, the DICOM origin is shifted -10mm in $Y$ for each image.  But, the distortion inherent to each pair of phantom surfaces appears to be quite symmetric.  If the gradient isocenter was truly located at the DICOM origin, then the images would be expected to contain significant asymmetry in the distortion.  This is not the case in recent phantom studies.
+
+The assumption that the origin of the DICOM patient coordinate system corresponds to the isocenter of the magnetic field in the MRI scanner is also invalid. Siemens engineers have confirmed that the exact location of the gradient isocenter is unknown. Thus, the assumption that the origin of the DICOM patient is at the same location as the gradient isocenter will further compromise the accuracy of the distortion correction method.
+
+% In addition, the computation, including image filtering, distortion parameters
+% computation and final correction, average takes about 20-30 minutes.  In some cases, the calculation
+% could require as much as 40 minutes. This is far from the ideal 15 minutes requirement for clinical use.
+
+In addition, with the introduction of the new 3T MR scanner with a larger bore, the previous phantom, which was designed for a 1.5 T scanner with a much smaller bore, turned out to be inadequate. The new scanner had only minimal distortion in the area probed by the orginal phantom with 16 cm diameter. A larger phantom was clearly needed that also better probed the circular field of view of the scanner.
 
 \section{Significance}
 
