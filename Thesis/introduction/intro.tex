@@ -11,66 +11,72 @@ fields or inhomogeneities of the scanner main field
 Gradient nonlinearities can cause over 2mm of distortion to the location of features in the 
 image~\cite{LSS08b,Lang99}.
 
-Modern MRI scanners have built-in distortion correction algorithms, that rely on knowledge of the magnetic 
-field configuration and its distortion. Built-in algorithms, which are usually proprietary, are designed 
-based on assumed knowledge of the geometry and location of the gradient coils. A more practical approach is 
-to use a phantom of known geometry and to derive the distortion by analyzing the MRI images generated with 
-such a phantom ~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}. 
-This method has the advantage that a scanner-specific correction can be applied, which can also take into 
-account potential changes in the gradient fields over time.
+% Modern MRI scanners have built-in distortion correction algorithms, that rely on knowledge of the magnetic 
+% field configuration and its distortion. Built-in algorithms, which are usually proprietary, are designed 
+% based on assumed knowledge of the geometry and location of the gradient coils. A more practical approach is 
+% to use a phantom of known geometry and to derive the distortion by analyzing the MRI images generated with 
+% such a phantom ~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}. 
+% This method has the advantage that a scanner-specific correction can be applied, which can also take into 
+% account potential changes in the gradient fields over time.
 
-Accurate knowledge of the gradient isocenter is essential to very accurate distortion correction methods, 
-To our knowledge, existing distortion correction algorithms, both built-in and phantom based, 
-make the assumption that the gradient isocenter coincides with the origin of the DICOM coordinates. 
-This assumption may not be accurate and should not be used if a high degree of accuracy is necessary.
+% Accurate knowledge of the gradient isocenter is essential to very accurate distortion correction methods, 
+% To our knowledge, existing distortion correction algorithms, both built-in and phantom based, 
+% make the assumption that the gradient isocenter coincides with the origin of the DICOM coordinates. 
+% This assumption may not be accurate and should not be used if a high degree of accuracy is necessary.
 
-The goal of this work was to develop and implement a numerical software-based method to estimate the gradient 
-isocenter of the magnetic field inside an MRI scanner using the MRI scan of a custom-built phantom.  
-In our previous work~\cite{LSS06a,LSS06b,LSS08a,LSS08b}, we used an oil filled plexiglas cube with
-159.50mm $\times$ 159.70mm $\times$ 158.11mm dimension that was designed to fit MR scanners that were 
-available at that time.  Current MRI scanners have a significantly wider aperture, which necessitates 
-a larger phantom to characterize the field distortion.  Furthermore, since the lower part of the scanner 
-aperture is occupied by the scanner table, the scanning area occupied by the phantom or the patient is not 
-centered on the gradient isocenter, making correction methods that assume that the phantom is centered with 
-respect to the gradient isocenter~\cite{LSS06a,LSS06b,LSS08a,LSS08b,Lang99} obsolete and potentially 
-inaccurate.
+% The goal of this work was to develop and implement a numerical software-based method to estimate the gradient 
+% isocenter of the magnetic field inside an MRI scanner using the MRI scan of a custom-built phantom.  
+% In our previous work~\cite{LSS06a,LSS06b,LSS08a,LSS08b}, we used an oil filled plexiglas cube with
+% 159.50mm $\times$ 159.70mm $\times$ 158.11mm dimension that was designed to fit MR scanners that were 
+% available at that time.  Current MRI scanners have a significantly wider aperture, which necessitates 
+% a larger phantom to characterize the field distortion.  Furthermore, since the lower part of the scanner 
+% aperture is occupied by the scanner table, the scanning area occupied by the phantom or the patient is not 
+% centered on the gradient isocenter, making correction methods that assume that the phantom is centered with 
+% respect to the gradient isocenter~\cite{LSS06a,LSS06b,LSS08a,LSS08b,Lang99} obsolete and potentially 
+% inaccurate.
 
-\begin{figure}[htb]
-  \begin{minipage}{0.80\linewidth}
-    \centering
-    \centerline{\mbox{\includegraphics[width=4in]{introduction/images/phantom_scanner2.eps}}}
-%    \centerline{New device}\medskip
-    \centerline{}\medskip
-  \end{minipage}
-  \caption{A phantom cube made of plexiglas and filled with oil is ready for scanning} \label{fig:1}
-\end{figure} 
+% \begin{figure}[htb]
+%   \begin{minipage}{0.80\linewidth}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=4in]{introduction/images/phantom_scanner2.eps}}}
+% %    \centerline{New device}\medskip
+%     \centerline{}\medskip
+%   \end{minipage}
+%   \caption{A phantom cube made of plexiglas and filled with oil is ready for scanning} \label{fig:1}
+% \end{figure} 
 
-The primary purpose of this thesis is to create method that would work in 3T MRI scanners as well as preivous
-method in 1.5T scanners. To do this, we would need to addresss following issues in this work:
+The primary purpose of this thesis was to improve the distortion correction method developed in a previous 
+thesis.  To do this, the following issues were addressed in this work:
 \begin{itemize}
-\item A new phantom design that can capture the distortion in 3T MRI scanner. 
-\item Algorithms that can extract interested data points from the MR images of the new phantom.
-\item An algorithm that can accurately estimate the gradient ISO center of the magnetic field inside 3T MRI 
-  scanners.
-\item An algorithm that can accurately estimate the undistortion paramters which could then be used to generate
-  undistorted images.
+\item A new phantom was designed that can capture the distortion in modern 3-Tesla(T) MRI scanner. 
+\item Algorithms were developed that can extract relevant data points from the MR images of the new phantom.
+\item An new algorithm was developed that can accurately estimate the gradient isocenter of the magnetic 
+  field inside 3T MRI scanners.
+\item An algorithm was developed that can determine the undistortion paramters, which can then be used to 
+  generate undistorted MR images.
+% \item An algorithm was developed that can accurately estimate the undistortion paramters,
+%   which could then be used to generate undistorted MR images.
 \end{itemize}
 
-Thesis is going to start with the design details of the new phantom and several phases and changes we have
-gone through. We will discuss some features captured by the final design of our phantom and their importance.
-
-The next chapter will discuss the algorithm we derived to estimate the gradient ISO center using our unique
-phantom design. Since there is no way to know the accurate location of ISO center inside MRI scanner, not even
-the manufacture themselves, we will analyze our result using a simulate data points. 
-
-After ISO center algorithm we will start to discuss a series of algorithms we used to extract data points
-from MR images and CT images. CT images is used for measuring certain dimensions inside phantom due to
-limitations of manufacture's macine. 
-
-In the final chapter, putting everything together, 
-we are using the geometric feature of the phantom and information
-obtained from MR images to estimating a undistortion parameter that can transform the distorted MR images
-back to undistorted images.
+% background 
+The thesis is organized as follows. After the introduction, Chapter 2 gives background information on MRI, 
+it's geometric distortion, and approaches to corrected. 
+Chapter 3 describe the design details of the new phantom and several phases and changes the design 
+went through. The main feature of the final design of the phantom and their importance will be discussed.
+The next chapter discusses the algorithm for estimation of  gradient isocenter based on new
+phantom design. % Since there is no way to know the accurate location of isocenter inside MRI scanner, not even
+% the manufacture themselves, we will analyze our result using a simulate data points. 
+Chapter 5 describe a series of algorithms used to extract relevant data from MR and CT images. CT images were
+used in this work to obtain accurate dimensions inside the phantom.
+% After isocenter algorithm we will start to discuss a series of algorithms we used to extract data points
+% from MR images and CT images. CT images is used for measuring certain dimensions inside phantom due to
+% limitations of manufacture's macine. 
+Chapter 6 describes the procedure to estimate the parameters of the model that undistorts the distorted 
+MR images. The final chapter summarizes the main results and suggests future work.
+% In the final chapter, putting everything together, 
+% we are using the geometric feature of the phantom and information
+% obtained from MR images to estimating a undistortion parameter that can transform the distorted MR images
+% back to undistorted images.
 
 \section{Background}
 
