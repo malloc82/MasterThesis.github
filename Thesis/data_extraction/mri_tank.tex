@@ -34,5 +34,13 @@ horizontal boundaries for surfaces:
 \item First we need to start from the middle to get an accurate middle slice's left and right boundary. To
   do this we will average middle slice and it's previous and next images to get rid of some of noise signals 
   as well as enhance the real data signals. 
-\item 
+\item We will use both coronal and saggital set to extract surfaces
+\item Bottom tank's boundaries could just use the upper tank's
+\item Only the exterior inside surface will use canny for edges, every other surface will use column wised
+  data analysis. 
+  All surfaces will use the same left and right boundaries derived from exterior inside surface.
+  Column wised pixel analysis should be able distinguish padding region and columns that might be outside
+  left or right boundaries.
+\item Averging three slices work well for most of the slices. Experiments have shown that 60\% mid slices 
+  is a good cut off point
 \end{enumerate}

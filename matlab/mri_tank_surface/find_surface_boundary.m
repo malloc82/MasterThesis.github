@@ -8,7 +8,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
 % already intercepted each other, and current region has nothing to
 % look for.
     
-    min_delta = 5; 
+    min_delta = 10; 
     
     % named index
     L       = 1;
