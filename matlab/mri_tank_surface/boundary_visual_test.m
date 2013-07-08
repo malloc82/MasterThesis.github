@@ -43,13 +43,16 @@ function boundary_visual_test(image_set)
         curr_sample = mid_next_sample;
         println_vector('initial boundary_info ', prev_boundaries, 1);
         fprintf('\n');
+
+        radius = int32(length(image_set) * 0.58 / 2)
         
-        for i=mid_sample_index+1:length(image_set)-1
+        % for i=mid_sample_index+1:length(image_set)-1
+        for i=mid_sample_index+1:mid_sample_index+radius
             next_sample = dicomread(image_set{i+1});
 
-            region = prev_sample(upper_layer:lower_layer, :) + ...
-                     curr_sample(upper_layer:lower_layer, :) + ...
-                     next_sample(upper_layer:lower_layer, :);
+            region = (prev_sample(upper_layer:lower_layer, :) + ...
+                      curr_sample(upper_layer:lower_layer, :) + ...
+                      next_sample(upper_layer:lower_layer, :)) / 3;
             
             im_info     = dicominfo(image_set{i});
             spacing     = im_info.PixelSpacing;
@@ -80,12 +83,13 @@ function boundary_visual_test(image_set)
         println_vector('initial boundary_info ', prev_boundaries, 1);
         fprintf('\n');
 
-        for i=mid_sample_index-1:-1:2
+        % for i=mid_sample_index-1:-1:2
+        for i=mid_sample_index-1:-1:mid_sample_index-radius
             next_sample = dicomread(image_set{i-1});
             
-            region = prev_sample(upper_layer:lower_layer, :) + ...
-                     curr_sample(upper_layer:lower_layer, :) + ...
-                     next_sample(upper_layer:lower_layer, :);
+            region = (prev_sample(upper_layer:lower_layer, :) + ...
+                      curr_sample(upper_layer:lower_layer, :) + ...
+                      next_sample(upper_layer:lower_layer, :)) / 3;
 
             % sample = dicomread(image_set{i});
             % region = sample(upper_layer:lower_layer, :);
@@ -118,13 +122,13 @@ function boundary_visual_test(image_set)
     % S1_down = tank_surfaces.exterior_outside_lower;
     % [S1_left, S1_right] = surface_edge(S1_up, S1_down, 0, 'exterior outside');
     
-    S2_up   = tank_surfaces.exterior_inside_upper;
-    S2_down = tank_surfaces.exterior_inside_lower;
-    [S2_left, S2_right] = surface_edge(S2_up, S2_down, 0, 'exterior inside');
+    % S2_up   = tank_surfaces.exterior_inside_upper;
+    % S2_down = tank_surfaces.exterior_inside_lower;
+    % [S2_left, S2_right] = surface_edge(S2_up, S2_down, 0, 'exterior inside');
     
-    % S3_up   = tank_surfaces.inferior_outside_upper;
-    % S3_down = tank_surfaces.inferior_outside_lower;
-    % [S3_left, S3_right] = surface_edge(S3_up, S3_down, 0, 'inferior outside');
+    S3_up   = tank_surfaces.inferior_outside_upper;
+    S3_down = tank_surfaces.inferior_outside_lower;
+    [S3_left, S3_right] = surface_edge(S3_up, S3_down, 0, 'inferior outside');
     
     % S4_up   = tank_surfaces.inferior_inside_upper;
     % S4_down = tank_surfaces.inferior_inside_lower;
@@ -136,13 +140,12 @@ function boundary_visual_test(image_set)
     % if ~isempty(S1_left),  scatter3(S1_left(:, 1),  S1_left(:, 2),  S1_left(:, 3),  'b'); end
     % if ~isempty(S1_right), scatter3(S1_right(:, 1), S1_right(:, 2), S1_right(:, 3), 'b'); end
     
-    if ~isempty(S2_left),  scatter3(S2_left(:, 1),  S2_left(:, 2),  S2_left(:, 3),  'b'); end
-    if ~isempty(S2_right), scatter3(S2_right(:, 1), S2_right(:, 2), S2_right(:, 3), 'b'); end
+    % if ~isempty(S2_left),  scatter3(S2_left(:, 1),  S2_left(:, 2),  S2_left(:, 3),  'b'); end
+    % if ~isempty(S2_right), scatter3(S2_right(:, 1), S2_right(:, 2), S2_right(:, 3), 'b'); end
 
-    % if ~isempty(S3_left),  scatter3(S3_left(:, 1),  S3_left(:, 2),  S3_left(:, 3),  'b'); end
-    % if ~isempty(S3_right), scatter3(S3_right(:, 1), S3_right(:, 2), S3_right(:, 3), 'b'); end
-    
-    
+    if ~isempty(S3_left),  scatter3(S3_left(:, 1),  S3_left(:, 2),  S3_left(:, 3),  'b'); end
+    if ~isempty(S3_right), scatter3(S3_right(:, 1), S3_right(:, 2), S3_right(:, 3), 'b'); end
+        
     xlabel('X');
     ylabel('Y');
     zlabel('Z');
