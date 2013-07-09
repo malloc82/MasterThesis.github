@@ -14,6 +14,8 @@ function edge_points = surface_edge(region, boundary)
     % imshow(blurred_region, []);
     
     function edge_point = locate_edge_point_S4(column)
+        % first = 380;
+        % last  = 390;
         data_points = zeros([1 row]);
         for i=1:row
             data_points(i) = mean(blurred_region(i, (column-3):(column+3)));
@@ -25,18 +27,28 @@ function edge_points = surface_edge(region, boundary)
         data_gradient = conv([-1 0 1], data_smooth);
         data_gradient = data_gradient(2:end-1);
 
-        % gradient_smooth = conv(data_gradient, gaussFilter7);
-        % gradient_smooth = gradient_smooth(4:end-3);
-        
         [maxpeaks minpeaks] = peakdet(data_gradient, 10);
 
-        % newfigure(sprintf('histogram for column %d', column));
-        % plot((1:row), data_points, 'b', ...
-        %      (1:row), data_gradient, 'r');
-        if ~isempty(maxpeaks), edge_point = max(maxpeaks(:, 1)); else edge_point = []; end
+        % if column >= first && column < last
+        %     newfigure(sprintf('histogram for column %d', column));
+        %     plot((1:row), data_points, 'b', ...
+        %          (1:row), data_gradient, 'r');
+        % end 
+        if isempty(maxpeaks)
+            edge_point = [];
+        else 
+            [v i] = max(maxpeaks(:, 2));
+            edge_point = maxpeaks(i, 1);
+        end
+
+        % if column >= first && column < last
+        %     if ~isempty(edge_point)
+        %         fprintf('column %d : edge_point = %d \n', column, edge_point);
+        %     end
+        % end 
     end
     
-    function [edge_points, edge_gradient] = process_peaks(edge_points, edge_gradient, peaks) % maxpeaks(:, 1)
+    function [edge_points, edge_gradient] = process_peaks(edge_points, edge_gradient, peaks)
         for i=1:length(peaks)
             for j=peaks(i):length(edge_gradient)
                 % if sign(edge_gradient(j)) == sign(edge_gradient(peaks(i))) && ...
@@ -60,50 +72,23 @@ function edge_points = surface_edge(region, boundary)
     end 
 
     function filtered_edge = remove_bumps(edge_points)
-        edge_gradient = conv([-1 0 1], edge_points(:, 1));
-        edge_gradient = edge_gradient(2:end-1);
-        [maxpeaks minpeaks] = peakdet(edge_gradient, 2);
-        [edge_points edge_gradient] = process_peaks(edge_points, edge_gradient, maxpeaks(:, 1));
-        [edge_points edge_gradient] = process_peaks(edge_points, edge_gradient, minpeaks(:, 1));
-        filtered_edge = edge_points(edge_points(:, 1) ~= -1, :);
-    end 
-    
-    
-    edge_points = [];
-    for c=left:right
-        edge_points = [edge_points; [locate_edge_point_S4(c), c]];
-    end
-    % marked_image = mark_image(region, {edge_points});
-    % newfigure('raw edge');
-    % imshow(marked_image, []);
-
-    
-    edge_points  = remove_short_edges(edge_points, 'col', 8);
-    % marked_image2 = mark_image(region, {edge_points});
-    % newfigure('filtered edge');
-    % imshow(marked_image2, []);
-    
-    smooth_edge = conv(edge_points(:, 1), gaussFilter5);
-    edge_points(:, 1) = int32(round(smooth_edge(3:end-2)));
-    % marked_image3 = mark_image(region, {edge_points(2:end-1, :)});
-    % newfigure('smoothed edge');
-    % imshow(marked_image3, []);
-
-    edge_points = remove_bumps(edge_points);
-    edge_points = remove_bumps(edge_points);
-    edge_points = remove_short_edges(edge_points, 'col', 5);
-    % smooth_edge = conv(edge_points(:, 1), gaussFilter5);
-    
-    % marked_image4 = mark_image(region, {edge_points(2:end-1, :)});
-    % newfigure('processed edge');
-    % imshow(marked_image4, []);
+        while 1
+            edge_gradient = conv([-1 0 1], edge_points(:, 1));
+            edge_gradient = edge_gradient(2:end-1);
+            % [(1:length(edge_gradient))' edge_gradient]
         
-    % edge_gradient = conv([-1 0 1], edge_points(:, 1));
-    % edge_gradient = edge_gradient(2:end-1);
-    % [maxpeaks minpeaks] = peakdet(edge_gradient, 2);
-    % newfigure('edge and it''s gradient plot')
-    % plot((1:length(edge_points)), edge_points(:, 1), 'b', ...
-    %      (1:length(edge_points)), edge_gradient,     'r');    
+            [maxpeaks minpeaks] = peakdet(edge_gradient, 2);
+            if isempty(maxpeaks) && isempty(minpeaks), break; end
+            if ~isempty(maxpeaks)
+                [edge_points edge_gradient] = process_peaks(edge_points, edge_gradient, maxpeaks(:, 1));
+            end 
+            if ~isempty(minpeaks)
+                [edge_points edge_gradient] = process_peaks(edge_points, edge_gradient, minpeaks(:, 1));
+            end 
+            edge_points = edge_points(edge_points(:, 1) ~= -1, :);
+        end 
+        filtered_edge = edge_points;
+    end 
 
     function filtered_edge = remove_short_bumps(edge_points)
         edge_gradient = conv([-1 0 1], edge_points(:, 1));
@@ -148,7 +133,7 @@ function edge_points = surface_edge(region, boundary)
                 end 
             end 
             if tracker_index >= 4
-                if tracker(1) <= 3 && tracker(2) <= 2 && tracker(3) <= 3
+                if tracker(1) <= 4 && tracker(2) <= 2 && tracker(3) <= 4
                     % fprintf('i = %d : [%d %d %d]\n', i, tracker(1), tracker(2), tracker(3));
                     len = sum(tracker);
                     edge_points(i-len:i-1, 1) = edge_points(i, 1) * ones(len, 1);
@@ -201,18 +186,57 @@ function edge_points = surface_edge(region, boundary)
         % filtered_edge = edge_points(edge_points(:, 1) ~= -1, :);
         filtered_edge = edge_points;
     end
+    
+    edge_points = [];
+    for c=left:right
+        p = locate_edge_point_S4(c);
+        if ~isempty(p), edge_points = [edge_points; [p, c]]; end
+    end
+    marked_image = mark_image(region, {edge_points});
+    newfigure('raw edge');
+    imshow(marked_image, []);
+    
+    edge_points  = remove_short_edges(edge_points, 'col', 8);
+    % marked_image2 = mark_image(region, {edge_points});
+    % newfigure('filtered edge');
+    % imshow(marked_image2, []);
+    
+    smooth_edge = conv(edge_points(:, 1), gaussFilter5);
+    edge_points(:, 1) = int32(round(smooth_edge(3:end-2)));
+    % marked_image3 = mark_image(region, {edge_points(2:end-1, :)});
+    % newfigure('smoothed edge');
+    % imshow(marked_image3, []);
+
+    edge_points = remove_bumps(edge_points);
+    edge_points = remove_short_edges(edge_points, 'col', 5);
+    % smooth_edge = conv(edge_points(:, 1), gaussFilter5);
+    
+    % marked_image4 = mark_image(region, {edge_points(2:end-1, :)});
+    % newfigure('processed edge');
+    % imshow(marked_image4, []);
+        
+    % edge_gradient = conv([-1 0 1], edge_points(:, 1));
+    % edge_gradient = edge_gradient(2:end-1);
+    % [maxpeaks minpeaks] = peakdet(edge_gradient, 2);
+    % newfigure('edge and it''s gradient plot')
+    % plot((1:length(edge_points)), edge_points(:, 1), 'b', ...
+    %      (1:length(edge_points)), edge_gradient,     'r');    
+
     edge_points = remove_short_bumps(edge_points);
+    % edge_points = remove_bumps(edge_points);
+    % edge_points = remove_bumps(edge_points);
+    
     marked_image5 = mark_image(region, {edge_points(2:end-1, :)});
     newfigure('edge removed 2 pixels bumps');
     imshow(marked_image5, []);
 
-    % edge_gradient = conv([-1 0 1], edge_points(:, 1));
-    % edge_gradient = edge_gradient(2:end-1);
-    % [maxpeaks minpeaks] = peakdet(edge_gradient, 2);
-    % newfigure('edge plot after removing bumps')
-    % plot((1:length(edge_points)), edge_points(:, 1), 'b', ...
-    %      (1:length(edge_points)), edge_gradient,     'r');    
+    edge_gradient = conv([-1 0 1], edge_points(:, 1));
+    edge_gradient = edge_gradient(2:end-1);
+    [maxpeaks minpeaks] = peakdet(edge_gradient, 2);
+    newfigure('edge plot after removing bumps')
+    plot((1:length(edge_points)), edge_points(:, 1), 'b', ...
+         (1:length(edge_points)), edge_gradient,     'r');    
     
-    % max(edge_points(:, 1))
-    % min(edge_points(:, 1))
+    max(edge_points(:, 1))
+    min(edge_points(:, 1))
 end
