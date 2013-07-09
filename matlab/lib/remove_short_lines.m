@@ -1,15 +1,15 @@
-function result = remove_short_lines(data, min_length)
+function result = remove_short_lines(im_data, min_length)
     if nargin == 1
         min_length = 15;
     end
-    [row, col] = size(data);
+    [row, col] = size(im_data);
     result = zeros(row, col);
 
     function verify_edge(r, c, value)
-        edge_pixels = {[r c data(r, c)]};
+        edge_pixels = {[r c im_data(r, c)]};
         edge_length = 1;
         trace       = {};
-        data(r, c)  = 0;
+        im_data(r, c)  = 0;
         
         first_round = 1;
         while first_round || length(trace) > 0
@@ -21,15 +21,15 @@ function result = remove_short_lines(data, min_length)
                 trace(end) = [];
 
             end
-            % data(r, c) = 0;
+            % im_data(r, c) = 0;
             for i=r-1:r+1
                 for j=c-1:c+1
                     if (i ~= r || j ~= c) && i >= 1 && i <= row && j >= 1 && j <= col
-                        if data(i, j) > 0
-                            edge_pixels = [edge_pixels [i j data(i, j)]];
+                        if im_data(i, j) > 0
+                            edge_pixels = [edge_pixels [i j im_data(i, j)]];
                             edge_length = edge_length + 1;
                             trace = [trace [i j]];
-                            data(i, j) = 0;
+                            im_data(i, j) = 0;
                         end
                     end
                 end
@@ -50,8 +50,8 @@ function result = remove_short_lines(data, min_length)
     for r=1:row
         for c=1:col
             if r >= 1 && r <= row && c >= 1 && c <= col
-                if data(r, c) > 0
-                    verify_edge(r, c, data(r, c));
+                if im_data(r, c) > 0
+                    verify_edge(r, c, im_data(r, c));
                 end
             end
         end

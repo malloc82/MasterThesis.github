@@ -146,7 +146,7 @@ function boundary_visual_test(coronal_set, sagittal_set)
     
     end 
     
-    [coronal_left, coronal_right]  = get_surface_boundaries(coronal_set);
+    % [coronal_left, coronal_right]  = get_surface_boundaries(coronal_set);
     [sagittal_left, sagittal_right] = get_surface_boundaries(sagittal_set);
 
     newfigure('Tank boundary test');
@@ -159,12 +159,12 @@ function boundary_visual_test(coronal_set, sagittal_set)
     % if ~isempty(S2_left),  scatter3(S2_left(:, 1),  S2_left(:, 2),  S2_left(:, 3),  'b'); end
     % if ~isempty(S2_right), scatter3(S2_right(:, 1), S2_right(:, 2), S2_right(:, 3), 'b'); end
 
-    if ~isempty(coronal_left)
-        scatter3(coronal_left(:, 1),  coronal_left(:, 2),  coronal_left(:, 3),  'b'); 
-    end
-    if ~isempty(coronal_right)
-        scatter3(coronal_right(:, 1), coronal_right(:, 2), coronal_right(:, 3), 'b'); 
-    end
+    % if ~isempty(coronal_left)
+    %     scatter3(coronal_left(:, 1),  coronal_left(:, 2),  coronal_left(:, 3),  'b'); 
+    % end
+    % if ~isempty(coronal_right)
+    %     scatter3(coronal_right(:, 1), coronal_right(:, 2), coronal_right(:, 3), 'b'); 
+    % end
 
     if ~isempty(sagittal_left)
         scatter3(sagittal_left(:, 1),  sagittal_left(:, 2),  sagittal_left(:, 3),  'r'); 
