@@ -8,7 +8,7 @@ function filtered_edge = remove_short_edges(edge_data, orientation, min_length)
         start = 1;
         edge_length = 1;
         for i=2:length(edge_data)
-            if abs(edge_data(i, 1) - edge_data(i-1, 1)) > 1
+            if edge_data(i, 2)-1 ~= edge_data(i-1, 2) || abs(edge_data(i, 1) - edge_data(i-1, 1)) > 1
                 if edge_length < min_length
                     edge_data(start:i-1, 1) = -1;
                     start = i;
