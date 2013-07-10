@@ -171,7 +171,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
             boundary_info(L_range) = min_delta;
         end     
     end     
-    if nargin > 1 && plot_data == 1
+    if nargin > 2 && plot_data == 1
         left_return  = left
         right_return = right
     end

@@ -14,7 +14,7 @@ function edge_points = surface_edge(region, boundary)
     % imshow(blurred_region, []);
     
     function edge_point = locate_edge_point_S4(column)
-        % first = 380;
+        % first = 380; 
         % last  = 390;
         data_points = zeros([1 row]);
         for i=1:row
@@ -67,7 +67,7 @@ function edge_points = surface_edge(region, boundary)
         end 
     end 
 
-    function filtered_edge = remove_bumps(edge_points)
+    function filtered_edge = rempve_peaks(edge_points)
         while 1
             edge_gradient = conv([-1 0 1], edge_points(:, 1));
             edge_gradient = edge_gradient(2:end-1);
@@ -105,7 +105,7 @@ function edge_points = surface_edge(region, boundary)
                         tracker_index = 0;
                     end 
                 end
-            elseif edge_gradient(i) == -1 || edge_gradient(i) == 1
+            elseif edge_gradient(i) <= -1 || edge_gradient(i) >= 1
                 if tracker_index == 0
                     tracker_index = 1;
                     tracker(1) = tracker(1) + 1;
@@ -118,7 +118,7 @@ function edge_points = surface_edge(region, boundary)
                         tracker(3) = tracker(3) + 1;
                     end
                 elseif edge_gradient(i-1) ~= 0 && sign(edge_gradient(i-1)) ~= sign(edge_gradient(i))
-                    if tracker_index == 1 
+                    if tracker_index == 1
                         tracker_index = 3;
                         tracker(3) = tracker(3) + 1;
                     elseif tracker_index == 3
@@ -129,7 +129,7 @@ function edge_points = surface_edge(region, boundary)
                 end 
             end 
             if tracker_index >= 4
-                if tracker(1) <= 4 && tracker(2) <= 2 && tracker(3) <= 4
+                if tracker(1) <= 4 && tracker(2) <= 3 && tracker(3) <= 4
                     % fprintf('i = %d : [%d %d %d]\n', i, tracker(1), tracker(2), tracker(3));
                     len = sum(tracker);
                     edge_points(i-len:i-1, 1) = edge_points(i, 1) * ones(len, 1);
@@ -169,28 +169,36 @@ function edge_points = surface_edge(region, boundary)
         p = locate_edge_point_S4(c);
         if ~isempty(p), edge_points = [edge_points; [p, c]]; end
     end
-    mark_image(region, {edge_points}, 'raw edge');
+    % mark_image(region, {edge_points}, 'raw edge');
     
-    edge_points  = remove_short_edges(edge_points, 'col', 8);
-    % mark_image(region, {edge_points}, 'filtered edge');
-    
+    edge_points = remove_short_edges(edge_points, 'col', 8);
+    edge_points = remove_short_bumps(edge_points);
+    % plot_data_and_gradients(edge_points, 'after removing short bumps');
+
     smooth_edge = conv(edge_points(:, 1), gaussFilter5);
     edge_points(:, 1) = int32(round(smooth_edge(3:end-2)));
+    
+    % mark_image(region, {edge_points}, 'filtered edge');
+    
     % mark_image(region, {edge_points(2:end-1, :)}, 'smoothed edge');
+    
+    % mark_image(region, {edge_points}, 'before remove bumps');
+    % plot_data_and_gradients(edge_points, 'edge plot before removing bumps');
 
-    edge_points = remove_bumps(edge_points);
-    edge_points = remove_short_edges(edge_points, 'col', 5);
+    edge_points = rempve_peaks(edge_points);
+    edge_points = remove_short_bumps(edge_points);
+    % edge_points = remove_short_edges(edge_points, 'col', 5);
     % smooth_edge = conv(edge_points(:, 1), gaussFilter5);
     
     % mark_image(region, {edge_points(2:end-1, :)}, 'processed edge');
         
     % plot_data_and_gradients(edge_points, 'edge and it''s gradient plot');
-
-    edge_points = remove_short_bumps(edge_points);
     
-    % mark_image(region, {edge_points(2:end-1, :)}, 'edge removed 2 pixels bumps');    
     % plot_data_and_gradients(edge_points, 'edge after removing bumps');
     
     % max(edge_points(:, 1))
     % min(edge_points(:, 1))
+    
+    % mark_image(region, {edge_points(2:end-1, :)}, 'final edge');        
+    % plot_data_and_gradients(edge_points, 'final edge gradient plot');
 end

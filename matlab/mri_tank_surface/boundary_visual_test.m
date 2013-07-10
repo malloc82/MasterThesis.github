@@ -123,7 +123,7 @@ function boundary_visual_test(coronal_set, sagittal_set)
                 curr_sample = next_sample;
             end 
             
-        end 
+        end
         
         % S1_up   = tank_surfaces.exterior_outside_upper;
         % S1_down = tank_surfaces.exterior_outside_lower;
