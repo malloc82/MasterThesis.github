@@ -1,0 +1,41 @@
+\subsection{Introduction}
+There are total 64 MR tubes filed Copper Sulfate $(CuSO_4)$ places on the outer region of the phantom.
+We filled them with $CuSO_4$ due to this solution has very good magnetic suspetibility inside MRI scanner. 
+They produce very strong signals in MR images which make them much easier to extract. Tubes can be purchased
+separately, and easy to replace if necessary. Tubes are sealed with silicon to prevent leaking and could stored
+vertically for a long period of time. 
+
+These tubes are used to estimate MRI scanner's gradient isocenter as well as calculate the x and y axis' 
+undistortion parameters. To calculation undistortion parameter, we need both original accurate 3D locations
+and distorted 3D locations of each tubes. We can use tube holders' spacing specified in phantom's 
+specification to determine their undistorted locations since these holders are precision made. So the missing
+information are distorted tubes locations. MRI's distortion is nonlinear, which means the 3D shifts at
+different locations are different. The way we extract tubes' distortion is by analyzing the axial 
+scan/reconstruction of the phantom to determine a starting and ending slice of those tubes, and for every
+slices in between them, we find the center of the each tube. Each bended tube in MR images can be viewed as
+series. We will use these cetners in later calculation of undistortion parameters.
+
+\subsection{Range}
+In this section, we are discussing how we determine which slice in axial scan to start tube processing and 
+which slice to stop tube processing.
+
+Tube holders at both end of the MR tubes will cause the regions of the tubes inside the tube holder to shift. 
+Depending on how the original scan is performed, the shifts' direction may vary. If the original scan is
+done in axial directin, the the shift will occur inside xy plane; if the original scan is performed in
+sagittal direction the shift will occur on z-axis. So this means that we cannot use the signal from the 
+regions where tube holders are at. 
+
+One way to determine where the tube holders's z-axis location is to find the middle water tank boundaries. 
+Tube holder is usually at least 5mm away from each  tank surfaces in MR images. So after finding the location
+of two water tank surfaces we can add or subtract 4mm as two boundaries. For every axial slices, we will
+check it's z-axis location to see if that slice is between the boundary, if it is, we will continue to process
+the slice, otherwise we will ignore it.
+
+To find a accurate middle tank surfaces, we can work on either coronal or sagittal series, and use the
+following steps:
+
+\begin{enumerate}
+\item Averge the middle slice of the series with its two adjacent slices to produce a sampling slice. This 
+  way we can get rid of some noise and would give a more reliable result.
+\item 
+\end{enumerate}
