@@ -35,7 +35,15 @@ To find a accurate middle tank surfaces, we can work on either coronal or sagitt
 following steps:
 
 \begin{enumerate}
-\item Averge the middle slice of the series with its two adjacent slices to produce a sampling slice. This 
+\item Averge the middle slice of the series with its two adjacent slices to produce a sample slice. This 
   way we can get rid of some noise and would give a more reliable result.
+\item In the sample slice, we average middle 3 columns of pixels to produce a sample column.
+\item Produce a gradient for the sample column. 
+\item The top surface of the middle water tank could be set to be the first peak in second half 
+  of the data that is greater than 150; and the bottom surface of the water tank could be set to the 
+  last peak in the first half that's lower than -150. 
+\item Two pixels will be used for calculating the z-axis location of the two tank surfaces. Their row
+  values are the two values we calculated from previous step repectively, and their column values are both
+  middle column of the middle slice of this series.
 \item 
 \end{enumerate}
