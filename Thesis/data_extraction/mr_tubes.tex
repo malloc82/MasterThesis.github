@@ -16,8 +16,8 @@ slices in between them, we find the center of the each tube. Each bended tube in
 series. We will use these cetners in later calculation of undistortion parameters.
 
 \subsection{Range}
-In this section, we are discussing how we determine which slice in axial scan to start tube processing and 
-which slice to stop tube processing.
+This section describes how to determine the first and the last axial slices that are used to extract
+tube centers.
 
 Tube holders at both end of the MR tubes will cause the regions of the tubes inside the tube holder to shift. 
 Depending on how the original scan is performed, the shifts' direction may vary. If the original scan is
@@ -45,5 +45,37 @@ following steps:
 \item Two pixels will be used for calculating the z-axis location of the two tank surfaces. Their row
   values are the two values we calculated from previous step repectively, and their column values are both
   middle column of the middle slice of this series.
-\item 
+\item Two pixels will be converted into 3D dicom coordinate using DICOM affine formula. The one with positive
+  z coordinate will be added 4mm and the one with negative z coordinate will be subtract 4mm. These two 
+  z coordinates defines a range which axial slices used to extract MR tubes centers should be in.
+\item To validate a axial slice, we use the ImagePatientPosition parameter to see if the slice is in the range.
 \end{enumerate}
+
+\subsection{Tube Centers Extraction}
+This section describes the method used in tube center extraction.
+
+A typical axial view of phantom in MR images looks like this:
+% \begin{figure}[htb]
+%   \begin{minipage}[b]{0.8\linewidth}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=0.8\linewidth]{}}}
+%   \end{minipage}
+%   \caption{Axial view}
+%   \label{fig:axial_sample}
+% \end{figure}
+
+The strategy to extract tube centers is to use one slice to produce a series of masks which specified the tube
+locations. For reest of the slices, we use the masks to extract regions where tubes are at and process each
+region separately. There are several advantage of doing this:
+\begin{itemize}
+\item This method will make the whole process runs a lot faster due to significant less amount of pixels needed
+  to process.
+\item It also has a lot potential to run much more faster. Once 
+  a set of masks is produced from a image, not only a number of images following that slice could be processed
+  simultaneously, 64 regions in each images could also be processed at the same time after they are extracted.
+\item It will be less error prone as well, due to masks narrows down the problem regions.
+\end{itemize}
+
+\subsubsection{Mask Extraction}
+This section describes how the masks are produced.
+
