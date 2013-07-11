@@ -79,3 +79,51 @@ region separately. There are several advantage of doing this:
 \subsubsection{Mask Extraction}
 This section describes how the masks are produced.
 
+The following steps are used to extract a set of tube mask from an axial MR images within the range we have
+calculated previously.
+\begin{enumerate}
+\item Use a threshold to produce a binary image that only contains tube signals. 
+  Due to the good suspetibility of $CuSO_4$ solutions, signals from solutions inside MR tubes are much
+  higher than other regions of in the same image.
+\item Apply canny edge detection on the binary image produced from previous step. Note: Applying canny
+  directly on original image with high threshold will also yield a good quality edge images with much
+  smaller circles.
+\item Masks of tubes at top row, bottom row, left column  and right column are generated first. 
+  for top row:
+  \begin{enumerate}
+  \item Iterate the the top left region of the image, sweeping row wise from left to right to search 
+    for a pixel that belongs to left most tube on top row.
+  \item Once an edge pixel is found, all the edge pixels of the this tube will be collected, i.e. record and 
+    remove from the image. And a center of the tube is computed using steepest descent method. 
+  \item Use the center calculated from previous method as a starting point and walk the pixels on the same row
+    to the right to obtain 7 other tube centers of top row by repeating previous steps.
+  \end{enumerate}
+\item Use similar method that obtained centers of top row to obtain bottom rown, left column and right column. 
+  For bottom row, lower right region of the image are searched initially, sweeping from right to left, once
+  the first tube center is found, algorithm traverse to left to collect the rest tube; 
+  for left column, top left region is swept column wise from up to down, after finding the first center, 
+  algorithm traverse down ward on the same column to search for other tubes.
+  for right column, bottom right region is swept column wise from bottom to top, after finding the first
+  center, algorithm traverse upward to search for other tubes.
+\item For diagnal tubes, similar initial search is used to look for the first pixel of the first tube. 
+  When looking remaining tubes, row wised sweeping is motion is used. 
+\item After a center is found, a square region is allocated for a mask for that tube. In total, there are 64
+  masks extracted from on image. Each region will have it's top left coordinate on the image as well as 
+  width and height.
+\end{enumerate}
+
+Center calculation is using steepest descent. Several other algorithms are tested, such as, weighted average,
+least square, but steepest descent has the best result among the three.
+
+\subsubsection{Center Extraction Using Masks}
+
+With a set of mask is extracted, it would much easier to extract centers on other images with the masks:
+\begin{enumerate}
+\item Using each region's top left corner coordinate and it's width and height, 64 much smaller regions only
+  containing tubes can be extracted. 
+\item Each region can use the same edge algorithm used earlier step, then extract pixels and calculate the
+  centers. Center coordinate in the region will add to the top left corner coordinate to become a coordinate
+  in original image.
+\end{enumerate}
+
+
