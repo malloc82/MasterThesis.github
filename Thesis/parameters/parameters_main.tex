@@ -41,10 +41,10 @@ where $(x_0, y_0, z_0)$ and $(x_1, y_1, z_1)$ are DICOM coordinates of the two p
 which are known, and $(\bar{x}_0, \bar{y}_0, \bar{z}_0)$, $(\bar{x}_1, \bar{y}_1, \bar{z}_1)$ are DICOM 
 coordinates of two points from undistorted spaces which are unknown. However, the exact distance of tube
 spacings are known, as well as the distance between opposite side of tubes. So 
-$(\delta{x}_{0,1}, \delta{y}_{0,1}, \delta{z}_{0,1})$ can be calculated using 
+$(\Delta{x}_{0,1}, \Delta{y}_{0,1}, \Delta{z}_{0,1})$ can be calculated using 
 
 \begin{equation}
-  (\delta{x}_{i,j}, \delta{y}_{i,j}, \delta{z}_{i,j}) = 
+  (\Delta{x}_{i,j}, \Delta{y}_{i,j}, \Delta{z}_{i,j}) = 
   (\bar{x}_i, \bar{y}_i, \bar{z}_i) - (\bar{x}_j, \bar{y}_j, \bar{z}_j)
 \end{equation}
 
@@ -69,12 +69,12 @@ figure \ref{fig:correction_tube_pairing_xy} shows how the pairing is done for x,
 
 For each pairing, a new formula is produced.
 \begin{eqnarray} 
-  \delta{\bar{x_{ij}}} & = & \delta{x_{ij}}(1 + K_{x_0}((x_i^2 + y_i^2) - (x_j^2 + y_j^2)) + \nonumber\\
+  \Delta{\bar{x_{ij}}} & = & \Delta{x_{ij}}(1 + K_{x_0}((x_i^2 + y_i^2) - (x_j^2 + y_j^2)) + \nonumber\\
   & & K_{x_1}(z_i^2 - z_j^2) + \nonumber\\
   & & K_{x_2}(z_i^2(x_i^2 + y_i^2)- z_j^2(x_j^2 + y_j^2)) + \nonumber\\
   & & K_{x_3}((x_i^2 + y_i^2)^2 - (x_j^2 + y_j^2)^2) + \nonumber\\
   & & K_{x_4}(z_0^4 - z_j^4)) \\
-  \delta{\bar{y_{ij}}} & = & \delta{y_{ij}}(1 + K_{y_0}((x_i^2 + y_i^2) - (x_j^2 + y_j^2)) + \nonumber\\
+  \Delta{\bar{y_{ij}}} & = & \Delta{y_{ij}}(1 + K_{y_0}((x_i^2 + y_i^2) - (x_j^2 + y_j^2)) + \nonumber\\
   & & K_{y_1}(z_i^2 - z_j^2) + \nonumber\\
   & & K_{y_2}(z_i^2(x_i^2 + y_i^2)- z_j^2(x_j^2 + y_j^2)) + \nonumber\\
   & & K_{y_3}((x_i^2 + y_i^2)^2 - (x_j^2 + y_j^2)^2) + \nonumber\\
@@ -98,7 +98,7 @@ show the pairing.
 
 And the formula we used for z axis correction is:
 \begin{eqnarray}
-  \delta{\bar{z_{ij}}} & = & \delta{z_{ij}}(1 + K_{z_0}((x_i^2 + y_i^2) - (x_j^2 + y_j^2)) + \nonumber\\
+  \Delta{\bar{z_{ij}}} & = & \Delta{z_{ij}}(1 + K_{z_0}((x_i^2 + y_i^2) - (x_j^2 + y_j^2)) + \nonumber\\
   & & K_{z_1}(z_i^2 - z_j^2) + \nonumber\\
   & & K_{z_2}(z_i^2(x_i^2 + y_i^2)- z_j^2(x_j^2 + y_j^2)) + \nonumber\\
   & & K_{z_3}((x_i^2 + y_i^2)^2 - (x_j^2 + y_j^2)^2) + \nonumber\\
