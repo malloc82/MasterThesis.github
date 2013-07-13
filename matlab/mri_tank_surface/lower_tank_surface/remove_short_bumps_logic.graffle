@@ -246,7 +246,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{364, 418}, {266, 24.499998}}</string>
+			<string>{{364, 405.99994}, {266, 24.499998}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
@@ -377,7 +377,7 @@ sign(gradient(i-1)) ~= sign(gradient(i))}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{282.01917, 97}, {200, 28}}</string>
+			<string>{{282.01917, 117}, {200, 28}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -438,11 +438,12 @@ sign(gradient(i-1)) ~= sign(gradient(i))}</string>
 			<integer>50</integer>
 			<key>Points</key>
 			<array>
-				<string>{270.21082, 265.65875}</string>
-				<string>{295, 186}</string>
-				<string>{395, 136}</string>
-				<string>{499, 185}</string>
-				<string>{520.64539, 265.30569}</string>
+				<string>{269.54941, 265.50278}</string>
+				<string>{282.01917, 223}</string>
+				<string>{334, 166.25}</string>
+				<string>{434.77557, 156}</string>
+				<string>{500, 195.12497}</string>
+				<string>{520.05347, 265.43372}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -668,7 +669,7 @@ sign(gradient(i-1)) ~= sign(gradient(i))}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{150, 461}, {254.44209, 24.499998}}</string>
+			<string>{{159, 448}, {254.44209, 24.499998}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
@@ -1050,7 +1051,7 @@ index = 0}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-07-13 00:08:16 +0000</string>
+	<string>2013-07-13 00:38:35 +0000</string>
 	<key>Modifier</key>
 	<string>Ritchie Cai</string>
 	<key>NotesVisible</key>
