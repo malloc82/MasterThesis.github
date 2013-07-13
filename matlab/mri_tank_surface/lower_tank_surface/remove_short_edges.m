@@ -23,6 +23,8 @@ function filtered_edge = remove_short_edges(edge_data, orientation, min_length)
         end 
         filtered_edge = edge_data(edge_data(:, 1) > 0, :);
     elseif strcmp(orientation, 'row') || strcmp(orientation, 'Row') || strcmp(orientation, 'ROW')
-    else 
+        % This case is not used
+    else
+        
     end 
 end

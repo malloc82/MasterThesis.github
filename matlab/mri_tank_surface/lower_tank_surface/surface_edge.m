@@ -13,9 +13,7 @@ function edge_points = surface_edge(region, boundary)
     % newfigure('blurred');
     % imshow(blurred_region, []);
     
-    function edge_point = locate_edge_point_S4(column)
-        % first = 380; 
-        % last  = 390;
+    function edge_point = locate_edge_point_S4(column, display_range)
         data_points = zeros([1 row]);
         for i=1:row
             data_points(i) = mean(blurred_region(i, (column-3):(column+3)));
@@ -28,12 +26,7 @@ function edge_points = surface_edge(region, boundary)
         data_gradient = data_gradient(2:end-1);
 
         [maxpeaks minpeaks] = peakdet(data_gradient, 10);
-
-        % if column >= first && column < last
-        %     newfigure(sprintf('histogram for column %d', column));
-        %     plot((1:row), data_points, 'b', ...
-        %          (1:row), data_gradient, 'r');
-        % end 
+        
         if isempty(maxpeaks)
             edge_point = [];
         else 
@@ -41,11 +34,15 @@ function edge_points = surface_edge(region, boundary)
             edge_point = maxpeaks(i, 1);
         end
 
-        % if column >= first && column < last
-        %     if ~isempty(edge_point)
-        %         fprintf('column %d : edge_point = %d \n', column, edge_point);
-        %     end
-        % end 
+        %% ========== debug start ==========
+        if nargin > 1 && column >= display_range(1) && column < display_range(2)
+            newfigure(sprintf('histogram for column %d', column));
+            plot((1:row), data_points, 'b', (1:row), data_gradient, 'r');
+            if ~isempty(edge_point)
+                fprintf('column %d : edge_point = %d \n', column, edge_point);
+            end
+        end 
+        % ----------------------------------
     end
     
     function [edge_points, edge_gradient] = process_peaks(edge_points, edge_gradient, peaks)
@@ -108,10 +105,10 @@ function edge_points = surface_edge(region, boundary)
             elseif edge_gradient(i) <= -1 || edge_gradient(i) >= 1
                 if tracker_index == 0
                     tracker_index = 1;
-                    tracker(1) = tracker(1) + 1;
+                    tracker(1)    = 1;
                 elseif tracker_index == 2
-                    if sign(edge_gradient(i-tracker(2)-1)) == edge_gradient(i)
-                        tracker = [1 0 0];
+                    if sign(edge_gradient(i-tracker(2)-1)) == sign(edge_gradient(i))
+                        Tracker = [1 0 0];
                         tracker_index = 1;
                     else 
                         tracker_index = 3;
@@ -120,7 +117,7 @@ function edge_points = surface_edge(region, boundary)
                 elseif edge_gradient(i-1) ~= 0 && sign(edge_gradient(i-1)) ~= sign(edge_gradient(i))
                     if tracker_index == 1
                         tracker_index = 3;
-                        tracker(3) = tracker(3) + 1;
+                        tracker(3)    = 1;
                     elseif tracker_index == 3
                         tracker_index = 5;
                     end 
@@ -137,7 +134,7 @@ function edge_points = surface_edge(region, boundary)
                         tracker = [0 0 0]; % reset tracker
                         tracker_index = 0; % reset index;
                     elseif tracker_index == 5
-                        tracker = [1 0 0]; % reset tracker
+                        tracker = [1 0 0]; % reset tracker from tracker(1)
                         tracker_index = 1;
                     end 
                 else 
