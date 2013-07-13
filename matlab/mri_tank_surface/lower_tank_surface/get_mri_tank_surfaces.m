@@ -22,7 +22,6 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
     end
     
     function [surfaces_data lefts rights] = get_surfaces(image_set)
-    % addpath('../');
         addpath('../../lib/');
         surfaces_data = struct();
         mid_sample_index = int32(length(image_set) / 2);
@@ -49,7 +48,7 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
         row = (regions.S2_up + regions.S2_down) / 2.0;
         
         [lefts rights]   = convert([left  row], [right row], mid_position, mid_orientation, mid_spacing)
-        s_data           = surface_edge(regions.S4, [left, right]);
+        s_data           = surface_edge(regions.S4, [left, right], 'S4');
         s_data(:, 1)     = s_data(:, 1) + regions.S4_up;
         surfaces_data.S4 = convert_surface_data(s_data, mid_position, mid_orientation, mid_spacing);
         
@@ -81,7 +80,7 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
             if isempty(right), fprintf(' right is empty!! '); else fprintf('right = %d, ', right), end
             fprintf('\n');
 
-            s_data           = surface_edge(regions.S4, [left, right]);
+            s_data           = surface_edge(regions.S4, [left, right], 'S4');
             s_data(:, 1)     = s_data(:, 1) + regions.S4_up;
             surfaces_data.S4 = [surfaces_data.S4;
                                 convert_surface_data(s_data, position, orientation, spacing)];
@@ -122,7 +121,7 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
             if isempty(right), fprintf(' right is empty!! '); else fprintf('right = %d, ', right), end
             fprintf('\n');
 
-            s_data           = surface_edge(regions.S4, [left, right]);
+            s_data           = surface_edge(regions.S4, [left, right], 'S4');
             s_data(:, 1)     = s_data(:, 1) + regions.S4_up;
             surfaces_data.S4 = [surfaces_data.S4; 
                                 convert_surface_data(s_data, position, orientation, spacing)];

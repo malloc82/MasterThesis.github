@@ -1,5 +1,5 @@
 function boundary_visual_test(coronal_set, sagittal_set)
-    addpath(sprintf('%s/%s', pwd, '../lib'));
+    addpath(sprintf('%s/%s', pwd, '../../lib'));
     % image_set = getAllFiles(data_set_dir);
 
     function [left_3d, right_3d] = convert(left_2d, right_2d, position, orientation, spacing)

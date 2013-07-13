@@ -1,6 +1,12 @@
-function edge_points = surface_edge(region, boundary)
+function edge_points = surface_edge(region, boundary, surface_label)
     % newfigure('original')
     % imshow(region, []);
+    
+    % Local Constants
+    upper_surface = 0;
+    lower_surface = 1;
+    top_surface   = 2; % for removing robber paddings
+    
     
     blurred_region = blur_image(region);
     left  = boundary(1);
@@ -13,17 +19,25 @@ function edge_points = surface_edge(region, boundary)
     % newfigure('blurred');
     % imshow(blurred_region, []);
     
-    function edge_point = locate_edge_point_S4(column, display_range)
+    function edge_point = locate_edge_point(column, orientation, display_range)
         data_points = zeros([1 row]);
         for i=1:row
-            data_points(i) = mean(blurred_region(i, (column-3):(column+3)));
+            % NOTE: 3 worked ok, trying out 2.
+            % data_points(i) = mean(blurred_region(i, (column-3):(column+3)));
+            data_points(i) = mean(blurred_region(i, (column-2):(column+2)));
         end 
                 
         data_smooth = conv(data_points, gaussFilter5);
         data_smooth = data_smooth(3:end-2);
         
-        data_gradient = conv([-1 0 1], data_smooth);
-        data_gradient = data_gradient(2:end-1);
+        if orientation == upper_surface
+            data_gradient = conv([1 0 -1], data_smooth);
+            data_gradient = data_gradient(2:end-1);
+        elseif orientation == lower_surface
+            data_gradient = conv([-1 0 1], data_smooth);
+            data_gradient = data_gradient(2:end-1);
+        else
+        end 
 
         [maxpeaks minpeaks] = peakdet(data_gradient, 10);
         
@@ -35,7 +49,7 @@ function edge_points = surface_edge(region, boundary)
         end
 
         %% ========== debug start ==========
-        if nargin > 1 && column >= display_range(1) && column < display_range(2)
+        if nargin > 2 && column >= display_range(1) && column < display_range(2)
             newfigure(sprintf('histogram for column %d', column));
             plot((1:row), data_points, 'b', (1:row), data_gradient, 'r');
             if ~isempty(edge_point)
@@ -162,10 +176,19 @@ function edge_points = surface_edge(region, boundary)
     end    
     
     edge_points = [];
-    for c=left:right
-        p = locate_edge_point_S4(c);
-        if ~isempty(p), edge_points = [edge_points; [p, c]]; end
-    end
+    
+    if nargin <= 2 || strcmp(surface_label, 'S1') || strcmp(surface_label, 's1')
+    end 
+    if nargin <= 2 || strcmp(surface_label, 'S2') || strcmp(surface_label, 's2')
+    end 
+    if nargin <= 2 || strcmp(surface_label, 'S3') || strcmp(surface_label, 's3')
+    end 
+    if nargin <= 2 || strcmp(surface_label, 'S4') || strcmp(surface_label, 's4')
+        for c=left:right
+            p = locate_edge_point(c, lower_surface);
+            if ~isempty(p), edge_points = [edge_points; [p, c]]; end
+        end
+    end 
     % mark_image(region, {edge_points}, 'raw edge');
     
     edge_points = remove_short_edges(edge_points, 'col', 8);
