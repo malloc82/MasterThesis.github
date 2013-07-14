@@ -1,5 +1,5 @@
-function mark_image(image_data, pixels, string)
-    max_val = 1024;
+function marked_image = mark_image(image_data, pixels, plot_msg)
+    max_val = 255;
     for i=1:length(pixels)
         group = pixels{i};
         [row col] = size(group);
@@ -15,11 +15,10 @@ function mark_image(image_data, pixels, string)
             end
         end
     end
-    
-    if nargin == 3 && ~strcmp(string, '')
-        newfigure(string)
-    else 
-        newfigure('marked image');
-    end
-    imshow(image_data, []);
+
+    if nargin > 2
+        newfigure(sprintf('marked image : %s', plot_msg));
+        imshow(image_data, []);
+    end 
+    marked_image = image_data;
 end

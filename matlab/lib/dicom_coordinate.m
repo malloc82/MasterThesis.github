@@ -1,7 +1,7 @@
 function coordinates3D = dicom_coordinate(pixel_coordinates, position, orientation, spacing)
-    M = [orientation(4) * spacing(1)   orientation(1) * spacing(2)   0   position(1)
-         orientation(5) * spacing(1)   orientation(2) * spacing(2)   0   position(2)
-         orientation(6) * spacing(1)   orientation(3) * spacing(2)   0   position(3)];
+    M = [orientation(1) * spacing(1)   orientation(4) * spacing(2)   0   position(1)
+         orientation(2) * spacing(1)   orientation(5) * spacing(2)   0   position(2)
+         orientation(3) * spacing(1)   orientation(6) * spacing(2)   0   position(3)];
     
     % pixel_coordinates
     [row col] = size(pixel_coordinates);

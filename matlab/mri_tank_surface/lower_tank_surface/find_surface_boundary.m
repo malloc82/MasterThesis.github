@@ -39,25 +39,8 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
         end 
     end 
     
-    column_averages = zeros(1, length(surface_region));
-    for i=1:length(column_averages)
-        column_averages(i) = mean(surface_region(:, i));
-    end
-    gradient_data = smooth_gradient(column_averages);
-    
-    % Test plot
-    if nargin > 2 && plot_data == 1
-        if nargin == 3
-            newfigure(sprintf('surface data2: %s', msg));
-        else 
-            newfigure('surface data')
-        end
-        plot((1:length(gradient_data)), column_averages, 'b', ...
-             (1:length(gradient_data)), gradient_data, 'r');
-    end
-    
-    [maxpeaks, minpeaks] = peakdet(gradient_data, 15);
-    
+    [column_averages, gradient_data, maxpeaks, minpeaks] = cross_section_analysis(surface_region, 5);
+
     % maxpeaks(maxpeaks(:, 2) < 1000 & maxpeaks(:, 2) > 250, :);
 
     if isempty(prev_boundaries)
@@ -69,21 +52,19 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
     % boundary threshold
     if isempty(minpeaks)
         right = [];
-        left  = [];
         if isempty(prev_boundaries)
             boundary_info = [];
         else 
             boundary_info(R_range) = prev_boundaries(R_range) + min_delta;
         end 
     else 
-        right_candidates = minpeaks(minpeaks(:, 2) < -15, 1);
+        right_candidates = minpeaks(minpeaks(:, 2) < -5, 1);
         if ~isempty(prev_boundaries)
             diffs = right_candidates - prev_boundaries(R);
-            if prev_boundaries(R_range) > min_delta
-                diff_index = abs(diffs) <= prev_boundaries(R_range) & sign(diffs) == sign(prev_boundaries(R_diff));
-            else 
-                diff_index = abs(diffs) <= prev_boundaries(R_range);
-            end        
+            diff_index = abs(diffs) <= prev_boundaries(R_range);
+            if prev_boundaries(R_diff) ~= 0
+                diff_index = diff_index & (sign(diffs) == sign(prev_boundaries(R_diff)) | diffs == 0);
+            end 
             if isempty(diffs(diff_index))
                 if prev_boundaries(R_range) <= min_delta
                     right = prev_boundaries(R) + prev_boundaries(R_diff);
@@ -103,8 +84,8 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
                     boundary_info(R) = right;
                 else 
                     [v i] = min(abs(right - prev_boundaries(R)));
-                    boundary_info(R) = right(i);
                     right            = right(i);
+                    boundary_info(R) = right;
                 end
                 diff = right - prev_boundaries(R);
                 if diff == 0
@@ -131,7 +112,6 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
     end 
 
     if isempty(maxpeaks)
-        right = [];
         left  = [];
         if isempty(prev_boundaries)
             boundary_info = [];
@@ -139,14 +119,13 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
             boundary_info(L_range) = prev_boundaries(L_range) + min_delta;
         end 
     else     
-        left_candidates = maxpeaks(maxpeaks(:, 2) > 15, 1);
+        left_candidates = maxpeaks(maxpeaks(:, 2) > 5, 1);
         if ~isempty(prev_boundaries)
             diffs = left_candidates - prev_boundaries(L);
-            if prev_boundaries(L_range) > min_delta
-                diff_index = abs(diffs) <= prev_boundaries(L_range) & sign(diffs) == sign(prev_boundaries(L_diff));
-            else 
-                diff_index = abs(diffs) <= prev_boundaries(L_range);
-            end
+            diff_index = abs(diffs) <= prev_boundaries(L_range);
+            if prev_boundaries(L_diff) ~= 0
+                diff_index = diff_index & (sign(diffs) == sign(prev_boundaries(L_diff)) | diffs == 0);
+            end 
             if isempty(diffs(diff_index))
                 if prev_boundaries(L_range) <= min_delta
                     left = prev_boundaries(L) + prev_boundaries(L_diff);
@@ -166,10 +145,9 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
                     boundary_info(L) = left;
                 else 
                     [v i] = min(abs(left - prev_boundaries(L)));
-                    boundary_info(L) = left(i);
-                    left             = left(i);
+                    left = left(i);
+                    boundary_info(L) = left;
                 end
-                % boundary_info(L)       = left_candidates(diff_index);
                 diff = left - prev_boundaries(L);
                 if diff == 0
                     boundary_info(L_diff) = sign(prev_boundaries(L_diff));
@@ -193,7 +171,7 @@ function [left, right, boundary_info] = find_surface_boundary(surface_region, pr
             boundary_info(L_range) = min_delta;
         end     
     end     
-    if nargin > 1 && plot_data == 1
+    if nargin > 2 && plot_data == 1
         left_return  = left
         right_return = right
     end
