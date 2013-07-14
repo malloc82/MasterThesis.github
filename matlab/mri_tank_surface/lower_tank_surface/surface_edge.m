@@ -1,4 +1,4 @@
-function edge_points = surface_edge(region, boundary, surface_label)
+function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
     % newfigure('original')
     % imshow(region, []);
     
@@ -55,7 +55,7 @@ function edge_points = surface_edge(region, boundary, surface_label)
             if ~isempty(edge_point)
                 fprintf('column %d : edge_point = %d \n', column, edge_point);
             end
-        end 
+        end
         % ----------------------------------
     end
     
@@ -180,8 +180,16 @@ function edge_points = surface_edge(region, boundary, surface_label)
     if nargin <= 2 || strcmp(surface_label, 'S1') || strcmp(surface_label, 's1')
     end 
     if nargin <= 2 || strcmp(surface_label, 'S2') || strcmp(surface_label, 's2')
+        for c=left:right
+            p = locate_edge_point(c, lower_surface);
+            if ~isempty(p), edge_points = [edge_points; [p, c]]; end
+        end
     end 
     if nargin <= 2 || strcmp(surface_label, 'S3') || strcmp(surface_label, 's3')
+        for c=left:right
+            p = locate_edge_point(c, upper_surface);
+            if ~isempty(p), edge_points = [edge_points; [p, c]]; end
+        end
     end 
     if nargin <= 2 || strcmp(surface_label, 'S4') || strcmp(surface_label, 's4')
         for c=left:right
@@ -207,7 +215,8 @@ function edge_points = surface_edge(region, boundary, surface_label)
 
     edge_points = rempve_peaks(edge_points);
     edge_points = remove_short_bumps(edge_points);
-    % edge_points = remove_short_edges(edge_points, 'col', 5);
+    edge_points = remove_short_edges(edge_points, 'col', 5);
+    
     % smooth_edge = conv(edge_points(:, 1), gaussFilter5);
     
     % mark_image(region, {edge_points(2:end-1, :)}, 'processed edge');
@@ -218,7 +227,9 @@ function edge_points = surface_edge(region, boundary, surface_label)
     
     % max(edge_points(:, 1))
     % min(edge_points(:, 1))
-    
-    % mark_image(region, {edge_points(2:end-1, :)}, 'final edge');        
-    % plot_data_and_gradients(edge_points, 'final edge gradient plot');
+
+    if nargin > 3
+        mark_image(region, {edge_points(2:end-1, :)}, sprintf('final edge : %s', plot_msg));
+        plot_data_and_gradients(edge_points, sprintf('final edge gradient plot : %s', plot_msg));
+    end 
 end
