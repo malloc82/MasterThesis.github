@@ -203,7 +203,7 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
         clean_data();
     end % get_surfaces
     
-    [surfaces_data lefts rights] = get_surfaces(sagittal_set, [2, 3, 4]);
+    [surfaces_data lefts rights] = get_surfaces(sagittal_set, [4]);
     plot_all_surfaces_mri(surfaces_data);
     
     

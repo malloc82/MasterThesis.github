@@ -7,7 +7,6 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
     lower_surface = 1;
     top_surface   = 2; % for removing robber paddings
     
-    
     blurred_region = blur_image(region);
     left  = boundary(1);
     right = boundary(2);
@@ -78,7 +77,7 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
         end 
     end 
 
-    function filtered_edge = rempve_peaks(edge_points)
+    function filtered_edge = remove_peaks(edge_points)
         while 1
             edge_gradient = conv([-1 0 1], edge_points(:, 1));
             edge_gradient = edge_gradient(2:end-1);
@@ -197,39 +196,56 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
             if ~isempty(p), edge_points = [edge_points; [p, c]]; end
         end
     end 
-    % mark_image(region, {edge_points}, 'raw edge');
+    if nargin > 3
+        % ----- display -----
+        mark_image(region, {edge_points}, 'raw edge');
+    end 
     
     edge_points = remove_short_edges(edge_points, 'col', 8);
-    edge_points = remove_short_bumps(edge_points);
-    % plot_data_and_gradients(edge_points, 'after removing short bumps');
 
-    smooth_edge = conv(edge_points(:, 1), gaussFilter5);
-    edge_points(:, 1) = int32(round(smooth_edge(3:end-2)));
+    if nargin > 3
+        % ----- display -----
+        mark_image(region, {edge_points}, 'removed short edges');
+    end 
     
-    % mark_image(region, {edge_points}, 'filtered edge');
-    
-    % mark_image(region, {edge_points(2:end-1, :)}, 'smoothed edge');
-    
-    % mark_image(region, {edge_points}, 'before remove bumps');
-    % plot_data_and_gradients(edge_points, 'edge plot before removing bumps');
-
-    edge_points = rempve_peaks(edge_points);
     edge_points = remove_short_bumps(edge_points);
-    edge_points = remove_short_edges(edge_points, 'col', 5);
+
+    if nargin > 3
+        % ----- display -----
+        plot_data_and_gradients(edge_points, 'after removing short bumps');
+        mark_image(region, {edge_points}, 'after removing short bumps');
+    end 
     
     % smooth_edge = conv(edge_points(:, 1), gaussFilter5);
+    % edge_points(:, 1) = int32(round(smooth_edge(3:end-2)));
+
+    % if nargin > 3
+    %     % ----- display -----
+    %     mark_image(region, {edge_points}, 'smooth');
+    % end 
+
+    edge_points = remove_peaks(edge_points);
+    if nargin > 3
+        % ----- display -----
+        mark_image(region, {edge_points}, 'remove peaks');
+        plot_data_and_gradients(edge_points, 'remove peaks');
+    end 
+
+    % edge_points = remove_short_bumps(edge_points);
+    % if nargin > 3
+    %     % ----- display -----
+    %     mark_image(region, {edge_points}, 'remove short bumps 2');
+    %     plot_data_and_gradients(edge_points, 'remove short bumps 2');
+    % end 
     
-    % mark_image(region, {edge_points(2:end-1, :)}, 'processed edge');
-        
-    % plot_data_and_gradients(edge_points, 'edge and it''s gradient plot');
+    % edge_points = remove_short_edges(edge_points, 'col', 5);
     
-    % plot_data_and_gradients(edge_points, 'edge after removing bumps');
     
     % max(edge_points(:, 1))
     % min(edge_points(:, 1))
 
     if nargin > 3
-        mark_image(region, {edge_points(2:end-1, :)}, sprintf('final edge : %s', plot_msg));
+        mark_image(region, {edge_points}, sprintf('final edge : %s', plot_msg));
         plot_data_and_gradients(edge_points, sprintf('final edge gradient plot : %s', plot_msg));
     end 
 end

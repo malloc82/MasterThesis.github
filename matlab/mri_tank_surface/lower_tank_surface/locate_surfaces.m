@@ -1,5 +1,4 @@
-function  tank_surfaces = locate_surfaces(image_data)
-    plot_data = 0;
+function  tank_surfaces = locate_surfaces(image_data, plot_msg)
     [row, col] = size(image_data);
 
     sample_point = idivide(int32(col), 2);
@@ -22,7 +21,7 @@ function  tank_surfaces = locate_surfaces(image_data)
     
     [sample_gradient_smooth, sample_smooth] = smooth_gradient(data_points, 1);
     
-    if plot_data == 1
+    if nargin > 1 
         newfigure('smooth sample & smooth data points');
         % plot((1:row), sample_smooth, 'b', ...
         %      (1:row), sample_gradient_smooth, 'r');
@@ -54,7 +53,7 @@ function  tank_surfaces = locate_surfaces(image_data)
                            'sample_column',          sample_point, ...
                            'sample_width',           sample_width);
     
-    if plot_data == 1
+    if nargin > 1
         show_surface_regions(image_data, tank_surfaces);
     end
 end
