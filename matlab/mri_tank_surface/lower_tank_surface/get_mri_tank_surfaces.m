@@ -94,7 +94,7 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
         mid_sample       = dicomread(image_set{mid_sample_index});
         mid_next_sample  = dicomread(image_set{mid_sample_index+1});
         
-        mid_image_sample = mid_prev_sample + mid_sample + mid_next_sample;
+        mid_image_sample = (mid_prev_sample + mid_sample + mid_next_sample) / 3;
         
         surfaces_locations = locate_surfaces(mid_image_sample);
         fprintf('mid sample : %s\n', image_set{mid_sample_index});
@@ -200,10 +200,10 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
             prev_sample = curr_sample;
             curr_sample = next_sample;
         end % for
-        clean_data();
+        % clean_data();
     end % get_surfaces
     
-    [surfaces_data lefts rights] = get_surfaces(sagittal_set, [4]);
+    [surfaces_data lefts rights] = get_surfaces(sagittal_set, [1]);
     plot_all_surfaces_mri(surfaces_data);
     
     

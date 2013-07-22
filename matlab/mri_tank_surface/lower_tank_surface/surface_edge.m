@@ -43,12 +43,13 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
         if isempty(maxpeaks)
             edge_point = [];
         else 
+            maxpeaks = maxpeaks(maxpeaks(:, 2) < 48, :);
             [v i] = max(maxpeaks(:, 2));
             edge_point = maxpeaks(i, 1);
         end
 
         %% ========== debug start ==========
-        if nargin > 2 && column >= display_range(1) && column < display_range(2)
+        if nargin > 2 && column >= display_range(1) && column <= display_range(2)
             newfigure(sprintf('histogram for column %d', column));
             plot((1:row), data_points, 'b', (1:row), data_gradient, 'r');
             if ~isempty(edge_point)
@@ -77,7 +78,7 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
         end 
     end 
 
-    function filtered_edge = remove_peaks(edge_points)
+    function edge_points = remove_spikes(edge_points)
         while 1
             edge_gradient = conv([-1 0 1], edge_points(:, 1));
             edge_gradient = edge_gradient(2:end-1);
@@ -91,80 +92,130 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
             if ~isempty(minpeaks)
                 [edge_points edge_gradient] = process_peaks(edge_points, edge_gradient, minpeaks(:, 1));
             end 
-            edge_points = edge_points(edge_points(:, 1) ~= -1, :);
+            edge_points = edge_points(edge_points(:, 1) >= 1, :);
         end 
-        filtered_edge = edge_points;
+        edge_points = remove_short_edges(edge_points, 'col', 8);
     end 
 
-    function filtered_edge = remove_short_bumps(edge_points)
-        edge_gradient = conv([-1 0 1], edge_points(:, 1));
-        edge_gradient = edge_gradient(2:end-1);
-        % [(1:length(edge_gradient))' edge_gradient]
+    function edge_points = remove_short_bumps(edge_points)
+        mid_width_limit  = 5;
+        peak_wdith_limit = 5;
+        change = 1;
+        round  = 1;
 
-        tracker = [0 0 0];
-        tracker_index = 0;
-        for i=2:length(edge_points(:, 1))-1
-            if edge_gradient(i) == 0
-                if tracker_index == 1 || tracker_index == 3
-                    tracker_index = tracker_index + 1;
-                end 
-                if tracker_index == 2 
-                    tracker(2) = tracker(2) + 1;
-                    if tracker(2) >= 4
-                        tracker = [0 0 0];
-                        tracker_index = 0;
+        while change ~= 0
+        % while round == 1
+            change = 0;
+
+            edge_gradient = conv([-1 0 1], edge_points(:, 1));
+            edge_gradient = edge_gradient(2:end-1);
+            % [(1:length(edge_gradient))' edge_gradient]
+            
+            tracker = [0 0 0];
+            tracker_index = 0;
+            for i=2:length(edge_points(:, 1))-1
+                if edge_gradient(i) == 0                    
+                    if tracker_index == 1 || tracker_index == 3
+                        tracker_index = tracker_index + 1;
                     end 
-                end
-            elseif edge_gradient(i) <= -1 || edge_gradient(i) >= 1
-                if tracker_index == 0
-                    tracker_index = 1;
-                    tracker(1)    = 1;
-                elseif tracker_index == 2
-                    if sign(edge_gradient(i-tracker(2)-1)) == sign(edge_gradient(i))
-                        Tracker = [1 0 0];
+                    if tracker_index == 2 
+                        tracker(2) = tracker(2) + 1;
+                        if tracker(2) > mid_width_limit;
+                            tracker = [0 0 0];
+                            tracker_index = 0;
+                        end 
+                    end
+                elseif edge_gradient(i) < 0 || edge_gradient(i) > 0
+                    if tracker_index == 0
                         tracker_index = 1;
+                        tracker(1)    = 1;
+                    elseif tracker_index == 2
+                        if sign(edge_gradient(i-tracker(2)-1)) == sign(edge_gradient(i))
+                            tracker = [1 0 0];
+                            tracker_index = 1;
+                        else 
+                            tracker_index = 3;
+                            tracker(3) = tracker(3) + 1;
+                        end
+                    elseif edge_gradient(i-1) ~= 0 && sign(edge_gradient(i-1)) ~= sign(edge_gradient(i))
+                        if tracker_index == 1
+                            tracker_index = 3;
+                            tracker(3)    = 1;
+                        elseif tracker_index == 3
+                            tracker_index = 5;
+                        end 
                     else 
-                        tracker_index = 3;
-                        tracker(3) = tracker(3) + 1;
-                    end
-                elseif edge_gradient(i-1) ~= 0 && sign(edge_gradient(i-1)) ~= sign(edge_gradient(i))
-                    if tracker_index == 1
-                        tracker_index = 3;
-                        tracker(3)    = 1;
-                    elseif tracker_index == 3
-                        tracker_index = 5;
+                        tracker(tracker_index) = tracker(tracker_index) + 1;
                     end 
-                else 
-                    tracker(tracker_index) = tracker(tracker_index) + 1;
+                end 
+                % if i >= 20 && i <= 33
+                %     fprintf('%d : tracker = [%d, %d, %d]\n', i, tracker(1), tracker(2), tracker(3));
+                % end 
+
+                if tracker_index >= 4
+                    if tracker(1) <= peak_wdith_limit && ...
+                            tracker(2) <= mid_width_limit && ...
+                            tracker(3) <= peak_wdith_limit
+                        len = sum(tracker);
+                        edge_points(i-len:i-1, 1) = edge_points(i, 1) * ones(len, 1);
+                        change = change + 1;
+                        if tracker_index == 4
+                            tracker = [0 0 0]; % reset tracker
+                            tracker_index = 0; % reset index;
+                        elseif tracker_index == 5
+                            tracker = [1 0 0]; % reset tracker from tracker(1)
+                            tracker_index = 1;
+                        end 
+                    else 
+                        tracker = [tracker(3) 0 0];
+                        if tracker_index == 4
+                            tracker_index = 2;
+                            tracker(tracker_index) = 1;
+                        elseif tracker_index == 5
+                            tracker_index = 3;
+                            tracker(tracker_index) = 1;
+                        end
+                    end 
                 end 
             end 
-            if tracker_index >= 4
-                if tracker(1) <= 4 && tracker(2) <= 3 && tracker(3) <= 4
-                    % fprintf('i = %d : [%d %d %d]\n', i, tracker(1), tracker(2), tracker(3));
-                    len = sum(tracker);
-                    edge_points(i-len:i-1, 1) = edge_points(i, 1) * ones(len, 1);
-                    if tracker_index == 4
-                        tracker = [0 0 0]; % reset tracker
-                        tracker_index = 0; % reset index;
-                    elseif tracker_index == 5
-                        tracker = [1 0 0]; % reset tracker from tracker(1)
-                        tracker_index = 1;
-                    end 
-                else 
-                    tracker = [tracker(3) 0 0];
-                    if tracker_index == 4
-                        tracker_index = 2;
-                        tracker(tracker_index) = 1;
-                    elseif tracker_index == 5
-                        tracker_index = 3;
-                        tracker(tracker_index) = 1;
-                    end
-                end 
-            end 
-        end 
-        filtered_edge = edge_points;
+            edge_points = edge_points;
+            % plot_data_and_gradients(edge_points, sprintf('after round : %d', round));
+            round = round + 1;
+        end
     end
 
+    function edge_points = clean_ends(edge_points, surface_label)
+        [row col] = size(edge_points);
+        if strcmp(surface_label, 'S4') || strcmp(surface_label, 's4') || ...
+                strcmp(surface_label, 'S3') || strcmp(surface_label, 's3')
+            for i=5:-1:2
+                if edge_points(i, 1) > edge_points(i-1, 1), edge_points(i-1, 1) = edge_points(i, 1); end
+            end 
+            for i=row-5:row-1
+                if edge_points(i, 1) > edge_points(i+1, 1), edge_points(i+1, 1) = edge_points(i, 1); end
+            end 
+        elseif strcmp(surface_label, 'S2') || strcmp(surface_label, 's2') || ...
+                strcmp(surface_label, 'S1') || strcmp(surface_label, 's1')
+            % for i=5:-1:2
+            %     if edge_points(i, 1) < edge_points(i-1, 1), edge_points(i-1, 1) = edge_points(i, 1); end
+            % end 
+            % for i=row-5:row-1
+            %     if edge_points(i, 1) < edge_points(i+1, 1), edge_points(i+1, 1) = edge_points(i, 1); end
+            % end 
+            b = edge_points(1, 1);
+            e = edge_points(5, 1);
+            smoothed_end = round(conv(gaussFilter5, [b; b; edge_points(1:5, 1); e; e]));
+            edge_points(1:5, 1) = smoothed_end(5:end-4);
+
+            b = edge_points(end-4, 1);
+            e = edge_points(end, 1);
+            smoothed_end = round(conv(gaussFilter5, [b; b; edge_points(end-4:end, 1); e; e]));
+            edge_points(end-4:end, 1) = smoothed_end(5:end-4);
+        else 
+            error(sprintf('Unrecognized surface position number: %d', surface_position));
+        end 
+    end 
+    
     function plot_data_and_gradients(data_points, plot_msg)
         data_gradient = conv([-1 0 1], data_points(:, 1));
         data_gradient = data_gradient(2:end-1);
@@ -177,6 +228,11 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
     edge_points = [];
     
     if nargin <= 2 || strcmp(surface_label, 'S1') || strcmp(surface_label, 's1')
+        for c=left:right
+            % p = locate_edge_point(c, upper_surface, [right, right]);
+            p = locate_edge_point(c, upper_surface);
+            if ~isempty(p), edge_points = [edge_points; [p, c]]; end
+        end
     end 
     if nargin <= 2 || strcmp(surface_label, 'S2') || strcmp(surface_label, 's2')
         for c=left:right
@@ -203,18 +259,30 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
     
     edge_points = remove_short_edges(edge_points, 'col', 8);
 
-    if nargin > 3
-        % ----- display -----
-        mark_image(region, {edge_points}, 'removed short edges');
-    end 
+    % if nargin > 3
+    %     % ----- display -----
+    %     mark_image(region, {edge_points}, 'removed short edges');
+    % end 
+    
+    
+    % if nargin > 3
+    %     mark_image(region, {edge_points}, sprintf('before remove short bumps : %s', plot_msg));
+    %     plot_data_and_gradients(edge_points, sprintf('before remove short bumps : %s', plot_msg));
+    % end 
     
     edge_points = remove_short_bumps(edge_points);
 
-    if nargin > 3
-        % ----- display -----
-        plot_data_and_gradients(edge_points, 'after removing short bumps');
-        mark_image(region, {edge_points}, 'after removing short bumps');
-    end 
+    % if nargin > 3
+    %     mark_image(region, {edge_points}, sprintf('after remove short bumps : %s', plot_msg));
+    %     plot_data_and_gradients(edge_points, sprintf('after remove short bumps : %s', plot_msg));
+    % end 
+    
+    
+    % if nargin > 3
+    %     % ----- display -----
+    %     plot_data_and_gradients(edge_points, 'after removing short bumps');
+    %     mark_image(region, {edge_points}, 'after removing short bumps');
+    % end 
     
     % smooth_edge = conv(edge_points(:, 1), gaussFilter5);
     % edge_points(:, 1) = int32(round(smooth_edge(3:end-2)));
@@ -224,12 +292,12 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
     %     mark_image(region, {edge_points}, 'smooth');
     % end 
 
-    edge_points = remove_peaks(edge_points);
-    if nargin > 3
-        % ----- display -----
-        mark_image(region, {edge_points}, 'remove peaks');
-        plot_data_and_gradients(edge_points, 'remove peaks');
-    end 
+    edge_points = remove_spikes(edge_points);
+    % if nargin > 3
+    %     % ----- display -----
+    %     mark_image(region, {edge_points}, 'remove peaks');
+    %     plot_data_and_gradients(edge_points, 'remove peaks');
+    % end 
 
     % edge_points = remove_short_bumps(edge_points);
     % if nargin > 3
@@ -244,8 +312,9 @@ function edge_points = surface_edge(region, boundary, surface_label, plot_msg)
     % max(edge_points(:, 1))
     % min(edge_points(:, 1))
 
+    edge_points = clean_ends(edge_points, surface_label);
     if nargin > 3
         mark_image(region, {edge_points}, sprintf('final edge : %s', plot_msg));
-        plot_data_and_gradients(edge_points, sprintf('final edge gradient plot : %s', plot_msg));
+        % plot_data_and_gradients(edge_points, sprintf('final edge gradient plot : %s', plot_msg));
     end 
 end

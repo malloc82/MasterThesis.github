@@ -2,6 +2,8 @@ function plot_all_surfaces_mri(surfaces_data)
     newfigure('MRI tank surfaces')
     hold on
     grid on
+
+    % % ----- trisurf ----
     % if ~isempty(surfaces_data.S1)
     %     tri = delaunay(surfaces_data.S1(:, 1), surfaces_data.S1(:, 2));
     %     h = trisurf(tri, surfaces_data.S1(:, 1), surfaces_data.S1(:, 2), surfaces_data.S1(:, 3));    

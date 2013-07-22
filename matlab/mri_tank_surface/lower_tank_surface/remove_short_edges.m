@@ -21,10 +21,11 @@ function filtered_edge = remove_short_edges(edge_data, orientation, min_length)
                 edge_length = edge_length + 1;
             end 
         end 
-        filtered_edge = edge_data(edge_data(:, 1) > 0, :);
+        filtered_edge = edge_data(edge_data(:, 1) >= 1, :);
     elseif strcmp(orientation, 'row') || strcmp(orientation, 'Row') || strcmp(orientation, 'ROW')
         % This case is not used
+        error('Remove_short_edges: row orientation not yet implemented');
     else
-        
+        error('Unrecognized orientation');
     end 
 end
