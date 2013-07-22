@@ -32,7 +32,7 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
     
     function [surfaces_data lefts rights] = get_surfaces(image_set, surfaces_number)
         addpath('../../lib/');
-
+        
         surfaces_data = struct();
         surfaces_data.S1 = [];
         surfaces_data.S2 = [];
@@ -88,15 +88,16 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
                     surfaces_data.S4(surfaces_data.S4(:, 3) > m - 4*s & surfaces_data.S4(:, 3) < m + 4*s, :);
             end 
         end
-        
         mid_sample_index = int32(length(image_set) / 2);
+        
         mid_prev_sample  = dicomread(image_set{mid_sample_index-1});
         mid_sample       = dicomread(image_set{mid_sample_index});
         mid_next_sample  = dicomread(image_set{mid_sample_index+1});
         
         mid_image_sample = (mid_prev_sample + mid_sample + mid_next_sample) / 3;
+
+        surfaces_locations = locate_surfaces(mid_image_sample, '')
         
-        surfaces_locations = locate_surfaces(mid_image_sample);
         fprintf('mid sample : %s\n', image_set{mid_sample_index});
         
         mid_info = dicominfo(image_set{mid_sample_index});
@@ -145,7 +146,6 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
             
             if isempty(left),  fprintf(' left  is empty!! '); else fprintf('left  = %d, ', left),  end
             if isempty(right), fprintf(' right is empty!! '); else fprintf('right = %d, ', right), end
-            fprintf('\n');
 
             
             if isempty(left),  left_2d  = []; else left_2d  = [left  row]; end;
@@ -153,8 +153,12 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
             [left_3d right_3d] = convert(left_2d, right_2d, slice_info);
             lefts  = [lefts;  left_3d];
             rights = [rights; right_3d];
-            
+            if i == 129
+                newfigure('129')
+                imshow(regions.S4, []);
+            end 
             get_surfaces_edge(regions, [left, right], surfaces_number, slice_info);
+            fprintf('\n');
             
             prev_sample = curr_sample;
             curr_sample = next_sample;
@@ -187,9 +191,9 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
             
             if isempty(left),  fprintf(' left  is empty!! '); else fprintf('left  = %d, ', left),  end
             if isempty(right), fprintf(' right is empty!! '); else fprintf('right = %d, ', right), end
-            fprintf('\n');
 
             get_surfaces_edge(regions, [left, right], surfaces_number, slice_info);
+            fprintf('\n');
         
             if isempty(left),  left_2d  = []; else left_2d  = [left  row]; end;
             if isempty(right), right_2d = []; else right_2d = [right row]; end;
@@ -203,9 +207,16 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
         % clean_data();
     end % get_surfaces
     
-    [surfaces_data lefts rights] = get_surfaces(sagittal_set, [1]);
-    plot_all_surfaces_mri(surfaces_data);
+
+    [surfaces_data lefts rights]    = get_surfaces(coronal_set,  [4]);
+
+    % [surfaces_data_sagittal lefts_sagittal rights_sagittal] = get_surfaces(sagittal_set, [4]);
+    % [surfaces_data_coronal lefts_coronal rights_coronal]    = get_surfaces(coronal_set,  [4]);
+    % surfaces_data = combine_surfaces_data(surfaces_data_sagittal, surfaces_data_coronal);
+    % lefts  = [lefts_sagittal;  lefts_coronal];
+    % rights = [rights_sagittal; rights_coronal];
     
+    plot_all_surfaces_mri(surfaces_data);
     
     newfigure('S2 boundary');
     hold on
@@ -222,4 +233,13 @@ function surfaces_data = get_mri_tank_surfaces(coronal_set, sagittal_set)
     ylabel('Y');
     zlabel('Z');
     hold off
+end
+
+
+function surfaces_data = combine_surfaces_data(s_data_sagittal, s_data_coronal)
+    surfaces_data = struct();
+    surfaces_data.S1 = [s_data_sagittal.S1; s_data_coronal.S1];
+    surfaces_data.S2 = [s_data_sagittal.S2; s_data_coronal.S2];
+    surfaces_data.S3 = [s_data_sagittal.S3; s_data_coronal.S3];
+    surfaces_data.S4 = [s_data_sagittal.S4; s_data_coronal.S4];
 end

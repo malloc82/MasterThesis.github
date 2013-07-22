@@ -1,6 +1,58 @@
+% -------------- Coronal S4 test -------------
+
+coronal_sample185_avg = get_im_data(coronal_set, (185-1:185+1));
+regions = get_surface_regions(coronal_sample185_avg, mri_surfaces_locations);
+surface_edge(regions.S4, [139, 369], 'S4', '185');
+
+% coronal_sample179_avg = get_im_data(coronal_set, (179-1:179+1));
+% regions = get_surface_regions(coronal_sample179_avg, mri_surfaces_locations);
+% surface_edge(regions.S4, [128, 379], 'S4', '179');
 
 
-% ----------- S1 test -------------
+% ------------- Coronal S1 test --------------
+% coronal_sample130_avg = get_im_data(coronal_set, (130-1:130+1));
+% regions = get_surface_regions(coronal_sample130_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [91, 416], 'S1', '130');
+
+
+
+% coronal_sample151_avg = get_im_data(coronal_set, (151-1:151+1));
+% regions = get_surface_regions(coronal_sample151_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [98, 409], 'S1', '151');
+
+% coronal_sample185_avg = get_im_data(coronal_set, (185-1:185+1));
+% regions = get_surface_regions(coronal_sample185_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [139, 369], 'S1', '185');
+
+% coronal_sample186_avg = get_im_data(coronal_set, (186-1:186+1));
+% regions = get_surface_regions(coronal_sample186_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [141, 367], 'S1', '186');
+
+% coronal_sample187_avg = get_im_data(coronal_set, (187-1:187+1));
+% regions = get_surface_regions(coronal_sample187_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [142, 365], 'S1', '187');
+
+% coronal_sample188_avg = get_im_data(coronal_set, (188-1:188+1));
+% regions = get_surface_regions(coronal_sample188_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [145, 363], 'S1', '188');
+
+% coronal_sample189_avg = get_im_data(coronal_set, (189-1:189+1));
+% regions = get_surface_regions(coronal_sample189_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [147, 360], 'S1', '189');
+
+% coronal_sample190_avg = get_im_data(coronal_set, (190-1:190+1));
+% regions = get_surface_regions(coronal_sample190_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [150, 358], 'S1', '190');
+
+% coronal_sample191_avg = get_im_data(coronal_set, (191-1:191+1));
+% regions = get_surface_regions(coronal_sample191_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [152, 355], 'S1', '191');
+
+% coronal_sample192_avg = get_im_data(coronal_set, (192-1:192+1));
+% regions = get_surface_regions(coronal_sample192_avg, mri_surfaces_locations);
+% surface_edge(regions.S1, [155, 353], 'S1', '192');
+
+% ----------- Sagittal S1 test -------------
 
 % sagittal_sample060_avg = get_im_data(sagittal_set, (060-1:060+1));
 % regions = get_surface_regions(sagittal_sample060_avg, mri_surfaces_locations);
@@ -41,9 +93,9 @@
 
 % ------------ S4 tests ------------
 
-sagittal_sample113_avg = get_im_data(sagittal_set, (113-1:113+1));
-regions = get_surface_regions(sagittal_sample113_avg, mri_surfaces_locations);
-surface_edge(regions.S4, [90, 419], 'S4', '113');
+% sagittal_sample113_avg = get_im_data(sagittal_set, (113-1:113+1));
+% regions = get_surface_regions(sagittal_sample113_avg, mri_surfaces_locations);
+% surface_edge(regions.S4, [90, 419], 'S4', '113');
 
 % sagittal_sample114_avg = get_im_data(sagittal_set, (114-1:114+1));
 % regions = get_surface_regions(sagittal_sample114_avg, mri_surfaces_locations);

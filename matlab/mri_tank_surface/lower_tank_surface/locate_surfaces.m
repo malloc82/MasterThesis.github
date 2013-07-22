@@ -28,7 +28,7 @@ function  tank_surfaces = locate_surfaces(image_data, plot_msg)
         plot((1:row), sample_gradient_smooth, 'r');
     end
 
-    [maxpeaks, minpeaks] = peakdet(sample_gradient_smooth, 14);
+    [maxpeaks, minpeaks] = peakdet(sample_gradient_smooth, 10);
 
     if length(maxpeaks) == 0 || length(minpeaks) == 0
         tank_surfaces = [];
