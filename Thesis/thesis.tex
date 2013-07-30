@@ -1,0 +1,101 @@
+\documentclass{sbthesis}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color} % color
+\usepackage{amsmath}
+\usepackage{breqn}
+\usepackage{xfrac}
+\definecolor{listinggray}{gray}{0.9}
+
+% \IncludeFig{caption}{label}{file}{scale}
+\newcommand{\IncludeFig}[4]{
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=#4]{#3}
+    \caption{#1}
+    \label{#2}
+  \end{figure}
+}
+
+% \Ccode{title}{label}{file}
+\newcommand{\Ccode}[3]{
+  \lstset{language=c}
+  \lstset{basicstyle=\footnotesize}
+  \lstset{backgroundcolor=\color{listinggray},rulecolor=\color{blue}}
+  \lstset{linewidth=\textwidth, xleftmargin=0pt, xrightmargin=0pt}
+  \lstset{commentstyle=\textit, stringstyle=\upshape,showspaces=false}
+  \lstset{frame=tb}
+  \lstinputlisting[caption={#1},label={#2}]{#3}
+}
+
+\newcommand{\Matlab}[3]{
+  \lstset{language=matlab}
+  \lstset{basicstyle=\footnotesize}
+  \lstset{backgroundcolor=\color{listinggray},rulecolor=\color{blue}}
+  \lstset{linewidth=\textwidth, xleftmargin=0pt, xrightmargin=0pt}
+  \lstset{commentstyle=\textit, stringstyle=\upshape,showspaces=false}
+  \lstset{frame=tb}
+  \lstinputlisting[caption={#1},label={#2}]{#3}
+}
+
+\title{A New Phantom and Gradient Isocenter Estimation for MRI Distortion Correction}
+\author{Zongqi Cai}
+\Department
+\EmailAddress{caiz@csusb.edu}
+\Advisor{Keith Evan Schubert}
+\Committee*{Kay Zemoudeh}{Haiyan Qiao}{Reinhard Schulte}{}
+\CSUSBDate{July 2013}
+\Copyright
+
+\AbstractText{Magnetic Resonance Imaging (MRI) provides an excellent modality for distinguishing different tissues in the human body, which makes this modality essential for medical applications. MRI can also be used for treatment planning of medical procedures that require a great degree of geometrical accuracy such as functional radiosurgery. Unfortunately, the accuracy of MRI for medical targeting applications is compromised by the presence of geometric distortions such as non-linearities of the magnetic gradient fields or inhomogeneities of the scanner main field. \\
+	The goal of this work was to develop and implement a numerical software-based method to estimate the gradient isocenter of the magnetic field inside an 3-Tesla(T) MRI scanner using the MRI scan of a custom-built phantom.  A new phantom has been designed from scratch to capture the distortions inside 3T MRI scanner. Several algorithms have also been develop to calculate the gradient isocenter of the 3T MRI scanner's magnetic field, extract relevant data points from the MR and CT images of new phantom and compute the undistortion parameters.abstract contents}
+
+\AcknowledgementText{}
+\DedicationText{My father}
+
+\NoTables
+\NoFigures
+
+\begin{document}
+\Thesis
+
+\Chapter{Introduction}
+\label{introduction}
+\input{introduction/intro.tex}
+
+\Chapter{Background}
+\label{background}
+\input{background/background}
+
+% \Chapter{Overview}
+% \label{overview}
+% \input{overview/main}
+
+% algorithm overviews
+% canny, peakdet, steepest descent, dicom coordinate conversion etc
+
+\Chapter{Phantom Design}
+\label{phantom_design}
+\input{phantom/phantom_design}
+
+\Chapter{Gradient Isocenter Localization}
+\label{iso_center}
+\input{isocenter/isocenter}
+
+\Chapter{Data Extraction}
+\label{data_extraction}
+\input{data_extraction/data_extraction}
+
+\Chapter{Parameters Calculation}
+\label{parameters_calculation}
+\input{parameters/parameters_main}
+
+% \Chapter{Verification}
+\Chapter{Summery and Conclusion}
+\label{conclusion}
+\input{conclusion/conclusion_main}
+
+
+\bibliographystyle{plain}
+\bibliography{thesis}
+\end{document}

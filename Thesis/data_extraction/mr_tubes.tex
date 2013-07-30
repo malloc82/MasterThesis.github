@@ -1,0 +1,129 @@
+\subsection{Introduction}
+There are total 64 MR tubes filed Copper Sulfate $(CuSO_4)$ places on the outer region of the phantom.
+We filled them with $CuSO_4$ due to this solution has very good magnetic suspetibility inside MRI scanner. 
+They produce very strong signals in MR images which make them much easier to extract. Tubes can be purchased
+separately, and easy to replace if necessary. Tubes are sealed with silicon to prevent leaking and could stored
+vertically for a long period of time. 
+
+These tubes are used to estimate MRI scanner's gradient isocenter as well as calculate the x and y axis' 
+undistortion parameters. To calculation undistortion parameter, we need both original accurate 3D locations
+and distorted 3D locations of each tubes. We can use tube holders' spacing specified in phantom's 
+specification to determine their undistorted locations since these holders are precision made. So the missing
+information are distorted tubes locations. MRI's distortion is nonlinear, which means the 3D shifts at
+different locations are different. The way we extract tubes' distortion is by analyzing the axial 
+scan/reconstruction of the phantom to determine a starting and ending slice of those tubes, and for every
+slices in between them, we find the center of the each tube. Each bended tube in MR images can be viewed as
+series. We will use these cetners in later calculation of undistortion parameters.
+
+\subsection{Range}
+This section describes how to determine the first and the last axial slices that are used to extract
+tube centers.
+
+Tube holders at both end of the MR tubes will cause the regions of the tubes inside the tube holder to shift. 
+Depending on how the original scan is performed, the shifts' direction may vary. If the original scan is
+done in axial directin, the the shift will occur inside xy plane; if the original scan is performed in
+sagittal direction the shift will occur on z-axis. So this means that we cannot use the signal from the 
+regions where tube holders are at. 
+
+One way to determine where the tube holders's z-axis location is to find the middle water tank boundaries. 
+Tube holder is usually at least 5mm away from each  tank surfaces in MR images. So after finding the location
+of two water tank surfaces we can add or subtract 4mm as two boundaries. For every axial slices, we will
+check it's z-axis location to see if that slice is between the boundary, if it is, we will continue to process
+the slice, otherwise we will ignore it.
+
+To find a accurate middle tank surfaces, we can work on either coronal or sagittal series, and use the
+following steps:
+
+\begin{enumerate}
+\item Averge the middle slice of the series with its two adjacent slices to produce a sample slice. This 
+  way we can get rid of some noise and would give a more reliable result.
+\item In the sample slice, we average middle 3 columns of pixels to produce a sample column.
+\item Produce a gradient for the sample column. 
+\item The top surface of the middle water tank could be set to be the first peak in second half 
+  of the data that is greater than 150; and the bottom surface of the water tank could be set to the 
+  last peak in the first half that's lower than -150. 
+\item Two pixels will be used for calculating the z-axis location of the two tank surfaces. Their row
+  values are the two values we calculated from previous step repectively, and their column values are both
+  middle column of the middle slice of this series.
+\item Two pixels will be converted into 3D dicom coordinate using DICOM affine formula. The one with positive
+  z coordinate will be added 4mm and the one with negative z coordinate will be subtract 4mm. These two 
+  z coordinates defines a range which axial slices used to extract MR tubes centers should be in.
+\item To validate a axial slice, we use the ImagePatientPosition parameter to see if the slice is in the range.
+\end{enumerate}
+
+\subsection{Tube Centers Extraction}
+This section describes the method used in tube center extraction.
+
+A typical axial view of phantom in MR images looks like this:
+% \begin{figure}[htb]
+%   \begin{minipage}[b]{0.8\linewidth}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=0.8\linewidth]{}}}
+%   \end{minipage}
+%   \caption{Axial view}
+%   \label{fig:axial_sample}
+% \end{figure}
+
+The strategy to extract tube centers is to use one slice to produce a series of masks which specified the tube
+locations. For reest of the slices, we use the masks to extract regions where tubes are at and process each
+region separately. There are several advantage of doing this:
+\begin{itemize}
+\item This method will make the whole process runs a lot faster due to significant less amount of pixels needed
+  to process.
+\item It also has a lot potential to run much more faster. Once 
+  a set of masks is produced from a image, not only a number of images following that slice could be processed
+  simultaneously, 64 regions in each images could also be processed at the same time after they are extracted.
+\item It will be less error prone as well, due to masks narrows down the problem regions.
+\end{itemize}
+
+\subsubsection{Mask Extraction}
+This section describes how the masks are produced.
+
+The following steps are used to extract a set of tube mask from an axial MR images within the range we have
+calculated previously.
+\begin{enumerate}
+\item Use a threshold to produce a binary image that only contains tube signals. 
+  Due to the good suspetibility of $CuSO_4$ solutions, signals from solutions inside MR tubes are much
+  higher than other regions of in the same image.
+\item Apply canny edge detection on the binary image produced from previous step. Note: Applying canny
+  directly on original image with high threshold will also yield a good quality edge images with much
+  smaller circles.
+\item Masks of tubes at top row, bottom row, left column  and right column are generated first. 
+  for top row:
+  \begin{enumerate}
+  \item Iterate the the top left region of the image, sweeping row wise from left to right to search 
+    for a pixel that belongs to left most tube on top row.
+  \item Once an edge pixel is found, all the edge pixels of the this tube will be collected, i.e. record and 
+    remove from the image. And a center of the tube is computed using steepest descent method. 
+  \item Use the center calculated from previous method as a starting point and walk the pixels on the same row
+    to the right to obtain 7 other tube centers of top row by repeating previous steps.
+  \end{enumerate}
+\item Use similar method that obtained centers of top row to obtain bottom rown, left column and right column. 
+  For bottom row, lower right region of the image are searched initially, sweeping from right to left, once
+  the first tube center is found, algorithm traverse to left to collect the rest tube; 
+  for left column, top left region is swept column wise from up to down, after finding the first center, 
+  algorithm traverse down ward on the same column to search for other tubes.
+  for right column, bottom right region is swept column wise from bottom to top, after finding the first
+  center, algorithm traverse upward to search for other tubes.
+\item For diagnal tubes, similar initial search is used to look for the first pixel of the first tube. 
+  When looking remaining tubes, row wised sweeping is motion is used. 
+\item After a center is found, a square region is allocated for a mask for that tube. In total, there are 64
+  masks extracted from on image. Each region will have it's top left coordinate on the image as well as 
+  width and height.
+\end{enumerate}
+
+Center calculation is using steepest descent. Several other algorithms are tested, such as, weighted average,
+least square, but steepest descent has the best result among the three.
+
+\subsubsection{Center Extraction Using Masks}
+
+With a set of mask is extracted, it would much easier to extract centers on other images with the masks:
+\begin{enumerate}
+\item Using each region's top left corner coordinate and it's width and height, 64 much smaller regions only
+  containing tubes can be extracted. 
+\item Each region can use the same edge algorithm used earlier step, then extract pixels and calculate the
+  centers. Center coordinate in the region will add to the top left corner coordinate to become a coordinate
+  in original image.
+\end{enumerate}
+
+

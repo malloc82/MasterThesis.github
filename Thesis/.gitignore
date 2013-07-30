@@ -1,0 +1,9 @@
+# ignore generated temporary files by latex
+*.aux
+*.lof
+*.log
+*.lot
+*.toc
+*.dvi
+# ignore generated pdf files
+*.pdf

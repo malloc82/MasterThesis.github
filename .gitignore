@@ -1,0 +1,23 @@
+# ignore object files
+*.[oa]
+
+# ignore temperary backup files
+*~
+.#*
+.DS_Store
+
+# ignore data directory where all input images are stored
+data
+data/
+
+# ignore temperary latex file
+*.aux
+*.log
+*.dvi
+*.toc
+*.blg
+
+# ignore dropbox files
+.dropbox
+Icon?
+*.bak

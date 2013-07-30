@@ -1,0 +1,46 @@
+
+\subsection{Introduction}
+Naturally due to the similarity of MR image and CT images, one can imagine that we shall reuse the algorithm
+we used to estimate water tank surfaces in CT images in MR images. However there are following challanges:
+\begin{enumerate}
+  \item MR images' quality is not as good as CT images. Espeically the water tank appeared at lower portion
+    of images. That portion of the phantom is not completely inside the head coil, so the signals from that
+    portion of the phantom contains a lot of noises. With that amount of noises, algorithm we used in CT 
+    images tends to get incorrect results. % NOTES: Elaborate or add examples 
+  \item Unlike CT images, which has no distortion in the images, MR images are distorted. Tank surfaces
+    in MR images have curvature. So when processing the curvatured noisy edge, we can't really use straight
+    line anymore, there has to be another reliable way to help us trace the broken, noisy curved edges.
+  \item Because CT images are not distorted, missing some data points at the edges is not that important.
+    With most data we collected, we can still construct a pretty accurate surfaces. However, since MR images
+    are distorted, data points on the edges are especially important because they contain the most information
+    about the distortion model.
+\end{enumerate}
+
+Once apprach is to use 
+
+Different cases:
+\begin{itemize}
+\item Top surface: remove robber pads
+\item bottom surface: noise
+\item Slices toward the edge % THOUGHT: we could probably combine both saggital and coronal reconstruction to collect a more complete data points
+\end{itemize}
+
+NOTE: old get_horizontal_boundaries is obvious not as sophisticated as the newer one, it would not even handle
+the mid slice well.
+
+horizontal boundaries for surfaces:
+\begin{enumerate}
+\item Locate tube regions on either side of the water tank
+\item First we need to start from the middle to get an accurate middle slice's left and right boundary. To
+  do this we will average middle slice and it's previous and next images to get rid of some of noise signals 
+  as well as enhance the real data signals. 
+\item We will use both coronal and saggital set to extract surfaces
+\item Bottom tank's boundaries could just use the upper tank's
+\item Only the exterior inside surface will use canny for edges, every other surface will use column wised
+  data analysis. 
+  All surfaces will use the same left and right boundaries derived from exterior inside surface.
+  Column wised pixel analysis should be able distinguish padding region and columns that might be outside
+  left or right boundaries.
+\item Averging three slices work well for most of the slices. Experiments have shown that 60\% mid slices 
+  is a good cut off point
+\end{enumerate}

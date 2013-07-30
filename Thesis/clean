@@ -1,0 +1,3 @@
+#! /bin/bash
+
+rm -f *.aux *.lof *.log *.lot *.toc *.dvi
