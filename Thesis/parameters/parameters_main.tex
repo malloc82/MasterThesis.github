@@ -1,5 +1,5 @@
 \section{Introduction}
-With both original measurements of the phantom and distorted data points, distortion or undistortion 
+With both original measurements of the phantom and distorted data points, distortion or correction 
 parameters can now be calculated 
 
 \begin{eqnarray} \label{eq:spherical_harmonics}
@@ -11,18 +11,18 @@ parameters can now be calculated
 + K_{z_3}(x_i^2 + y_i^2)^2 + K_{z_4}z_i^4)
 \end{eqnarray}
 
-where $(\bar{x}_i, \bar{y}_i, \bar{z}_i)$ and $(x_i, y_i, z_i)$ represent distorted and undistroted data sets.
+where $(\bar{x}_i, \bar{y}_i, \bar{z}_i)$ and $(x_i, y_i, z_i)$ represent distorted and corrected data sets.
 If $(\bar{x}_i, \bar{y}_i, \bar{z}_i)$ is distorted data set, $K_{x_i}, K_{y_i}, K_{z_i}$ would be 
 distortion parameters, i.e. parameters used to distort original phantom data. If 
 $(\bar{x}_i, \bar{y}_i, \bar{z}_i)$ and $(x_i, y_i, z_i)$ are swapped, $K_{x_i}, K_{y_i}, K_{z_i}$ would work as
-undistortion parameters, i.e. parameters used to convert distorted data points into their original position.
-In this case, what need to be calculated is undistortion parameters which will be used to correct the
+correction parameters, i.e. parameters used to convert distorted data points into their original position.
+In this case, what need to be calculated is correction parameters which will be used to correct the
 distortions inside MR images.
 
 Both $(x_i, y_i, z_i)$ and $(\bar{x}_i, \bar{y}_i, \bar{z}_i)$ have to be in DICOM coordinate, i.e. relative
 coordinate from gradient isocenter. The gradient isocenter computed in early chapters are using data points
 extracted from MR images, so it can be used to convert data points from MR images into DICOM coordinate, but 
-not the undistorted data. 
+not the corrected data. 
 
 \section{XY Axis Distortion Correction Parameters Calculation}
 This section describes how to setup and calculate the X and Y axis correction parameters.
@@ -39,7 +39,7 @@ setup:
 
 where $(x_0, y_0, z_0)$ and $(x_1, y_1, z_1)$ are DICOM coordinates of the two points from distorted space, 
 which are known, and $(\bar{x}_0, \bar{y}_0, \bar{z}_0)$, $(\bar{x}_1, \bar{y}_1, \bar{z}_1)$ are DICOM 
-coordinates of two points from undistorted spaces which are unknown. However, the exact distance of tube
+coordinates of two points from corrected spaces which are unknown. However, the exact distance of tube
 spacings are known, as well as the distance between opposite side of tubes. So 
 $(\delta{x}_{0,1}, \delta{y}_{0,1}, \delta{z}_{0,1})$ can be calculated using 
 
