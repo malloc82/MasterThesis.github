@@ -24,7 +24,7 @@ coordinate from gradient isocenter. The gradient isocenter computed in early cha
 extracted from MR images, so it can be used to convert data points from MR images into DICOM coordinate, but 
 not the undistorted data. 
 
-\section{XY Axis Correction Parameters Calculation}
+\section{XY Axis Distortion Correction Parameters Calculation}
 This section describes how to setup and calculate the X and Y axis correction parameters.
 
 Consider using two data points from two separate MR tubes in the same xy plane, two equations could be
@@ -81,7 +81,7 @@ For each pairing, a new formula is produced.
   & & K_{y_4}(z_0^4 - z_j^4))
 \end{eqnarray}
 
-\section{Z Axis Correction Parameters Calculation}
+\section{Z Axis Distortion Correction Parameters Calculation}
 
 Similarly to xy correction, we pair up surfaces of water tanks. Figure \ref{fig:correction_surface_pairing}, 
 show the pairing.

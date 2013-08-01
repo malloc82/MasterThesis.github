@@ -7,15 +7,15 @@ medical procedures that require a great degree of geometrical accuracy such as
 functional radiosurgery~\cite{Kond99}. Unfortunately, the accuracy of MRI for medical targeting applications
 is compromised by the presence of geometric distortions such as non-linearities of the magnetic gradient
 fields or inhomogeneities of the scanner main field
-~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}.
+~\cite{Dor05,LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach,Wang04a,Wang04b}.
 Gradient nonlinearities can cause over 2mm of distortion to the location of features in the
-image~\cite{LSS08b,Lang99}.
+image~\cite{tlee_iaeng,simple_approach}.
 
 % Modern MRI scanners have built-in distortion correction algorithms, that rely on knowledge of the magnetic
 % field configuration and its distortion. Built-in algorithms, which are usually proprietary, are designed
 % based on assumed knowledge of the geometry and location of the gradient coils. A more practical approach is
 % to use a phantom of known geometry and to derive the distortion by analyzing the MRI images generated with
-% such a phantom ~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}.
+% such a phantom ~\cite{Dor05,LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach,Wang04a,Wang04b}.
 % This method has the advantage that a scanner-specific correction can be applied, which can also take into
 % account potential changes in the gradient fields over time.
 
@@ -26,13 +26,13 @@ image~\cite{LSS08b,Lang99}.
 
 % The goal of this work was to develop and implement a numerical software-based method to estimate the gradient
 % isocenter of the magnetic field inside an MRI scanner using the MRI scan of a custom-built phantom.
-% In our previous work~\cite{LSS06a,LSS06b,LSS08a,LSS08b}, we used an oil filled plexiglas cube with
+% In our previous work~\cite{LSS06a,LSS06b,LSS08a,tlee_iaeng}, we used an oil filled plexiglas cube with
 % 159.50mm $\times$ 159.70mm $\times$ 158.11mm dimension that was designed to fit MR scanners that were
 % available at that time.  Current MRI scanners have a significantly wider aperture, which necessitates
 % a larger phantom to characterize the field distortion.  Furthermore, since the lower part of the scanner
 % aperture is occupied by the scanner table, the scanning area occupied by the phantom or the patient is not
 % centered on the gradient isocenter, making correction methods that assume that the phantom is centered with
-% respect to the gradient isocenter~\cite{LSS06a,LSS06b,LSS08a,LSS08b,Lang99} obsolete and potentially
+% respect to the gradient isocenter~\cite{LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach} obsolete and potentially
 % inaccurate.
 
 % \begin{figure}[htb]
@@ -46,7 +46,7 @@ image~\cite{LSS08b,Lang99}.
 % \end{figure}
 
 The primary purpose of this thesis was to improve the distortion correction method developed in a previous
-thesis \cite{tom}.  To do this, the following issues were addressed in this work:
+thesis \cite{tom_thesis}.  To do this, the following issues were addressed in this work:
 \begin{itemize}
 \item A new phantom was designed that can capture the distortion in modern 3-Tesla(T) MRI scanner.
 \item Algorithms were developed that can extract relevant data points from the MR images of the new phantom.
@@ -112,10 +112,10 @@ correction are:
 
 % I added some more detail in this paragraph
 
-%The iteracy that this work is based on presented gradient nonlinearity correction method based on a cubic phantom MRI data set\cite{tom}.
+%The iteracy that this work is based on presented gradient nonlinearity correction method based on a cubic phantom MRI data set\cite{tom_thesis}.
 
-This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set \cite{Lang99}, which was also subject of a previous thesis by Tom S. Lee \cite{tom}.
-% This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set \cite{tom}.
+This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set \cite{simple_approach}, which was also subject of a previous thesis by Tom S. Lee \cite{tom_thesis}.
+% This work is based on a published method for gradient nonlinearity correction using a cubic phantom MRI data set \cite{tom_thesis}.
 The published method utilizes the sum of spherical
 harmonics to model the geometrically warped planes of the cube, and applies the model
 to correct arbitrary image sets acquired with the same scanner. The cube is
@@ -176,7 +176,7 @@ In addition, with the introduction of the new 3T MR scanner with a larger bore, 
 \section{Significance}
 
 % Medical Significance
-Geometric distortions are critical for the use of MRI in accurate medical targeting. Procedures such as functional proton radiosurgery that deliver very high doses to small targets very accurate targeting is an absolute requirement. The built-in distortion correction of modern MRI scanners is probably not accurate enough for such procedures, and distortion correction methods that are based on measurements of the nonlinearity in the actual scanner are needed. With the work accomplished in this thesis, we have come a step closer to using MRI for such procedures. The phantom and algorithms developed will also be useful for other neurosurgical procedures that use MRI as the basis for accuate targeting.
+Geometric distortions are critical for the use of MRI in accurate medical targeting. Procedures such as functional proton radiosurgery that deliver very high doses to small targets very accurate targeting is an absolute requirement. The built-in distortion correction of modern MRI scanners is probably not accurate enough for such procedures, and distortion correction methods that are based on measurements of the nonlinearity in the actual scanner are needed. With the work accomplished in this thesis, we have come a step closer to using MRI for such procedures. The phantom and algorithms developed will also be useful for other MRI targettingl procedures.
 
 % % Which equation are you referring to here?  It would be better to reference the equation, instead of saying "the equation above"
 

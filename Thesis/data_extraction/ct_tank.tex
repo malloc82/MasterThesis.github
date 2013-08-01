@@ -32,63 +32,62 @@ for. This problem is illustrated in figure \ref{fig:canny_ct_141}, \ref{fig:cann
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/default/20121017_141.eps}}}
-    \centerline{\emph{(a) Default parameters}}
+    \centerline{\emph{(a)}}
   \end{minipage}\medskip
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.01_0.02/20121017_141.eps}}}
-    \centerline{\emph{(b) Low threshold 0.01, high threshold  0.02}}
+    \centerline{\emph{(b)}}
   \end{minipage}
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_141.eps}}}
-    \centerline{\emph{(c) Low threshold 0.02, high threshold  0.04}}
+    \centerline{\emph{(c)}}
   \end{minipage}\medskip
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_141.eps}}}
-    \centerline{\emph{(d) Low threshold 0.05, high threshold  0.1}}
+    \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 141 with different parameters}} \label{fig:canny_ct_141}
+  \caption{\emph{Canny algorithm applied to coronal sequence 141 with different parameters: (a) Default parameters (b) Low threshold 0.01, high threshold 0.02 (c) Low threshold 0.02, high threshold 0.04 (d) Low threshold 0.05, high threshold  0.1}} \label{fig:canny_ct_141}
 \end{figure}
-
 
 \begin{figure}[htb]
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/default/20121017_270.eps}}}
-    \centerline{\emph{(a) Default parameter}}
+    \centerline{\emph{(a)}}
   \end{minipage}\medskip
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.01_0.02/20121017_270.eps}}}
-    \centerline{\emph{(b) Low threshold 0.01, high threshold  0.02}}
+    \centerline{\emph{(b)}}
   \end{minipage}
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_270.eps}}}
-    \centerline{\emph{(c) Low threshold 0.02, high threshold  0.04}}
+    \centerline{\emph{(c)}}
   \end{minipage}\medskip
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_270.eps}}}
-    \centerline{\emph{(d) Low threshold 0.05, high threshold  0.1}}
+    \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 270 with different parameters}} \label{fig:canny_ct_270}
+  \caption{\emph{Canny algorithm applied to coronal sequence 270 with different parameters: (a) Default parameter (b) Low threshold 0.01, high threshold  0.02 (c) Low threshold 0.02, high threshold  0.04 (d) Low threshold 0.05, high threshold  0.1}} \label{fig:canny_ct_270}
 \end{figure}
 
 \begin{figure}[htb]
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_276.eps}}}
-    \centerline{\emph{(f) Low threshold 0.02, high threshold  0.04}}
+    \centerline{\emph{(a)}}
   \end{minipage}\medskip
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_276.eps}}}
-    \centerline{\emph{(h) Low threshold 0.05, high threshold  0.1}}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 276 with different parameters}} \label{fig:canny_ct_276}
+  \caption{\emph{Canny algorithm applied to coronal sequence 276 with different parameters: (a) Low threshold 0.02, high threshold 0.04 (b) Low threshold 0.05, high threshold 0.1}} \label{fig:canny_ct_276}
 \end{figure}
 
 In figure \ref{fig:canny_ct_141}(a), we can see that Matlab's canny algorithm with default parameter gives 
@@ -139,23 +138,25 @@ location of each surface by specifying the surfaces are within the $\pm5$ rows o
 identified pixels. The $\pm5$ rows should give enough room for any horizontal or vertical tiltness.
 
 \begin{figure}[htb]
-  \begin{minipage}[b]{2.75in}
+  \begin{minipage}[b]{1.8in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_histogram.eps}}}
-    \centerline{\emph{(a) mid slice intensity histogram}}
-  \end{minipage}\medskip
-  \begin{minipage}[b]{2.75in}
-    \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_tank_and_water_overlap_marked.eps}}}
-    \centerline{\emph{(b) Mared overlap region}}
+    \centerline{\mbox{\includegraphics[width=1.8in]{data_extraction/images/mid_slice_histogram.eps}}}
+    \centerline{\emph{(a)}}
   \end{minipage}
-  \begin{minipage}[b]{2.75in}
+  \hfill
+  \begin{minipage}[b]{1.8in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_gradient_marked.eps}}}
-    \centerline{\emph{(c) mid slice surface locations}}
+    \centerline{\mbox{\includegraphics[width=1.8in]{data_extraction/images/mid_slice_tank_and_water_overlap_marked.eps}}}
+    \centerline{\emph{(b)}}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{1.8in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1.8in]{data_extraction/images/mid_slice_gradient_marked.eps}}}
+    \centerline{\emph{(c)}}
   \end{minipage}
 
-  \caption{\emph{Histograms of middle column of middle slice of a coronal series}} 
+  \caption{\emph{Histograms of middle column of middle slice of a coronal series: (a) mid slice intensity histogram (b) Mared overlap region (c) mid slice surface locations}} 
   \label{fig:histograms_mid_coronal}
 \end{figure}
 
@@ -179,24 +180,31 @@ region as well as the gradient for the intensity graph as shown in figure
 \ref{fig:coronal_270_boundary_histogram}. 
 
 \begin{figure}[htb]
-  \begin{minipage}[b]{5in}
+  \begin{minipage}[b]{3in}
     \centering
-    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/histogram_marked.eps}}}
-    \centerline{\emph{(a) Histogram for inferior tank inside edge}}
+    \centerline{\mbox{\includegraphics[width=3in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/histogram_marked.eps}}}
+    \centerline{\emph{(a)}}
   \end{minipage}
-  \caption{\emph{Histogram for boundary detection on image sequence \#270}}
-  \label{fig:coronal_270_boundary_histogram}
+  \hfill
+  \begin{minipage}[b]{3in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=3in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
+    \centerline{\emph{(b)}}
+  \end{minipage}
+
+  \caption{\emph{Histogram for boundary detection: (a) inferior tank inside edge of \#270 (b) superior tank outside edge of \#100}}
+  \label{fig:coronal_boundaries_histogram}
 \end{figure}
 
-\begin{figure}[htb]
-  \begin{minipage}[b]{5in}
-    \centering
-    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
-    \centerline{\emph{(a) Histogram for superior tank outside edge}}
-  \end{minipage}
-  \caption{\emph{Histogram for boundary detection on image sequence \#100}}
-  \label{fig:coronal_270_boundary_histogram}
-\end{figure}
+% \begin{figure}[htb]
+%   \begin{minipage}[b]{5in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
+%     \centerline{\emph{(a) Histogram for superior tank outside edge}}
+%   \end{minipage}
+%   \caption{\emph{Histogram for boundary detection on image sequence \#100}}
+%   \label{fig:coronal_270_boundary_histogram}
+% \end{figure}
 
 Upper pair of arrows in figure \ref{fig:coronal_270_boundary_histogram} indicates where the inside edges of
 the phantom tanks are, and the lower pair of arrows indicates how do those edges shows up in its gradient graph.
@@ -222,14 +230,14 @@ There are couple of issues with this approach.
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge.eps}}}
-    \centerline{\emph{(a) Extra edge caused by tube section}}
+    \centerline{\emph{(a)}}
   \end{minipage}
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge_histogram.eps}}}
-    \centerline{\emph{(b) Histgram of the superior outside surface in (a) }}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Superior outside surface artifacts}}
+  \caption{\emph{Superior outside surface artifacts: (a) Extra edge caused by tube section (b) Histgram for superior outside surface of the same image}}
   \label{fig:superior_outside_artifacts}
 \end{figure}
 
@@ -330,20 +338,18 @@ while others not.
 
 \subsubsection{Improvement}
 
-
-
 \begin{figure}[htb]
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/result.eps}}}
-    \centerline{\emph{(a) Edge result on image sequence \#270}}
+    \centerline{\emph{(a)}}
   \end{minipage}
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_100/Coronal/result_canny_[0.001,0.002].eps}}}
-    \centerline{\emph{(b) Edge result on image sequence \#100}}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Final edge results}}
+  \caption{\emph{Final edge results: (a) Edge result on image sequence \#270 (b) Edge result on image sequence \#100}}
   \label{fig:coronal_edge_final_result}
 \end{figure}
 
@@ -469,4 +475,4 @@ Notice that in the YZ view in figure \ref{fig:ct_tank_surface_reconstruction_yz}
 all four surfaces are tilted. This is consistant with what we observed on saggital reconstruction 
 of this image set. 
 
-\subsection{Estimating Surfaces Distances}
+% \subsection{Estimating Surfaces Distances}

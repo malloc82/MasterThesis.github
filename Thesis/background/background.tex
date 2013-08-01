@@ -1,6 +1,6 @@
 \section{Magnetic Resonance Imaging}
 The image in MRI is a multidimensional data array representing the spatial distribution of nuclear 
-magnetic properties of the image object although the original data acquired represents the frequency 
+magnetic properties of the image object, although the original data acquired represents the frequency 
 distribution of the responses of a multitude of hydrogen nuclei in an inhomogeneous magnetic field. The 
 information is usually organized as 2D images, presented discretely in form of image pixels such that 
 each pixel is a 2D representation of the measured physical quantity in the corresponding object voxel 
@@ -11,8 +11,8 @@ including the nuclear spin density, $\rho$ , the spin-lattice relaxation time T1
 relaxation time T2, molecular motions (diffusion and perfusion), susceptibility effects, chemical shift 
 differences, etc. The relative weight of these parameters in their contribution to the image contrast 
 can be influenced by operator-selectable parameters, such as the repetition time TR, echo time TE, and 
-flip angle $\alpha$. However, this will not be further discussed here because it is not necessary or 
-understanding and correcting the origin of gradient nonlinearity.
+flip angle $\alpha$. However, this will not be further discussed here because it is not necessary for 
+correcting the origin of gradient nonlinearity.
 
 \subsection{Hardware Components of an MRI Scanner}
 
@@ -21,10 +21,10 @@ It consists of three main hardware
 components: the main magnet (blue), the gradient coil system (red), and the radiofrequency (RF) coil 
 system (green). The main magnet can be thought of as a large tube, which fits inside the bore of the MR 
 scanner. The housing of the three gradient coils also takes the form of a tube, which fit inside the 
-main magnet. The RF body coil, which both produces and receives RF signals, takes the shape of another 
+main magnet. The RF coil, which both produces and receives RF signals, takes the shape of another 
 tube that fits inside the gradient coils. Hence the space in which the body part to be imaged is placed 
 is a cylindrical volume with the longitudinal axis (z) being parallel to the patient longitudinal body 
-axis and the diameter matching the inner diameter of the body coil housing. If the head is imaged, a 
+axis and the diameter matching the inner diameter of the coil housing. If the head is imaged, a 
 removable RF head coil, which has a better signal to noise ratio than the body coil, is placed inside 
 the body coil.
 
@@ -43,10 +43,11 @@ imaged object. Spin is a fundamental quantum property of elementary particles ju
 charge or mass, which is related to the angular momentum of the nucleus. In classical terms, angular 
 momentum is due to spinning of an object about its axis. Spin quantum numbers come discrete, i.e.,  in 
 multiples of $\frac{1}{2}$, and can be either positive or negative. The total spin quantum number of 
-paired protons
+$\frac{1}{2}$ paired protons
 and neutrons equals zero, while unpaired protons and neutrons in a nucleus each contribute a spin 
-quantum number of ½. Thus, a nucleus with an uneven number of nucleons (protons or neutrons) has a 
-nonzero spin quantum number, which is a multiple of ½, and a large number of them can, therefore, 
+quantum number of $\frac{1}{2}$. Thus, a nucleus with an uneven number of nucleons (protons or neutrons) 
+has a nonzero spin quantum number, which is a multiple of $\frac{1}{2}$, 
+and a large number of them can, therefore, 
 produce a net magnetization when placed in an external magnetic field. The most abundant nucleus with 
 uneven number of nucleons in the human body is hydrogen with just one proton.
 
@@ -63,6 +64,8 @@ $\textbf{J}$ and magnetic moment are linearly related to each other by
 \begin{equation}
   \mu = \frac{\gamma}{2}\pi J
 \end{equation}
+
+which $\gamma$ is gyromagnetic ratio.
 
 \subsection{Distortion Origin and Manifestations}
 
@@ -121,7 +124,8 @@ The design of the gradient coils in x and y-direction is more complicated. The p
 
 \subsection{Physical and Mathematical Description of Nonlinear Gradient Fields}
 
-Let \textbf{B} the magnetic flux density and \textbf{H} be the magnetic field intensity vectors produced by any of the gradient coils. The relationship between these vector quantities is 
+The following description of nonlinear gradient field was given by Dr. Sumanaweera in his thesis 
+\cite{sumanaweera_thesis}. Let \textbf{B} the magnetic flux density and \textbf{H} be the magnetic field intensity vectors produced by any of the gradient coils. The relationship between these vector quantities is 
 \begin{equation}
   \textbf{B} = \mu \textbf{H}
 \end{equation}
@@ -194,9 +198,18 @@ where $r'$ is the distorted coordinate vector derived from the undistorted vecto
   \end{bmatrix} 
 \end{equation}
 
-% \section{Previous Work}
+\section{Previous Work}
 
+Previous study was conducted using a 159.50mm × 159.70mm × 158.11mm oil phantom inside a 1.5 Tesla(T) 
+MRI scanner as shown in figure 
 
+% \begin{figure}[htb]
+%   \begin{minipage}[b]{2.75in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=2.75in]{background/images}
+    
+%   \end{minipage}
+% \end{figure}
 
 % \begin{enumerate}
 %   \item Magnetic Resonance Imaging
