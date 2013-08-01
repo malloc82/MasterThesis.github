@@ -52,10 +52,10 @@ thesis \cite{tom_thesis}.  To do this, the following issues were addressed in th
 \item Algorithms were developed that can extract relevant data points from the MR images of the new phantom.
 \item An new algorithm was developed that can accurately estimate the gradient isocenter of the magnetic
   field inside 3T MRI scanners.
-\item An algorithm was developed that can determine the undistortion paramters, which can then be used to
-  generate undistorted MR images.
-% \item An algorithm was developed that can accurately estimate the undistortion paramters,
-%   which could then be used to generate undistorted MR images.
+\item An algorithm was developed that can determine the correction parameters, which can then be used to
+  generate corrected MR images.
+% \item An algorithm was developed that can accurately estimate the correction paramters,
+%   which could then be used to generate corrected MR images.
 \end{itemize}
 
 % background
@@ -71,12 +71,12 @@ used in this work to obtain accurate dimensions inside the phantom.
 % After isocenter algorithm we will start to discuss a series of algorithms we used to extract data points
 % from MR images and CT images. CT images is used for measuring certain dimensions inside phantom due to
 % limitations of manufacture's macine.
-Chapter 6 describes the procedure to estimate the parameters of the model that undistorts the distorted
+Chapter 6 describes the procedure to estimate the parameters of the model that corrects the distorted
 MR images. The final chapter summarizes the main results and suggests future work.
 % In the final chapter, putting everything together,
 % we are using the geometric feature of the phantom and information
-% obtained from MR images to estimating a undistortion parameter that can transform the distorted MR images
-% back to undistorted images.
+% obtained from MR images to estimating a correction parameter that can transform the distorted MR images
+% back to corrected images.
 
 \section{Background}
 
@@ -121,7 +121,7 @@ harmonics to model the geometrically warped planes of the cube, and applies the 
 to correct arbitrary image sets acquired with the same scanner. The cube is
 placed in the MRI scanner such that the cube's center is exactly in the center of the MRI scanner.  This work assumes the center of the MRI scanner corresponds to the isocenter of the
 magnetic field of the scanner. Opposite faces of the phantom are averaged, and three midplanes are fit to these surfaces.  Due to the symmetric property of the magnetic field,
-the midplanes of different orientations of the phantom cube are undistorted.  Through each midplane, the ideal planes of different surfaces
+the midplanes of different orientations of the phantom cube are corrected.  Through each midplane, the ideal planes of different surfaces
 of the cube are calculated simply by shifting the midplane to the direction
 of the ideal plane by one-half the length of the cube. For each pixel on
 the ideal plane, the sum of spherical
@@ -133,7 +133,7 @@ K_{\alpha_2}z^2(x^2 + y^2) + K_{\alpha_3}(x^2 + y^2)^2 +
 K_{\alpha_4}z^4)
 \end{equation}
 
-Where $\bar{\alpha}$ and $\alpha$ are undistorted and distorted 3D coordinate respectively; $x$, $y$ and $z$ are coordinates of $\alpha$ on each axis; $K_{\alpha_i}$ are distortion parameters. Thus the distortion parameters in
+Where $\bar{\alpha}$ and $\alpha$ are corrected and distorted 3D coordinate respectively; $x$, $y$ and $z$ are coordinates of $\alpha$ on each axis; $K_{\alpha_i}$ are distortion parameters. Thus the distortion parameters in
 equation \ref{eq:spherical_harmonics} are computed using linear least squares
 technique.
 
@@ -141,7 +141,7 @@ Several assumptions are made for this model:
 \begin{itemize}
   \item The phantom is (reasonably) centered with respect to the gradient isocenter of the scanner.
   \item The distortion is (reasonably) symmetric for each pair of faces.
-  \item The origin of the DICOM patient coordinate system conincides with the position of the gradient
+  \item The origin of the DICOM patient coordinate system coincides with the position of the gradient
     isocenter.
 \end{itemize}
 
@@ -176,7 +176,7 @@ In addition, with the introduction of the new 3T MR scanner with a larger bore, 
 \section{Significance}
 
 % Medical Significance
-Geometric distortions are critical for the use of MRI in accurate medical targeting. Procedures such as functional proton radiosurgery that deliver very high doses to small targets very accurate targeting is an absolute requirement. The built-in distortion correction of modern MRI scanners is probably not accurate enough for such procedures, and distortion correction methods that are based on measurements of the nonlinearity in the actual scanner are needed. With the work accomplished in this thesis, we have come a step closer to using MRI for such procedures. The phantom and algorithms developed will also be useful for other MRI targettingl procedures.
+Geometric distortions are critical for the use of MRI in accurate medical targeting. Procedures such as functional proton radiosurgery that deliver very high doses to small targets very accurate targeting is an absolute requirement. The built-in distortion correction of modern MRI scanners is probably not accurate enough for such procedures, and distortion correction methods that are based on measurements of the nonlinearity in the actual scanner are needed. With the work accomplished in this thesis, we have come a step closer to using MRI for such procedures. The phantom and algorithms developed will also be useful for other MRI targeting procedures.
 
 % % Which equation are you referring to here?  It would be better to reference the equation, instead of saying "the equation above"
 
