@@ -1,25 +1,30 @@
 
-\subsection{CT Scan overview, target surfaces}
+\subsection{Introduction}
 Due to the limitation of manufacture's equipments, water tank at each end can only be guaranteed that their
-surfaces are parallel \footnote{what's the error?} to each other, their accurate distances between each other
-are unknown. We decided to perform a CT scan\footnote{what's the CT's error} on the phantom, then collect each
+surfaces are parallel % \footnote{what's the error?}
+to each other, their accurate distances between each other
+are unknown. We decided to perform a CT scan% \footnote{what's the CT's error}
+on the phantom, then collect each
 surfaces' data points through coronal view CT images. With enough data points on each surface, we should be
-able to have a good estimation of the distances with between each pair of surfaces. \footnote{brief outline of full algorithm}
+able to have a good estimation of the distances with between each pair of surfaces. % \footnote{brief outline of full algorithm}
+\\
 
 \begin{figure}[htb]
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/targets/ct_coronal_mid_slice.eps}}}
     \centerline{\emph{(a) Coronal view, center slice}}
-  \end{minipage}\medskip
+  \end{minipage}
   \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/targets/ct_coronal_mid_slice_marked_surface.eps}}}
     \centerline{\emph{(b) Marked target surfaces}}
   \end{minipage}
+  \caption{\emph{Sample CT image in coronal view.}}
+  \label{fig:ct_sample_coronal}
 \end{figure}
 
-Above images indicates the target feature we are looking for inside a typical coronal view of CT image.
+Figure ~\ref{fig:ct_sample_coronal} (b) indicates the target feature we are looking for inside a typical coronal view of CT image.
 
 \subsection{Canny Edges}
 
