@@ -20,7 +20,7 @@ able to have a good estimation of the distances with between each pair of surfac
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/targets/ct_coronal_mid_slice_marked_surface.eps}}}
     \centerline{\emph{(b) Marked target surfaces}}
   \end{minipage}
-  \caption{\emph{Sample CT image in coronal view.}}
+  \caption{Sample CT image in coronal view.}
   \label{fig:ct_sample_coronal}
 \end{figure}
 
@@ -54,7 +54,8 @@ for. This problem is illustrated in figure \ref{fig:canny_ct_141}, \ref{fig:cann
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_141.eps}}}
     \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 141 with different parameters: (a) Default parameters (b) Low threshold 0.01, high threshold 0.02 (c) Low threshold 0.02, high threshold 0.04 (d) Low threshold 0.05, high threshold  0.1}} \label{fig:canny_ct_141}
+  \caption{Canny algorithm applied to coronal sequence 141 with different parameters: (a) Default parameters (b) Low threshold 0.01, high threshold 0.02 (c) Low threshold 0.02, high threshold 0.04 (d) Low threshold 0.05, high threshold  0.1} 
+  \label{fig:canny_ct_141}
 \end{figure}
 
 \begin{figure}[htb]
@@ -78,7 +79,7 @@ for. This problem is illustrated in figure \ref{fig:canny_ct_141}, \ref{fig:cann
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_270.eps}}}
     \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 270 with different parameters: (a) Default parameter (b) Low threshold 0.01, high threshold  0.02 (c) Low threshold 0.02, high threshold  0.04 (d) Low threshold 0.05, high threshold  0.1}} \label{fig:canny_ct_270}
+  \caption{Canny algorithm applied to coronal sequence 270 with different parameters: (a) Default parameter (b) Low threshold 0.01, high threshold  0.02 (c) Low threshold 0.02, high threshold  0.04 (d) Low threshold 0.05, high threshold  0.1} \label{fig:canny_ct_270}
 \end{figure}
 
 \begin{figure}[htb]
@@ -92,7 +93,8 @@ for. This problem is illustrated in figure \ref{fig:canny_ct_141}, \ref{fig:cann
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_276.eps}}}
     \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 276 with different parameters: (a) Low threshold 0.02, high threshold 0.04 (b) Low threshold 0.05, high threshold 0.1}} \label{fig:canny_ct_276}
+  \caption{Canny algorithm applied to coronal sequence 276 with different parameters: (a) Low threshold 0.02, high threshold 0.04 (b) Low threshold 0.05, high threshold 0.1} 
+  \label{fig:canny_ct_276}
 \end{figure}
 
 In figure \ref{fig:canny_ct_141}(a), we can see that Matlab's canny algorithm with default parameter gives 
@@ -161,7 +163,7 @@ identified pixels. The $\pm5$ rows should give enough room for any horizontal or
     \centerline{\emph{(c)}}
   \end{minipage}
 
-  \caption{\emph{Histograms of middle column of middle slice of a coronal series: (a) mid slice intensity histogram (b) Marked overlap region (c) mid slice surface locations}} 
+  \caption{Histograms of middle column of middle slice of a coronal series: (a) mid slice intensity histogram (b) Marked overlap region (c) mid slice surface locations} 
   \label{fig:histograms_mid_coronal}
 \end{figure}
 
@@ -197,7 +199,7 @@ region as well as the gradient for the intensity graph as shown in figure
     \centerline{\emph{(b)}}
   \end{minipage}
 
-  \caption{\emph{Histogram for boundary detection: (a) inferior tank inside edge of \#270 (b) superior tank outside edge of \#100}}
+  \caption{Histogram for boundary detection: (a) inferior tank inside edge of \#270 (b) superior tank outside edge of \#100}
   \label{fig:coronal_boundaries_histogram}
 \end{figure}
 
@@ -207,7 +209,7 @@ region as well as the gradient for the intensity graph as shown in figure
 %     \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
 %     \centerline{\emph{(a) Histogram for superior tank outside edge}}
 %   \end{minipage}
-%   \caption{\emph{Histogram for boundary detection on image sequence \#100}}
+%   \caption{Histogram for boundary detection on image sequence \#100}
 %   \label{fig:coronal_270_boundary_histogram}
 % \end{figure}
 
@@ -242,7 +244,7 @@ There are couple of issues with this approach.
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge_histogram.eps}}}
     \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Superior outside surface artifacts: (a) Extra edge caused by tube section (b) Histogram for superior outside surface of the same image}}
+  \caption{Superior outside surface artifacts: (a) Extra edge caused by tube section (b) Histogram for superior outside surface of the same image}
   \label{fig:superior_outside_artifacts}
 \end{figure}
 
@@ -337,7 +339,7 @@ while others not.
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/4_within_boundary.eps}}}
     \centerline{\emph{(d) Edges within the boundary}}
   \end{minipage}
-  \caption{\emph{Edge extraction intermediate results on image sequence \#270's inferior tank inside edge}}
+  \caption{Edge extraction intermediate results on image sequence \#270's inferior tank inside edge}
   \label{fig:coronal_270_intermediate_results}
 \end{figure}
 
@@ -354,7 +356,7 @@ while others not.
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_100/Coronal/result_canny_[0.001,0.002].eps}}}
     \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Final edge results: (a) Edge result on image sequence \#270 (b) Edge result on image sequence \#100}}
+  \caption{Final edge results: (a) Edge result on image sequence \#270 (b) Edge result on image sequence \#100}
   \label{fig:coronal_edge_final_result}
 \end{figure}
 
@@ -446,7 +448,7 @@ Reconstructed surfaces can be see below:
     \centerline{\emph{(d)}}
   \end{minipage}
   
-  \caption{\emph{Water tank surfaces reconstruction from CT scan, YZ view}}
+  \caption{Water tank surfaces reconstruction from CT scan, YZ view}
   \label{fig:ct_tank_surface_reconstruction_yz}
 
 \end{figure}
@@ -472,7 +474,7 @@ Reconstructed surfaces can be see below:
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_outside/xy.eps}}}
     \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Water tank surfaces reconstruction from CT scan, XY view}}
+  \caption{Water tank surfaces reconstruction from CT scan, XY view}
   \label{fig:ct_tank_surface_reconstruction_xy}
 \end{figure}
 
