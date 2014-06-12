@@ -5,5 +5,11 @@
 *.lot
 *.toc
 *.dvi
+*.bbl
+*.old
+*.fdb_latexmk
+*.synctex.gz
+*.fls
+
 # ignore generated pdf files
 *.pdf
