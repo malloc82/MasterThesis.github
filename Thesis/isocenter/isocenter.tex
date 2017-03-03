@@ -1,21 +1,21 @@
-\subsection{Introduction}
+\section{Introduction}
 \label{Introduction}
-%The isocenter of the magnetic gradient fields inside a Magnetic Resonance (MR) Imaging scanner is used in many distortion correction methods for MR images~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}.  Currently there is no known method for estimating the gradient isocenter. All existing estimation methods are using the DICOM patient center which is very close but not exactly the same as isocenter. The different between isocenter and DICOM patient center could contribute part of the error of overall correctness of estimation.
+%The isocenter of the magnetic gradient fields inside a Magnetic Resonance (MR) Imaging scanner is used in many distortion correction methods for MR images~\cite{Dor05,LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach,Wang04a,Wang04b}.  Currently there is no known method for estimating the gradient isocenter. All existing estimation methods are using the DICOM patient center which is very close but not exactly the same as isocenter. The different between isocenter and DICOM patient center could contribute part of the error of overall correctness of estimation.
 
-Magnetic resonance imaging (MRI) provides an excellent modality for distinguishing different tissues in the human body, which makes this modality essential for medical applications. MRI can also be used for treatment planning of medical procedures that require a great degree of geometrical accuracy such as  functional radiosurgery~\cite{Kond99}. Unfortunately, the accuracy of MRI for medical targeting applications is compromised by the presence of geometric distortions such as non-linearities of the magnetic gradient fields or inhomogeneities of the scanner main field ~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}. Gradient nonlinearities can cause over 2mm of distortion to the location of features in the image~\cite{LSS08b,Lang99}.
+Magnetic resonance imaging (MRI) provides an excellent modality for distinguishing different tissues in the human body, which makes this modality essential for medical applications. MRI can also be used for treatment planning of medical procedures that require a great degree of geometrical accuracy such as  functional radiosurgery~\cite{Kond99}. Unfortunately, the accuracy of MRI for medical targeting applications is compromised by the presence of geometric distortions such as non-linearities of the magnetic gradient fields or inhomogeneities of the scanner main field ~\cite{Dor05,LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach,Wang04a,Wang04b}. Gradient nonlinearities can cause over 2mm of distortion to the location of features in the image~\cite{tlee_iaeng,simple_approach}.
 
-Modern MRI scanners have built-in distortion correction algorithms, that rely on knowledge of the magnetic field configuration and its distortion. Built-in algorithms, which are usually proprietary, are designed based on assumed knowledge of the geometry and location of the gradient coils. A more practical approach is to use a phantom of known geometry and to derive the distortion by analyzing the MRI images generated with such a phantom ~\cite{Dor05,LSS06a,LSS06b,LSS08a,LSS08b,Lang99,Wang04a,Wang04b}. This method has the advantage that a scanner-specific correction can be applied, which can also take into account potential changes in the gradient fields over time.
+Modern MRI scanners have built-in distortion correction algorithms, that rely on knowledge of the magnetic field configuration and its distortion. Built-in algorithms, which are usually proprietary, are designed based on assumed knowledge of the geometry and location of the gradient coils. A more practical approach is to use a phantom of known geometry and to derive the distortion by analyzing the MRI images generated with such a phantom ~\cite{Dor05,LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach,Wang04a,Wang04b}. This method has the advantage that a scanner-specific correction can be applied, which can also take into account potential changes in the gradient fields over time.
 
 Accurate knowledge of the gradient isocenter is essential to very accurate distortion correction methods, To our knowledge, existing distortion correction algorithms, both built-in and phantom based, make the assumption that the gradient isocenter coincides with the origin of the DICOM coordinates. This assumption may not be accurate and should not be used if a high degree of accuracy is necessary.
 
-The goal of this work was to develop and implement a numerical software-based method to estimate the gradient isocenter of the magnetic field inside an MRI scanner using the MRI scan of a custom-built phantom.  In our previous work~\cite{LSS06a,LSS06b,LSS08a,LSS08b}, we used an oil filled plexiglas cube with
-159.50mm $\times$ 159.70mm $\times$ 158.11mm dimension that was designed to fit MR scanners that were available at that time.  Current MRI scanners have a significantly wider aperture, which necessitates a larger phantom to characterize the field distortion.  Furthermore, since the lower part of the scanner aperture is occupied by the scanner table, the scanning area occupied by the phantom or the patient is not centered on the gradient isocenter, making correction methods that assume that the phantom is centered with respect to the gradient isocenter~\cite{LSS06a,LSS06b,LSS08a,LSS08b,Lang99} obsolete and potentially inaccurate.
+The goal of this work was to develop and implement a numerical software-based method to estimate the gradient isocenter of the magnetic field inside an MRI scanner using the MRI scan of a custom-built phantom.  In our previous work~\cite{LSS06a,LSS06b,LSS08a,tlee_iaeng}, we used an oil filled plexiglass cube with
+159.50mm $\times$ 159.70mm $\times$ 158.11mm dimension that was designed to fit MR scanners that were available at that time.  Current MRI scanners have a significantly wider aperture, which necessitates a larger phantom to characterize the field distortion.  Furthermore, since the lower part of the scanner aperture is occupied by the scanner table, the scanning area occupied by the phantom or the patient is not centered on the gradient isocenter, making correction methods that assume that the phantom is centered with respect to the gradient isocenter~\cite{LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach} obsolete and potentially inaccurate.
 
-\subsection{Distortion Phantom}
-A new phantom design was developed with the intention to probe the distortion in the 50 cm field-of-view (FOV) of a modern 3T MRI scanner (Magnetom Trio, Siemens).  Due to the geometry of the gradient field nonlinearity, the distortion is largest in the outer fringes of the FOV~\cite{LSS06a,LSS06b,LSS08a,LSS08b}. Capturing distortion data in the periphery of the FOV is important for better accuracy of the distortion correction. Building a very large cubical oil-filled phantom is a challenge due to weight limitations and limited capability to accurately machine a very large flat surface. Thus it was felt to be impractical to simply scale up the original phantom.  Another limitation is that the phantom needs to fit inside the scanner head coil which needs to be used to achieve a sufficiently high signal-to-noise ratio.  To meet all requirements, we designed a phantom that is comprised of 64 NMR glass tubes of 3 mm inner diameter, filled with copper sulfate and arranged in 8 surfaces forming an octagon.  A water-filled cylinder in the middle of the octagon ensures a good signal generated by the tubes.  The distance between tubes on the opposite side of the surface is 205mm, which is about 28\% wider than the original phantom. In addition we also added four more surfaces to provide data and better fit the headcoil.  There are 8 removable tubes on each surface with 10 mm gap between adjacent tubes.  Each tube is about 207 mm long, which is also an increase of about 28\% in length from the original phantom.  Tubes are placed along the main axis of the magnetic $B_0$  field to reduce the effects of chemical shift and magnetic susceptibility and
+\section{Distortion Phantom}
+A new phantom design was developed with the intention to probe the distortion in the 50 cm field-of-view (FOV) of a modern 3T MRI scanner (Magnetom Trio, Siemens).  Due to the geometry of the gradient field nonlinearity, the distortion is largest in the outer fringes of the FOV~\cite{LSS06a,LSS06b,LSS08a,tlee_iaeng}. Capturing distortion data in the periphery of the FOV is important for better accuracy of the distortion correction. Building a very large cubical oil-filled phantom is a challenge due to weight limitations and limited capability to accurately machine a very large flat surface. Thus it was felt to be impractical to simply scale up the original phantom.  Another limitation is that the phantom needs to fit inside the scanner head coil which needs to be used to achieve a sufficiently high signal-to-noise ratio.  To meet all requirements, we designed a phantom that is comprised of 64 NMR glass tubes of 3 mm inner diameter, filled with copper sulfate and arranged in 8 surfaces forming an octagon.  A water-filled cylinder in the middle of the octagon ensures a good signal generated by the tubes.  The distance between tubes on the opposite side of the surface is 205mm, which is about 28\% wider than the original phantom. In addition we also added four more surfaces to provide data and better fit the headcoil.  There are 8 removable tubes on each surface with 10 mm gap between adjacent tubes.  Each tube is about 207 mm long, which is also an increase of about 28\% in length from the original phantom.  Tubes are placed along the main axis of the magnetic $B_0$  field to reduce the effects of chemical shift and magnetic susceptibility and
 resulting in high-quality axial images.
 
-\subsection{Computational Algorithm}
+\section{Computational Algorithm}
 
 The algorithm we described here is using simulated data set that is based the
 geometric property of the phantom and the properties of the MR images.
@@ -24,28 +24,29 @@ The MR images we are using have 1mm per pixel resolution for every image and
 each data point. Since the images we are using to collect data points are all axial scans,
 we will only add noise to x and y coordinate of each data point.
 
-\subsection{Tube Modeling}
+\section{Tube Modeling}
 
-The tubes is 203 mm long. So our simulation data is ranging from -100 to 100 on z axis for each tube.
+The tubes are 203 mm long. So our simulation data is ranging from -100 to 100 on z axis for each tube.
 The arrangement of the tubes could be seen in Figure~\ref{fig:1}.
-Our algorithm is based on two standard assumptions~\cite{LSS06a,LSS06b,LSS08a,LSS08b,Lang99}.: (1) the distortion in MR images are only caused by the magnetic field inside MRI scanner and (2) the magnetic field can be perfectly described using the sum of spherical harmonic.
+Our algorithm is based on two standard assumptions~\cite{LSS06a,LSS06b,LSS08a,tlee_iaeng,simple_approach}.: (1) the distortion in MR images are only caused by the magnetic field inside MRI scanner and (2) the magnetic field can be perfectly described using the sum of spherical harmonic.
 
 \begin{figure}[htb]
 
-  \begin{minipage}[b]{1.65in}
+  \begin{minipage}[b]{2.2in}
     \centering
-    \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/axial_no_distortion.eps}}}
-    \centerline{\emph{(a) Axial view.}}\medskip
+    \centerline{\mbox{\includegraphics[width=2.2in]{isocenter/images/simulation/axial_no_distortion.eps}}}
+    \centerline{\emph{(a) Axial view.}}
   \end{minipage}
   \hfill
-  \begin{minipage}[b]{1.65in}
+  \begin{minipage}[b]{2.2in}
     \centering
-    \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/coronal_no_distortion.eps}}}
-    \centerline{\emph{(b) Coronal view.}}\medskip
+    \centerline{\mbox{\includegraphics[width=2.2in]{isocenter/images/simulation/coronal_no_distortion.eps}}}
+    \centerline{\emph{(b) Coronal view.}}
   \end{minipage}
 %\hfill
 %
-\caption{\emph{Phantom modeling without distortion}} \label{fig:1}
+  \caption{Phantom modeling without distortion} 
+  \label{fig:1}
 %
 \end{figure}
 
@@ -130,9 +131,9 @@ z + \Delta z \\
 % \label{eq6}
 \end{eqnarray}
 
-\subsection{ISO-Center Coordinate Estimation}
+\section{ISO-Center Coordinate Estimation}
 
-Using a exaggerated distortion parameter we can visualize the shape of the distortion model. Without distortion, the phantom appears as in Figure~\ref{fig:1}.  With large distortions, the phantom appears as in Figure~\ref{fig:2}, which is useful to understand the form of the distortions.  A more realistic distortion can be seen in Figure~\ref{fig:3}, which uses distortion parameters from~\cite{LSS08b}.
+Using a exaggerated distortion parameter we can visualize the shape of the distortion model. Without distortion, the phantom appears as in Figure~\ref{fig:1}.  With large distortions, the phantom appears as in Figure~\ref{fig:2}, which is useful to understand the form of the distortions.  A more realistic distortion can be seen in Figure~\ref{fig:3}, which uses distortion parameters from~\cite{tlee_iaeng}.
 
 
 \begin{figure}[htb]
@@ -148,6 +149,7 @@ Using a exaggerated distortion parameter we can visualize the shape of the disto
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/axial_tube_distortion_0.eps}}}
     \centerline{\emph{(b) Enlarged axial view.}}\medskip
   \end{minipage}
+  \hfill
   \begin{minipage}[b]{1.65in}
     \centering
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/coronal_distortion_0.eps}}}
@@ -155,31 +157,34 @@ Using a exaggerated distortion parameter we can visualize the shape of the disto
   \end{minipage}
 %\hfill
 %
-\caption{\emph{Phantom modeling with large distortions}} \label{fig:2}
+  \caption{Phantom modeling with large distortions}
+  \label{fig:2}
 %
 \end{figure}
 
 \begin{figure}[htb]
 
-  \begin{minipage}[b]{0.48\linewidth}
+  \begin{minipage}[b]{1.65in}
     \centering
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/axial_distortion_1.eps}}}
-    \centerline{\emph{(a) Axial view.}}\medskip
+    \centerline{\emph{(a) Axial view.}}
   \end{minipage}
   \hfill
-  \begin{minipage}[b]{0.48\linewidth}
+  \begin{minipage}[b]{1.65in}
     \centering
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/axial_tube_distortion_1.eps}}}
-    \centerline{\emph{(b) Enlarged axial view.}}\medskip
+    \centerline{\emph{(b) Enlarged axial view.}}
   \end{minipage}
-  \begin{minipage}[b]{0.48\linewidth}
+  \hfill
+  \begin{minipage}[b]{1.65in}
     \centering
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/coronal_distortion_1.eps}}}
-    \centerline{\emph{(c) Coronal view.}}\medskip
+    \centerline{\emph{(c) Coronal view.}}
   \end{minipage}
 %\hfill
 %
-\caption{\emph{Phantom modeling with small distortions}} \label{fig:3}
+  \caption{Phantom modeling with small distortions}
+  \label{fig:3}
 %
 \end{figure}
 
@@ -310,7 +315,8 @@ they make a huge numeric difference as shown in \ref{fig:4}(a) and \ref{fig:4}(b
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/tube_plane_small_error_y.eps}}}
     \centerline{\emph{(d) LS fit with y orientation.}}\medskip
   \end{minipage}
-\caption{\emph{Phantom modeling with distortion, showing differences in isocenter estimates due to how the LS equation is oriented.}} \label{fig:4}
+  \caption{Phantom modeling with distortion, showing differences in isocenter estimates due to how the LS equation is oriented.} 
+  \label{fig:4}
 %
 \end{figure}
 
@@ -336,7 +342,8 @@ estimation.
     \centerline{\mbox{\includegraphics[width=1.65in]{isocenter/images/simulation/tube_plane_diagonal_using_y.eps}}}
     \centerline{\emph{(b) LS using y orientation.}}\medskip
   \end{minipage}
-\caption{\emph{Phantom modeling with distortion, showing how diagonal tube planes without rotation do not improve the estimates produced.}} \label{fig:diagonal}
+  \caption{Phantom modeling with distortion, showing how diagonal tube planes without rotation do not improve the estimates produced.} 
+  \label{fig:diagonal}
 %
 \end{figure}
 
@@ -389,7 +396,8 @@ In table~\ref{table:symmetric}, the test is run using a symmetric x-y axis disto
     TLS  & 4.0800 & 0.1035  & 0.0800   & 4.0800 & 0.0964 & 0.0800 \\
     \hline
   \end{tabular}
-  \caption{\emph{Average of 200 runs using different methods for estimating the isocenter at $[4 \; 4 \; 3]$ in the presence of symmetrical distortion}} \label{table:symmetric}
+  \caption{Average of 200 runs using different methods for estimating the isocenter at $[4 \; 4 \; 3]$ in the presence of symmetrical distortion} 
+  \label{table:symmetric}
 \end{table}
 
 
@@ -408,10 +416,11 @@ When the distortion is not symmetrical the issue of proper estimation becomes cr
     TLS  & 9.5744 & 0.2616 & 5.5744   & 8.6905 & 0.2393 & 4.6905 \\
     \hline
   \end{tabular}
-  \caption{\emph{Average of 200 runs using different methods for estimating the isocenter at $[4 \; 4 \; 3]$ in the presence of non-symmetrical distortion }} \label{table:nonsymmetric}
+  \caption{Average of 200 runs using different methods for estimating the isocenter at $[4 \; 4 \; 3]$ in the presence of non-symmetrical distortion } 
+  \label{table:nonsymmetric}
 \end{table}
 
 
-\subsection{Conclusion}
+\section{Conclusion}
 In this work, we developed a new numerical algorithm to accurately determine the gradient isocenter
 of MRI scanners based on a new distortion correction phantom. Knowledge of the gradient isocenter is an essential part of gradient-nonlinearity correction methods.  We have shown that the method used in this work to estimate the gradient isocenter is a good alternative to more traditional estimation methods such as least squares and total least squares. The new algorithm is particularly suited when the image data are extremely sensitive to the presence of noise and asymmetric distortion. Using simulated (but realistic) distortion data, it was shown, that the resulting estimated isocenter was within $0.2$ mm of the actual gradient isocenter, leading to a better estimate than the currently used DICOM coordinate center.

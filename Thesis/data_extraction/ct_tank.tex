@@ -1,25 +1,30 @@
 
-\subsection{CT Scan overview, target surfaces}
-Due to the limitation of manufacture equipments, water tank at each end can only be guaranteed that their
-surfaces are parallel \footnote{what's the error?} to each other, their accurate distances betweeen each other
-are unknown. We decided to perform a CT scan\footnote{what's the CT's error} on the phantom, then collect each
+\subsection{Introduction}
+Due to the limitation of manufacture's equipments, water tank at each end can only be guaranteed that their
+surfaces are parallel % \footnote{what's the error?}
+to each other, their accurate distances between each other
+are unknown. We decided to perform a CT scan% \footnote{what's the CT's error}
+on the phantom, then collect each
 surfaces' data points through coronal view CT images. With enough data points on each surface, we should be
-able to have a good estimation of the distances with between each pair of surfaces. \footnote{brief outline of full algorithm}
+able to have a good estimation of the distances with between each pair of surfaces. % \footnote{brief outline of full algorithm}
+\\
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/targets/ct_coronal_mid_slice.eps}}}
     \centerline{\emph{(a) Coronal view, center slice}}
-  \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \end{minipage}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/targets/ct_coronal_mid_slice_marked_surface.eps}}}
     \centerline{\emph{(b) Marked target surfaces}}
   \end{minipage}
+  \caption{Sample CT image in coronal view.}
+  \label{fig:ct_sample_coronal}
 \end{figure}
 
-Above images indicates the target feature we are looking for inside a typical coronal view of CT image.
+Figure ~\ref{fig:ct_sample_coronal} (b) indicates the target feature we are looking for inside a typical coronal view of CT image.
 
 \subsection{Canny Edges}
 
@@ -29,66 +34,67 @@ this approach often contain fair amount of noise edges some of which overlap wit
 for. This problem is illustrated in figure \ref{fig:canny_ct_141}, \ref{fig:canny_ct_270} and \ref{fig:canny_ct_276}.
  
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/default/20121017_141.eps}}}
-    \centerline{\emph{(a) Default parameters}}
+    \centerline{\emph{(a)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.01_0.02/20121017_141.eps}}}
-    \centerline{\emph{(b) Low threshold 0.01, high threshold  0.02}}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_141.eps}}}
-    \centerline{\emph{(c) Low threshold 0.02, high threshold  0.04}}
+    \centerline{\emph{(c)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_141.eps}}}
-    \centerline{\emph{(d) Low threshold 0.05, high threshold  0.1}}
+    \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 141 with different parameters}} \label{fig:canny_ct_141}
+  \caption{Canny algorithm applied to coronal sequence 141 with different parameters: (a) Default parameters (b) Low threshold 0.01, high threshold 0.02 (c) Low threshold 0.02, high threshold 0.04 (d) Low threshold 0.05, high threshold  0.1} 
+  \label{fig:canny_ct_141}
 \end{figure}
 
-
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/default/20121017_270.eps}}}
-    \centerline{\emph{(a) Default parameter}}
+    \centerline{\emph{(a)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.01_0.02/20121017_270.eps}}}
-    \centerline{\emph{(b) Low threshold 0.01, high threshold  0.02}}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_270.eps}}}
-    \centerline{\emph{(c) Low threshold 0.02, high threshold  0.04}}
+    \centerline{\emph{(c)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_270.eps}}}
-    \centerline{\emph{(d) Low threshold 0.05, high threshold  0.1}}
+    \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 270 with different parameters}} \label{fig:canny_ct_270}
+  \caption{Canny algorithm applied to coronal sequence 270 with different parameters: (a) Default parameter (b) Low threshold 0.01, high threshold  0.02 (c) Low threshold 0.02, high threshold  0.04 (d) Low threshold 0.05, high threshold  0.1} \label{fig:canny_ct_270}
 \end{figure}
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.02_0.04/20121017_276.eps}}}
-    \centerline{\emph{(f) Low threshold 0.02, high threshold  0.04}}
+    \centerline{\emph{(a)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/canny/0.05_0.1/20121017_276.eps}}}
-    \centerline{\emph{(h) Low threshold 0.05, high threshold  0.1}}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Canny algorithm applied to coronal sequence 276 with different parameters}} \label{fig:canny_ct_276}
+  \caption{Canny algorithm applied to coronal sequence 276 with different parameters: (a) Low threshold 0.02, high threshold 0.04 (b) Low threshold 0.05, high threshold 0.1} 
+  \label{fig:canny_ct_276}
 \end{figure}
 
 In figure \ref{fig:canny_ct_141}(a), we can see that Matlab's canny algorithm with default parameter gives 
@@ -109,7 +115,7 @@ Since all objects we are looking for has a very uniform and distinct shape, we c
 regions each contains one object. In our case, the choice is very obvious. The objects we are looking for are
 four straight lines at fixed location and parallel to each other. For images that contain those objects, they
 should have them at almost exactly the same location with possibility of a few pixels offset due to potential
-tiltness of the phantom during scan. If we choose a slice in the middle of the series, that should give us a
+tilt of the phantom during scan. If we choose a slice in the middle of the series, that should give us a
 relatively smaller overall error margin both above and below the surface location on that particular slice
 comparing to picking a slice at the beginning or at the end of the series which would give a relatively larger 
 error on either above or below the surface location. Also the slice in the middle of series tends to have better 
@@ -124,7 +130,7 @@ In figure \ref{fig:histograms_mid_coronal}(c), a zoomed in picture of the region
 and phantom tank distribution, we can see that two distributions' tails overlaps with each other. From the fact 
 that the number of pixels in this overlap region is quite small and that this region is between two 
 distributions, we can determine that most of them should be the pixels on the boundary between water and tank.
-So, according to ranges of two distributinos as we can observer from the diagram, the range of difference
+So, according to ranges of two distributions as we can observer from the diagram, the range of difference
 between tank signal and water signal should be somewhere between 40 to 300. However, since the difference we are
 looking for is on the boundary of water and phantom tank, signals in those regions should tend to be close 
 to each other. Therefore we should expect the to see spikes in gradient to be around $\pm40$. In figure
@@ -136,26 +142,28 @@ water and phantom tank.
 With one pixel on each locations of the water and phantom tank boundaries are identified, 
 we can also narrow down the 
 location of each surface by specifying the surfaces are within the $\pm5$ rows of the row coordinate of each
-identified pixels. The $\pm5$ rows should give enough room for any horizontal or vertical tiltness.
+identified pixels. The $\pm5$ rows should give enough room for any horizontal or vertical tilts.
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{1.8in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_histogram.eps}}}
-    \centerline{\emph{(a) mid slice intensity histogram}}
-  \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
-    \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_tank_and_water_overlap_marked.eps}}}
-    \centerline{\emph{(b) Mared overlap region}}
+    \centerline{\mbox{\includegraphics[width=1.8in]{data_extraction/images/mid_slice_histogram.eps}}}
+    \centerline{\emph{(a)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \hfill
+  \begin{minipage}[b]{1.8in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/mid_slice_gradient_marked.eps}}}
-    \centerline{\emph{(c) mid slice surface locations}}
+    \centerline{\mbox{\includegraphics[width=1.8in]{data_extraction/images/mid_slice_tank_and_water_overlap_marked.eps}}}
+    \centerline{\emph{(b)}}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{1.8in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=1.8in]{data_extraction/images/mid_slice_gradient_marked.eps}}}
+    \centerline{\emph{(c)}}
   \end{minipage}
 
-  \caption{\emph{Histograms of middle column of middle slice of a coronal series}} 
+  \caption{Histograms of middle column of middle slice of a coronal series: (a) mid slice intensity histogram (b) Marked overlap region (c) mid slice surface locations} 
   \label{fig:histograms_mid_coronal}
 \end{figure}
 
@@ -176,32 +184,39 @@ edge from these regions. The following issues are need to be resolved:
 
 To detect the left and right boundary we plot the histogram of sum of intensities of each column across the
 region as well as the gradient for the intensity graph as shown in figure 
-\ref{fig:coronal_270_boundary_histogram}. 
+\ref{fig:coronal_boundaries_histogram}. 
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{5in}
+  \begin{minipage}[b]{3in}
     \centering
-    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/histogram_marked.eps}}}
-    \centerline{\emph{(a) Histogram for inferior tank inside edge}}
+    \centerline{\mbox{\includegraphics[width=3in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/histogram_marked.eps}}}
+    \centerline{\emph{(a)}}
   \end{minipage}
-  \caption{\emph{Histogram for boundary detection on image sequence \#270}}
-  \label{fig:coronal_270_boundary_histogram}
+  \hfill
+  \begin{minipage}[b]{3in}
+    \centering
+    \centerline{\mbox{\includegraphics[width=3in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
+    \centerline{\emph{(b)}}
+  \end{minipage}
+
+  \caption{Histogram for boundary detection: (a) inferior tank inside edge of \#270 (b) superior tank outside edge of \#100}
+  \label{fig:coronal_boundaries_histogram}
 \end{figure}
 
-\begin{figure}[htb]
-  \begin{minipage}[t]{5in}
-    \centering
-    \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
-    \centerline{\emph{(a) Histogram for superior tank outside edge}}
-  \end{minipage}
-  \caption{\emph{Histogram for boundary detection on image sequence \#100}}
-  \label{fig:coronal_270_boundary_histogram}
-\end{figure}
+% \begin{figure}[htb]
+%   \begin{minipage}[b]{5in}
+%     \centering
+%     \centerline{\mbox{\includegraphics[width=5in]{data_extraction/images/sample/20121017_100/Coronal/superior_outside/superior_outside_histogram_marked.eps}}}
+%     \centerline{\emph{(a) Histogram for superior tank outside edge}}
+%   \end{minipage}
+%   \caption{Histogram for boundary detection on image sequence \#100}
+%   \label{fig:coronal_270_boundary_histogram}
+% \end{figure}
 
-Upper pair of arrows in figure \ref{fig:coronal_270_boundary_histogram} indicates where the inside edges of
+Upper pair of arrows in figure \ref{fig:coronal_boundaries_histogram}(a) indicates where the inside edges of
 the phantom tanks are, and the lower pair of arrows indicates how do those edges shows up in its gradient graph.
-The two small edges are identifiable with properties of value bewteen 200 and 1000. We can identify them with
-this property for most of the sliceds. The transition from phantom tank to water become smoother on the slices
+The two small edges are identifiable with properties of value between 200 and 1000. We can identify them with
+this property for most of the slices. The transition from phantom tank to water become smoother on the slices
 more toward anterior or posterior in coronal view. 
 
 There are couple of issues with this approach.
@@ -219,17 +234,17 @@ There are couple of issues with this approach.
 \end{itemize}
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge.eps}}}
-    \centerline{\emph{(a) Extra edge caused by tube section}}
+    \centerline{\emph{(a)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_125/Coronal/Superior_outside/extra_edge_histogram.eps}}}
-    \centerline{\emph{(b) Histgram of the superior outside surface in (a) }}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Superior outside surface artifacts}}
+  \caption{Superior outside surface artifacts: (a) Extra edge caused by tube section (b) Histogram for superior outside surface of the same image}
   \label{fig:superior_outside_artifacts}
 \end{figure}
 
@@ -267,7 +282,7 @@ pattern. To remove the noisy edges that are unattached to the target edges, we d
     \end{enumerate}
 \end{enumerate}
 
-After follwing above steps, the resulting image will look like something like figure 
+After following above steps, the resulting image will look like something like figure 
 \ref{fig:coronal_270_intermediate_results} (c).
 
 At this stage, we will apply the boundary limit to this newly filtered edge, removing all the pixels beyond
@@ -277,7 +292,7 @@ out as shown in figure \ref{fig:coronal_270_intermediate_results} (d).
 To filter these sticking edges out, we do the following steps:
 
 \begin{enumerate}
-  \item Extract 2d coordinate informate of every edge pixels, and fit them to a straight line, since we know
+  \item Extract 2d coordinate information of every edge pixels, and fit them to a straight line, since we know
     our target edge is a straight line. We can setup the equation as:
     \begin{eqnarray}
       \begin{bmatrix}
@@ -307,43 +322,41 @@ edges. Figure Figure \ref{fig:coronal_edge_final_result} (b) is an example where
 while others not.
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/1_region.eps}}}
     \centerline{\emph{(a) Extracted region}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/2_raw_edges.eps}}}
     \centerline{\emph{(b) Raw edges}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/3_removed_noise.eps}}}
     \centerline{\emph{(c) Removed noisy edges}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/inferior_inside/4_within_boundary.eps}}}
     \centerline{\emph{(d) Edges within the boundary}}
   \end{minipage}
-  \caption{\emph{Edge extraction intermediate results on image sequence \#270's inferior tank inside edge}}
+  \caption{Edge extraction intermediate results on image sequence \#270's inferior tank inside edge}
   \label{fig:coronal_270_intermediate_results}
 \end{figure}
 
 \subsubsection{Improvement}
 
-
-
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_270/Coronal/result.eps}}}
-    \centerline{\emph{(a) Edge result on image sequence \#270}}
+    \centerline{\emph{(a)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
-    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_100/Coronal/result_canny_[0-001,0-002].eps}}}
-    \centerline{\emph{(b) Edge result on image sequence \#100}}
+    \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/sample/20121017_100/Coronal/result_canny_[0_001,0_002].eps}}}
+    \centerline{\emph{(b)}}
   \end{minipage}
-  \caption{\emph{Final edge results}}
+  \caption{Final edge results: (a) Edge result on image sequence \#270 (b) Edge result on image sequence \#100}
   \label{fig:coronal_edge_final_result}
 \end{figure}
 
@@ -356,7 +369,7 @@ ax + by + cz + d & = & 0 \label{eq:plane}
 \end{eqnarray}
 
 With somewhere between 50,000~70,000 date points for each surfaces, it's the best to use least square ($Ax=b$) to 
-esitmate each surfaces' equation paramters. Considering the following fact:
+estimate each surfaces' equation parameters. Considering the following fact:
 \begin{enumerate}
   \item Least square assumes that there is error in measurement but not observation, so it will only try to
     minimize error in A not b.
@@ -387,7 +400,7 @@ d/b
 \end{bmatrix}
 \end{eqnarray}
 
-With this setup, our estimated paramters for each planes are:
+With this setup, our estimated parameters for each planes are:
 
 \begin{tabular}{| l || r | r | r | r |}
             \hline
@@ -414,59 +427,59 @@ With this setup, our estimated paramters for each planes are:
 Reconstructed surfaces can be see below:
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/superior_comparison/Surface1_2.eps}}}
     \centerline{\emph{(a)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_comparison/Surface3_4.eps}}}
     \centerline{\emph{(b)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/Surface1_2_3_4.eps}}}
     \centerline{\emph{(c)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/saggital_ct_tilt.eps}}}
     \centerline{\emph{(d)}}
   \end{minipage}
   
-  \caption{\emph{Water tank surfaces reconstruction from CT scan, YZ view}}
+  \caption{Water tank surfaces reconstruction from CT scan, YZ view}
   \label{fig:ct_tank_surface_reconstruction_yz}
 
 \end{figure}
 
 \begin{figure}[htb]
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/superior_inside/xy.eps}}}
     \centerline{\emph{(a)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/superior_outside/xy.eps}}}
     \centerline{\emph{(b)}}
   \end{minipage}
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_inside/xy.eps}}}
     \centerline{\emph{(c)}}
   \end{minipage}\medskip
-  \begin{minipage}[t]{2.75in}
+  \begin{minipage}[b]{2.75in}
     \centering
     \centerline{\mbox{\includegraphics[width=2.75in]{data_extraction/images/surface_plane/inferior_outside/xy.eps}}}
     \centerline{\emph{(d)}}
   \end{minipage}
-  \caption{\emph{Water tank surfaces reconstruction from CT scan, XY view}}
+  \caption{Water tank surfaces reconstruction from CT scan, XY view}
   \label{fig:ct_tank_surface_reconstruction_xy}
 \end{figure}
 
 Notice that in the YZ view in figure \ref{fig:ct_tank_surface_reconstruction_yz}(a) (b) (c), 
-all four surfaces are tilted. This is consistant with what we observed on saggital reconstruction 
+all four surfaces are tilted. This is consistent with what we observed on sagittal reconstruction 
 of this image set. 
 
-\subsection{Estimating Surfaces Distances}
+% \subsection{Estimating Surfaces Distances}

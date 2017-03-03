@@ -7,7 +7,7 @@
 *.dvi
 *.bbl
 *.old
-*.fdb_latexmk
+*.fdb_latexmk*
 *.synctex.gz
 *.fls
 
