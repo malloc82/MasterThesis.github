@@ -8,3 +8,5 @@
 *.bbl
 # ignore generated pdf files
 *.pdf
+*.fdb_latexmk*
+
